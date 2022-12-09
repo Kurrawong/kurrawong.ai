@@ -7,7 +7,7 @@
 		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"ghcr.io/devcontainers-contrib/features/typescript:1": {}
 	},
-	"extensions": ["Vue.volar", "Vue.vscode-typescript-vue-plugin", "astro-build.astro-vscode"]
+	"extensions": ["Vue.volar", "Vue.vscode-typescript-vue-plugin", "astro-build.astro-vscode", "esbenp.prettier-vscode"]
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
