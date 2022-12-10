@@ -3,8 +3,8 @@ main {
   @apply px-2;
 }
 
-a {
-  @apply text-[#3366ff] visited:text-[#3366ff] hover:underline;
+main > p > a {
+  @apply text-[#980000] visited:text-[#980000] hover:underline;
 }
 
 /* user agent stylesheet */
