@@ -1,3 +1,5 @@
+<!-- This component is experimental. -->
+
 <template>
   <p>
     <img
@@ -10,14 +12,11 @@
   </p>
 </template>
 
-<script lang="ts">
-export default {
-  name: "FloatImageText",
-  props: {
-    imageUrl: String,
-    floatImage: String,
-    width: String,
-    alt: String,
-  },
-};
+<script setup lang="ts">
+defineProps<{
+  imageUrl?: string;
+  floatImage?: string;
+  width: string;
+  alt?: string;
+}>();
 </script>

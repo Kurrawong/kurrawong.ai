@@ -1,6 +1,6 @@
 ---
 import Header from "../components/Header.vue";
-import FloatImageText from "../components/FloatImageText.vue";
+import Container from "../components/Container.vue";
 
 export interface Props {
   title: string;
@@ -19,14 +19,15 @@ const { title } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <Header />
-    <FloatImageText
-      imageUrl="graph.png"
-      width="200"
-      alt="A graph image with ndoes and edges."
-      >Kurrawong AI can be contracted directly and is on several government
-      panels. Please just contact us to make arrangements.</FloatImageText
-    >
-    <slot />
+    <Header
+      items={[
+        { label: "One", href: "/One" },
+        { label: "Two", href: "/Two" },
+        { label: "Three", href: "/Three" },
+      ]}
+    />
+    <Container>
+      <slot />
+    </Container>
   </body>
 </html>
