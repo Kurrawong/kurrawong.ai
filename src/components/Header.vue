@@ -1,7 +1,9 @@
 <template>
-  <div class="bg-[#fcdcad] border-solid border-b-2 border-[#fddca9]">
+  <div
+    class="bg-[#fcdcad] border-solid border-b-2 border-[#fddca9] drop-shadow-md"
+  >
     <div class="container mx-auto min-w-[320px]">
-      <header class="flex justify-between items-center">
+      <header class="flex justify-between items-center px-2">
         <div class="flex items-center">
           <a href="/">
             <img src="/KurrawongAI_250.svg" alt="Kurrawong AI logo" />
