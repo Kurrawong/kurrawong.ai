@@ -25,11 +25,8 @@ jobs:
       - name: Build website
         run: npm run build
 
-      - name: Rename output dir
-        run: mv dist/ docs/
-
       - name: Deploy to GitHub Pages 🚀
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           BRANCH: gh-pages
-          FOLDER: docs
+          FOLDER: dist
