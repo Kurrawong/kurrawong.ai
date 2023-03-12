@@ -20,12 +20,20 @@ p {
   margin-inline-end: 0px;
 }
 
+a {
+  @apply text-[#980000] visited:text-[#980000] hover:underline;
+}
+
+h1 {
+  @apply container mx-auto text-center text-2xl sm:text-4xl md:text-6xl font-bold py-8;
+}
+
 h2 {
-  @apply text-2xl font-semibold my-4;
+  @apply text-2xl font-semibold mb-4 mt-8;
 }
 
 h3 {
-  @apply text-xl font-semibold my-4;
+  @apply text-xl font-semibold mb-4 mt-8;
 }
 
 ul {

@@ -1,0 +1,321 @@
+---
+layout: ../layouts/PageLayout.astro
+title: Services
+---
+
+# Services
+
+_KurrawongAI aims to support all aspects of Knowledge Graphs, including designing data, building systems, maintaining them and providing KG and system training. If there is a KG service you need and you don't see it here, please let us know!_
+
+These are the services offered by KurrawongAI.
+
+- [Categories](#categories) of service
+- [Products](#products) supported
+- [Example SLAs](#example-slas)
+- [Arranging an SLA](#arranging-an-sla)
+
+## Categories
+
+KurrawongAI offers services in the following categories:
+
+- [Data Governance](#data-governance) - policies, reviews and training
+- [Vocabularies](#vocabularies)
+- [Knowledge Graph data modelling](#knowledge-graph-data-modelling)
+- [Knowledge Graph system design, establishment, branding & maintenance](#knowledge-graph-systems)
+- [Knowledge Graph-related software tool support](#knowledge-graph-tooling)
+- [Training](#training)
+
+## Products
+
+Within the categories listed above, KurrawongAI provides _Service Level Agreement_-backed maintenance services for the following proprietary and open-source systems:
+
+<div class="tbl">
+
+| **System**                                                            | **Purpose**              | **Type**                  | **Maintenance Plan Options**                                                                                                                                                              | **More Details**                                           |
+| --------------------------------------------------------------------- | ------------------------ | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| [Fuseki RDF database](https://jena.apache.org/documentation/fuseki2/) | A KG database            | free open source          | deployment (prem or cloud, hosted)<br />configuration<br />operations (scaling, etc.)<br />training<br />interoperability (with external system)<br />extension (sutom data/indexes etc.) | [our Fuseki page](supported-products/fuseki)               |
+| [RDFLib](https://github.com/rdflib/rdflib)                            | RDF manipulation library | free open source          | installation (including restricted access machines)<br />extension<br />usage coaching<br />continued operations                                                                          | [our RDFLib page](supported-products/rdflib)               |
+| [Prez](https://github.com/rdflib/prez/)                               | KG database              | free open source          | installation<br />customisation<br />theming/branding<br />usage coaching<br />continued operations                                                                                       | [our Prez page](supported-products/prez)                   |
+| [Olis](https://olis.dev)                                              | KG database management   | proprietary (KurrawongAI) | installation<br />extension<br />usage coaching<br />continued operations                                                                                                                 | [our Olis page](supported-products/olis)                   |
+| [VocExcel](https://github.com/RDFLib/VocExcel)                        | Excel-to-RDF conversion  | free open source          | custom template design<br />usage coaching                                                                                                                                                | [our VocExcel page](supported-products/vocexcel)           |
+| [SPARQLWrapper](https://github.com/rdflib/SPARQLWrapper)              | KG endpoint connector    | free open source          | installation (including restricted access machines)<br />extension<br />usage coaching<br />continued operations                                                                          | [our SPARQLWrapper page](supported-products/sparqlwrapper) |
+| [RDFTools](http://rdftools.kurrawong.net)                             | Many KG data functions   | free online tool          | extension<br />usage coaching                                                                                                                                                             | [our RDFTools page](supported-products/rdftools)           |
+| [pySHACL](https://pypi.org/project/pyshacl/)                          | KG data validation       | free open source          | extension<br />usage coaching                                                                                                                                                             | [our pySHACL page](supported-products/pyshacl)             |
+| [pyLODE](https://pypi.org/project/pylode/)                            | Model documentation      | free open source          | extension<br />usage coaching                                                                                                                                                             | [our pyLODE page](supported-products/pylode)               |
+
+</div>
+
+## Data Governance
+
+KurrawongAI is familiar with data governance conventions, best practice and policy for a range of data domains. We have several staff that have work on data governance for large Commonwealth data holders for decades.
+
+KurrawongAI is able to offer the following data governance services:
+
+- **governance review**
+  - does your current governance regime do what you are expecting it to do?
+  - likely not if you are conducting a review! but what _exactly_ is missing in your regime, when compared with best practice among your peers?
+- **governance policy design**
+  - having developed and implemented many data governance policies for a number of organisations over the years, we are able to assess your needs and design policies for you
+- **governance implementation**
+  - after you have policies defined, you'll need social infrastructure to implement it
+  - we can assist you in creating the committee structures, role definitions and role allocations needed to implement your policy
+
+## Vocabularies
+
+KurrawongAI has lots of experience in creating Knowledge Graph ([SKOS](https://www.w3.org/TR/skos-primer/))-based vocabularies, also known as taxonomies, to classify data and objects with.
+
+Many of our vocabulary system establishment projects see us creating vocabularies for clients and then training them to create their own and to govern them (see [Data Governance](#data-governance) above).
+
+<div class="case-study">
+  <a href="https://www.energymining.sa.gov.au/">
+    <img
+      src="logo-dem.png"
+      width="312"
+      height="41"
+      style="float:right; width:50%;"
+    />
+  </a>
+  <h3>Case Study</h3>
+  <h4>
+    Vocabulary system establishment for South Australia's Department for Energy
+    and Mining
+  </h4>
+  <p>
+    <em>
+      This is an example of a common government vocabulary establishment
+      project.
+    </em>
+  </p>
+  <p>
+    We took Excel spreadsheets of 6 vocabularies of dataset classification terms
+    created by the Department and converted them to SKOS vocabularies.
+  </p>
+  <p>
+    We also then creates 5 other SKOS vocabularies ourselves: several based on
+    external vocabularies, one or two from scratch.
+  </p>
+  <p>
+    We then created an extension of the{" "}
+    <a href="https://w3id.org/profile/vocpub">VocPub</a> Profile's vocabulary
+    metadata to publish these 11 vocabularies with extended derivation and
+    governance information.
+  </p>
+  <p>
+    Finally we established a <a href="/supported-products/prez">Prez</a>{" "}
+    instance, branded for the Department, that published their vocabularies in
+    both human- and machine-readable form for use by their staff, industry and
+    cataloguing systems.
+  </p>
+  <p>Use is on-going.</p>
+</div>
+
+KurrawongAI is able to offer the following vocabulary services:
+
+- **vocabulary training**
+  - how do I make a SKOS vocab?
+  - what is SKOS and what can it do?
+  - how do I reuse existing vocabularies, rather than reinventing the wheel?
+- **vocabulary creation**
+  - we can make vocabularies from just about any source information, such as spreadsheets, databases, even emailed lists of things!
+- **vocabulary management**
+  - as per Data Governance above, we can assist you with policy and social infrastructure to manage your vocabularies
+- **vocabulary system creation**
+  - we have been installing vocabulary system tooling for 5 years now and can customise a toolset for you
+- **vocabulary analysis**
+  - we can analyse your vocabularies and implement best practice design
+  - evn if we don't know about your domain, we know about vocabulary data and use patterns
+
+## Knowledge Graph data modelling
+
+KurrawongAI is extremely experienced with the creation and implementation of Knowledge Graph, including [OWL](https://www.w3.org/TR/owl2-primer/) / Semantic Web data modelling.
+
+<div class="case-study">
+  <a href="https://nicholascar.com/anz-nat-addr-model-candidate/model.html#_model">
+    <img
+      src="addr-model.png"
+      width="312"
+      height="220"
+      style="float:right; width:50%;"
+    />
+  </a>
+  <h3>Case Study</h3>
+  <h4>Address Model for ANZ</h4>
+  <p>
+    <em>This is an example of an OWL modelling and implementation project.</em>
+  </p>
+  <p>
+    KurrawongAI responded to a request to implement a new Addresses data model
+    for the Queensland government that catered for future address data
+    requirements, as specified in the{" "}
+    <em>
+      <a href="https://www.icsm.gov.au/publications/addressing-2035">
+        ICSM Addressing 2035 strategy
+      </a>
+    </em>
+    .
+  </p>
+  <p>
+    In 2022 we produced an OWL model of address information derived from the{" "}
+    <a href="https://data.gov.au/dataset/ds-dga-19432f89-dc3a-4ef3-b943-5326ef1dbecc">
+      Geocoded National Address file relational model
+    </a>
+    and an OWL version of the <a href="https://linked.data.gov.au/def/iso19160-1-address">
+      ISO 19160 international address model
+    </a> that KurrawongAI staff developed 2017 while at CSIRO.
+  </p>
+  <p>
+    We implemented example data for this model within a Knowledge Graph system
+    (Fuseki) and also a relational system (Postgres) to demonstrate the model s
+    competence.
+  </p>
+  <p>
+    The work was well received by the client - the{" "}
+    <a href="https://www.resources.qld.gov.au/">
+      Queensland Department of Resources
+    </a>
+    as evidenced by follow-on Solutions Architecture work in 2023 that designs the
+    systems needed to implement this model in production.
+  </p>
+</div>
+
+We offer the following Knowledge Graph data modelling services:
+
+- **domain-specific data modelling**
+  - we've modelled in many domains, such as archiving, environmental science, spatial data and provenance
+  - we are able to pair up with your domain experts and develop models with them
+- **enterprise data modelling**
+  - so-called "Supermodel" modelling whereby we model a broad scenario's requirements as a data model
+  - Supermodels are compartmentalised allowing for staged implementation
+- **model skill demonstration**
+  - query-based competency testing of models
+  - so you can demo the power of KG models
+- **example data generation**
+  - we can hand-make data to assist with model demonstration
+- **data transform**
+  - from existing systems to new KG models
+  - see [Knowledge Graph tooling](#knowledge-graph-tooling) below
+
+## Knowledge Graph systems
+
+<img src="logo-olis.png" width="150" height="156" />
+
+We implement all aspects of Knowledge Graph systems, from RDF generation scripts to databases, adaptors for external systems to work with RDF data and APIs to deliver Knowledge Graph data online as [Linked Data](https://www.w3.org/standards/semanticweb/data).
+
+The main tasks we generally undertake for KG systems are:
+
+- **establishment**
+  - specification of infrastructure
+  - configuration, such as index creation
+  - containerisation and/or cloud infra coding
+- **getting data in**
+  - converting non-KG data into [RDF](https://www.w3.org/RDF/)
+  - data loading API configuration
+- **getting data out**
+  - making custom APIs with tools like [Prez](/supported-products/prez)
+  - see [Knowledge Graph tooling](#knowledge-graph-tooling) below for what we can do to link your external systems with KG systems
+- **management**
+  - of large and/or growing data
+  - of complex data
+  - see [Olis](/supported-products/olis), our very own graph management API
+
+We provide commercial support for several RDF databases (also known as _triplestores_), in particular [Fuseki](/supported-products/fuseki). See the list of [supported products](#products) above for all options.
+
+<div class="case-study">
+  <a href="https://linked.data.gov.au/dataset/geofabric/hydroid/26968628">
+    <img
+      src="catchment.png"
+      width="312"
+      height="204"
+      style="float:right; width:50%;"
+    />
+  </a>
+  <h3>Case Study</h3>
+  <h4>Geofabric Linked Data System</h4>
+  <p>
+    <em>
+      This is an example of a large-scale, operational, Linked Data system.
+    </em>
+  </p>
+  <p>
+    KurrawongAI staff extracted hydrological catchment data from an offline
+    spatial data source using <a href="/supported-products/rdflib">RDFLib</a>{" "}
+    and created Knowledge Graph data (RDF) from it, based on the{" "}
+    <a href="https://linked.data.gov.au/def/geofabric">Geofabric Ontology</a> we
+    designed for it. We then loaded the data into a KG database (
+    <a href="/supported-products/fuseki">Fuseki</a>) and then delivered the
+    information online using <a href="/supported-products/prez">Prez</a>.
+  </p>
+  <p>
+    This Geofabric Linked Data System is part of Geoscience Australia's KG-based{" "}
+    <a href="https://geoscienceaustralia.github.io/fsdf-supermodel/supermodel.html">
+      FSDF Data Platform
+    </a>
+    which is being built to support their <em>Digital Atlas of Australia</em>
+  </p>
+  <p>
+    We continue to support the operations of the Geofabric Linked Data System
+    and expect to enhance the data it delivers in mid-2023 due to international
+    interest in the delivery of spatial Semantic Web data.
+  </p>
+</div>
+
+## Knowledge Graph tooling
+
+<img src="logo-rdflib.png" width="250" height="250" />
+
+We have several staff who have been long-time developers of the open source [RDFLib](/supported-products/rdflib) Python RDF manipulation toolkit, including Nicholas and Edmond who are RDFLib maintainers. We use it to convert non-KG data into RDF for loading into graph databases. We also know well and use the [Jena framework's tools](https://jena.apache.org/documentation/tools/) for this.
+
+In addition to these tools, we maintain an RDF conversion and validation tool based on RDFLib, imaginatively titled [RDFTools](/supported-products/rdftools).
+
+Both RDFLib and Jena tools can be used as libraries within scripts and workflows to generate RDF data from non-RDF sources, such as relational databases, spatial data files and so on. We have many instances of custom data pipelines that we've developed to create and update RDF data using these tools.
+
+We also maintain a series of RDFLib-derived tools, such as [pyLODE](/supported-products/pylode) and [VocExcel](/supported-products/vocexcel).
+
+We offer the following Knowledge Graph tooling services:
+
+- **creation and application of RDFLib and Jena-based tooling**
+  - if you need a custom script/program to create or manipulate KG data, we can probably make it using RDFLib or Jena
+- **custom product creation**
+  - if we find that a custom script/program is highly reusable, we could package that up for you as a product
+  - this is what has happened with RDFtools: we made this and a customer of ours has their own in-house copy of it, tailored for their needs
+- **supported use of pySHACL, pyLODE RDFTools & VocExcel**
+  - we've developed these tools and are happy to assist you with their use
+
+_KG tooling deployments are usually one-off things. Please contact us for a quote for your needs!_
+
+## Training
+
+KurrawongAI provides training services for the following domains:
+
+- **vocabulary creation & management**
+  - see [Vocabularies](#vocabularies) above
+- **data strategy**
+  - how to plan for your organisation's data in the medium and long term
+- **data governance**
+  - how to manage your data
+  - see [Data Governance](#data-governance) above
+- **KG data generation**
+  - how to make [RDF](https://www.w3.org/RDF/) data manually or from existing, non-RDF data sources
+- **system management**
+  - how to maintain Knowledge Graph systems like [Prez](/supported-products//prez) APIs and RDF databases such as [Fuseki](/supported-products/fuseki)
+
+We offer the following training options:
+
+<div class="tbl">
+
+| **Training option**   | **Description**                                                                                                                                | **Topics**                                               | **Costs**                                     |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | --------------------------------------------- |
+| Workshops             | 1 or multi-day workshops either on-line or in person                                                                                           | Any of the domains above                                 | $5,000 per day in person, less if only online |
+| Instructional videos  | videos made for you to train and document your staff                                                                                           | KG data generation<br />System Management                | by arrangement                                |
+| Interactive notebooks | Jupyter notebooks to demonstrate software and data<br />e.g. [our ANU data science lectures](https://github.com/nicholascar/comp7230-training) | KG data generation<br />System Management                | by arrangement                                |
+| Pattern write-ups     | identification of data patterns in KGs (inc. vocabularies) that handle specific scenarios, such as how to version vocabulary Concepts          | vocabularies<br />KG spatial data<br />KG data generally | by arrangement                                |
+
+</div>
+
+## Example SLAs
+
+We will soon (Feb 2023) bt placing example Service Level Agreements here to give you an idea of specific SLAs.
+
+## Arranging an SLA
+
+Please just [contact us](./contact) directly in the short term. Eventually we will provide a decision tree tool here to help you define some of your requirements up front.

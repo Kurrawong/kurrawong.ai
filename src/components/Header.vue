@@ -1,15 +1,20 @@
 <template>
   <div
-    class="bg-[#fcdcad] border-solid border-b-2 border-[#fddca9] drop-shadow-md"
+    class="bg-[#ffffff] border-solid border-b-2 border-[#ffffff] drop-shadow-md"
   >
     <div class="container mx-auto min-w-[320px]">
       <header class="flex justify-between items-center px-2">
-        <div class="flex items-center">
+        <div class="flex items-center min-w-[175px]">
           <a href="/">
-            <img src="/KurrawongAI_250.svg" alt="Kurrawong AI logo" />
+            <img
+              src="/KurrawongAI_350.png"
+              alt="Kurrawong AI logo"
+              width="350"
+              height="143"
+            />
           </a>
         </div>
-        <nav class="pr-3">
+        <nav class="pr-3 overflow-x-auto py-4">
           <ul class="flex items-center m-0">
             <NavItem
               v-for="item in items"

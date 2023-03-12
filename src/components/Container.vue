@@ -8,7 +8,7 @@
 -->
 
 <template>
-  <div class="bg-[#fbf0df]">
+  <div class="bg-[#ffffff]">
     <div class="container mx-auto min-w-[320px] w-full">
       <div class="max-w-screen-md px-2 py-2 mx-auto">
         <slot />
