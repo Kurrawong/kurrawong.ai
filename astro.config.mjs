@@ -12,6 +12,4 @@ import tailwind from "@astrojs/tailwind";
 // https://astro.build/config
 export default defineConfig({
   integrations: [vue(), mdx(), tailwind()],
-  site: "https://edmondchuc.github.io",
-  base: "/kurrawong.net",
 });
