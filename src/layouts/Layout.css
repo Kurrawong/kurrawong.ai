@@ -21,7 +21,7 @@ p {
 }
 
 a {
-  @apply text-[#980000] visited:text-[#980000] hover:underline;
+  @apply text-[#3366ff] visited:text-[#3366ff] hover:underline;
 }
 
 h1 {
