@@ -1,18 +1,15 @@
+/* CSS variables */
+:root {
+  --primary-color: #8d0000;
+  --secondary-color: #aba500;
+}
+
 main {
   font-family: sans-serif;
-  @apply px-2;
+  @apply px-2 min-h-screen;
 }
 
-main > p > a {
-  @apply text-[#980000] visited:text-[#980000] hover:underline;
-}
-
-/* user agent stylesheet */
-html {
-  line-height: 1.5em;
-}
-
-p {
+main p {
   display: block;
   margin-block-start: 1em;
   margin-block-end: 1em;
@@ -21,22 +18,26 @@ p {
 }
 
 a {
-  @apply text-[#3366ff] visited:text-[#3366ff] hover:underline;
+  @apply text-[#3366ff] visited:text-[#3366ff] focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50 rounded;
 }
 
-h1 {
+main a {
+  @apply hover:underline;
+}
+
+/* main h1 {
   @apply container mx-auto text-center text-2xl sm:text-4xl md:text-6xl font-bold py-8;
-}
+} */
 
-h2 {
+main h2 {
   @apply text-2xl font-semibold mb-4 mt-8;
 }
 
-h3 {
+main h3 {
   @apply text-xl font-semibold mb-4 mt-8;
 }
 
-ul {
+main ul {
   display: block;
   list-style-type: disc;
   margin-block-start: 1em;
@@ -46,7 +47,7 @@ ul {
   padding-inline-start: 40px;
 }
 
-li {
+main li {
   display: list-item;
   text-align: -webkit-match-parent;
 }
