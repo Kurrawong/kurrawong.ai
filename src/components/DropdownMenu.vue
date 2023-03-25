@@ -1,13 +1,11 @@
 <script lang="ts" setup>
-// Headless UI, for more info and examples you can check out https://github.com/tailwindlabs/headlessui
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 </script>
 
 <template>
   <Menu as="div" class="relative inline-block">
-    <!-- Dropdown Toggle Button -->
     <MenuButton
-      class="py-3 px-4 font-medium hover:bg-gray-100 hover:cursor-pointer flex justify-center rounded"
+      class="py-3 px-4 font-medium hover:cursor-pointer flex justify-center rounded text-gray-600 hover:bg-gray-100 hover:text-gray-700"
     >
       <span>Products</span>
       <svg
@@ -23,10 +21,8 @@ import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
         />
       </svg>
     </MenuButton>
-    <!-- END Dropdown Toggle Button -->
 
-    <!-- Dropdown -->
-    <Transition
+    <transition
       enter-active-class="transition ease-out duration-150"
       enter-from-class="transform opacity-0 scale-75"
       enter-to-class="transform opacity-100 scale-100"
@@ -35,7 +31,7 @@ import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
       leave-to-class="transform opacity-0 scale-75"
     >
       <MenuItems
-        class="absolute  origin-top-left mt-2 shadow-xl rounded whitespace-nowrap z-50 focus:outline-none"
+        class="absolute origin-top-left mt-2 shadow-xl rounded whitespace-nowrap z-50 focus:outline-none"
       >
         <div
           class="bg-white ring-1 ring-black ring-opacity-5 rounded divide-y divide-gray-100"
@@ -46,8 +42,8 @@ import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
                 href="/products"
                 class="flex items-center space-x-2 rounded py-2 px-3 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-700"
                 :class="{
-                  'text-gray-700 bg-gray-100': active,
-                  'text-gray-600 hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:bg-gray-100 focus:text-gray-700':
+                  'text-gray-700 bg-gray-100 visited:text-gray-700': active,
+                  'text-gray-600 hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:bg-gray-100 focus:text-gray-700 visited:text-gray-700':
                     !active,
                 }"
               >
@@ -59,8 +55,8 @@ import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
                 href="/supported-products"
                 class="flex items-center space-x-2 rounded py-2 px-3 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-700"
                 :class="{
-                  'text-gray-700 bg-gray-100': active,
-                  'text-gray-600 hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:bg-gray-100 focus:text-gray-700':
+                  'text-gray-700 bg-gray-100 visited:text-gray-700': active,
+                  'text-gray-600 hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:bg-gray-100 focus:text-gray-700 visited:text-gray-700':
                     !active,
                 }"
               >
@@ -70,6 +66,6 @@ import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
           </div>
         </div>
       </MenuItems>
-    </Transition>
+    </transition>
   </Menu>
 </template>

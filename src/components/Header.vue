@@ -26,14 +26,53 @@
             />
           </ul>
         </nav>
+        <nav class="-mr-2 -my-2 min-[940px]:hidden">
+          <button
+            @click="handleMenuClick"
+            class="bg-white hover:bg-gray-100 hover:text-gray-500 inline-flex items-center justify-center p-2 rounded-md text-gray-400 focus:outline-none"
+            aria-label="Open menu"
+            type="button"
+            :aria-expanded="isOpen"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              class="h-6 w-6 stroke-gray-900"
+              fill="none"
+              focusable="false"
+              xmlns="http://www.w3.org/2000/svg"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <path
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </button>
+        </nav>
       </div>
     </div>
+    <NavMenuMobile :is-open="isOpen" @closed="setIsOpenFalse"></NavMenuMobile>
   </header>
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import NavItem from "./NavItem.vue";
 import DropdownMenu from "./DropdownMenu.vue";
+import NavMenuMobile from "./NavMenuMobile.vue";
 
 defineProps<{ items: { label: string; href: string }[] }>();
+
+const isOpen = ref(false);
+
+const handleMenuClick = () => {
+  isOpen.value = !isOpen.value;
+};
+
+const setIsOpenFalse = () => {
+  isOpen.value = false;
+};
 </script>

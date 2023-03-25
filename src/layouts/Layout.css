@@ -4,6 +4,11 @@
   --secondary-color: #aba500;
 }
 
+::selection {
+  background-color: rgb(216 255 246 / var(--tw-bg-opacity));
+  color: #000000 !important;
+}
+
 main {
   font-family: sans-serif;
   @apply px-2 min-h-screen;
@@ -24,10 +29,6 @@ a {
 main a {
   @apply hover:underline;
 }
-
-/* main h1 {
-  @apply container mx-auto text-center text-2xl sm:text-4xl md:text-6xl font-bold py-8;
-} */
 
 main h2 {
   @apply text-2xl font-semibold mb-4 mt-8;
