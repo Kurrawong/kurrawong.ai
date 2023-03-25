@@ -1,9 +1,9 @@
 <template>
-  <div class="bg-[#ffffff2d] py-14">
-    <h1 class="text-7xl font-bold tracking-tighter">
+  <div class="bg-[#ffffff2d]">
+    <h1>
       <slot />
     </h1>
-    <div class="grid place-items-center pb-8 pt-12">
+    <div class="grid place-items-center pb-8">
       <img
         src="graph.png"
         alt="An image of a graph with nodes and edges."

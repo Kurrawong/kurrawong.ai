@@ -1,24 +1,21 @@
 <template>
-  <header
-    class="bg-white border-b border-gray-200 fixed h-16 inset-x-0 min-[940px]:border-0 min-[940px]:h-auto min-[940px]:relative top-0 z-10"
+  <div
+    class="bg-[#ffffff] border-solid border-b-2 border-[#ffffff] drop-shadow-md"
   >
-    <div class="mx-auto max-w-7xl h-full px-4 sm:px-6">
-      <div
-        class="flex items-center justify-between h-full min-[940px]:py-6 xl:justify-start xl:space-x-10"
-      >
-        <div class="flex justify-start min-[940px]:flex-1 min-[940px]:w-0">
+    <div class="container mx-auto min-w-[320px]">
+      <header class="flex justify-between items-center px-2">
+        <div class="flex items-center min-w-[175px]">
           <a href="/">
             <img
               src="/KurrawongAI_350.png"
               alt="Kurrawong AI logo"
-              width="130"
+              width="350"
+              height="143"
             />
           </a>
         </div>
-
-        <nav class="hidden min-[940px]:flex items-center space-x-8">
+        <nav class="pr-3 overflow-x-auto py-4">
           <ul class="flex items-center m-0">
-            <DropdownMenu></DropdownMenu>
             <NavItem
               v-for="item in items"
               :label="item.label"
@@ -26,14 +23,13 @@
             />
           </ul>
         </nav>
-      </div>
+      </header>
     </div>
-  </header>
+  </div>
 </template>
 
 <script setup lang="ts">
 import NavItem from "./NavItem.vue";
-import DropdownMenu from "./DropdownMenu.vue";
 
 defineProps<{ items: { label: string; href: string }[] }>();
 </script>
