@@ -23,6 +23,7 @@
               v-for="item in items"
               :label="item.label"
               :href="item.href"
+              :outline="item.outline"
             />
           </ul>
         </nav>
@@ -64,7 +65,7 @@ import NavItem from "./NavItem.vue";
 import DropdownMenu from "./DropdownMenu.vue";
 import NavMenuMobile from "./NavMenuMobile.vue";
 
-defineProps<{ items: { label: string; href: string }[] }>();
+defineProps<{ items: { label: string; href: string; outline?: boolean }[] }>();
 
 const isOpen = ref(false);
 

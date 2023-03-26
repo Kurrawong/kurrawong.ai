@@ -14,7 +14,7 @@
       <div
         class="bg-white rounded-lg shadow-lg divide-gray-50 divide-y-2 ring-1 ring-black ring-opacity-5"
       >
-        <div class="pt-5 pb-6 px-5">
+        <div class="p-5">
           <div class="flex items-center justify-between">
             <div class="flex justify-start min-[940px]:flex-1 min-[940px]:w-0">
               <a href="/">
@@ -82,7 +82,7 @@
             <div>
               <a
                 href="/contact"
-                class="flex items-center focus-visible:ring-2 focus-visible:ring-offset-1 focus:outline-none justify-center no-link shrink-0 text-md focus:rounded-md hover:bg-gray-100 hover:text-gray-700 font-medium text-gray-700 visited:text-gray-700 px-4 py-2 rounded-md"
+                class="flex items-center focus-visible:ring-2 focus-visible:ring-offset-1 focus:outline-none justify-center no-link shrink-0 text-md focus:rounded-md hover:bg-gray-100 hover:text-gray-700 font-medium text-gray-700 visited:text-gray-700 px-4 py-2 rounded-md outline outline-1 outline-gray-500"
                 >Contact Us</a
               >
             </div>
