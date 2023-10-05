@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
+defineProps<{ title: string; href: string; items: { label: string; href: string; }[] }>();
 </script>
 
 <template>
@@ -7,7 +8,11 @@ import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
     <MenuButton
       class="py-3 px-4 font-medium hover:cursor-pointer flex justify-center rounded text-gray-600 hover:bg-gray-100 hover:text-gray-700"
     >
-      <span>Products</span>
+      <a :href="href" 
+        class="visited:text-gray-600 text-gray-600 hover:bg-gray-100 hover:text-gray-700">
+        {{title}}
+      </a>
+      &nbsp;
       <svg
         class="hi-solid hi-chevron-down inline-block w-5 h-5 opacity-50"
         fill="currentColor"
@@ -37,9 +42,9 @@ import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
           class="bg-white ring-1 ring-black ring-opacity-5 rounded divide-y divide-gray-100"
         >
           <div class="p-2 space-y-1">
-            <MenuItem v-slot="{ active }">
+            <MenuItem v-for="item in items" v-slot="{ active }">
               <a
-                href="/products"
+                :href="item.href"
                 class="flex items-center space-x-2 rounded py-2 px-3 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-700"
                 :class="{
                   'text-gray-700 bg-gray-100 visited:text-gray-700': active,
@@ -47,22 +52,10 @@ import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
                     !active,
                 }"
               >
-                <span>Product Range</span>
+                <span>{{item.label}}</span>
               </a>
             </MenuItem>
-            <MenuItem v-slot="{ active }">
-              <a
-                href="/supported-products"
-                class="flex items-center space-x-2 rounded py-2 px-3 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-700"
-                :class="{
-                  'text-gray-700 bg-gray-100 visited:text-gray-700': active,
-                  'text-gray-600 hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:bg-gray-100 focus:text-gray-700 visited:text-gray-700':
-                    !active,
-                }"
-              >
-                <span>Supported Products</span>
-              </a>
-            </MenuItem>
+          
           </div>
         </div>
       </MenuItems>

@@ -5,15 +5,23 @@ title: Olis
 
 # Olis
 
-[Products](/products) > [Supported Products](/supported-products) > [Olis](./olis)
+[Products](/products) > [Olis](./olis)
 
 Oli<span class="rtl">s</span> is a graph management application. Its job is to help administrators of [Knowledge Graphs](https://en.wikipedia.org/wiki/Knowledge_graph) manage them as a series of sub-graphs.
+
+<img
+  src="/logo-olis.png"
+  style="float:right; padding: 1rem;"
+  width="150"
+  height="156"
+  alt="Olis logo."
+/>
 
 ## Opposite of Silo
 
 Oli<span class="rtl">s</span>, "Silo", reversed!, is the _opposite_ of a Data Silo as there are as few barriers as possible to getting data in and out, and even moving away from an Oli<span class="rtl">s</span>-managed dataset.
 
-Oli<span class="rtl">s</span> does things to ensure you are completely in control of your data and not locked in my it:
+Oli<span class="rtl">s</span> does things to ensure you are completely in control of your data and not locked in by it:
 
 - **Contains Schema in the data**
   - Oli<span class="rtl">s</span> manages data that contains its schemas within it, not somewhere else that can only be accessed through special tools
@@ -36,9 +44,18 @@ Oli<span class="rtl">s</span> provides a model and an API for managing Knowledge
 
 Using the Oli<span class="rtl">s</span> API, you can make Virtual Graphs for complex datasets that consist of potentially very many Real Graphs and other Virtual Graphs that segment the dataset's data by time or some other dimension.
 
-!!! note "Example"
+<br/>
+<div style="border-width:3px; border-style:solid; border-color:#000000; padding: 1em;">
+
+**Example**
+
 A data stream supplies new data to a Knowledge Graph every day.
 
     Oli<span class="rtl">s</span> can be used to define a Virtual Graph for that stream and a Real Graph is created for incoming data each week.
 
     Data reprocessing or reasoning can be performed on weekly Real Graph 'chunks', rather than the whole dataset.
+
+</div>
+<br/>
+
+This allows for a much more scalable and sustainable system.

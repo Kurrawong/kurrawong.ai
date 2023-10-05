@@ -52,3 +52,8 @@ main li {
   display: list-item;
   text-align: -webkit-match-parent;
 }
+
+th, td {
+  border-bottom: 1px solid;
+  padding: 15px;
+}

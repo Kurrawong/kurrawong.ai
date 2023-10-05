@@ -18,7 +18,28 @@
 
         <nav class="hidden min-[940px]:flex items-center space-x-8">
           <ul class="flex items-center m-0">
-            <DropdownMenu></DropdownMenu>
+            <DropdownMenu 
+              title="Products" 
+              href="/products" 
+              :items="[
+                { label: 'Fuseki', href: '/products/fuseki' },
+                { label: 'Olis', href: '/products/olis' },
+                { label: 'Prez', href: '/products/prez' }
+              ]">
+            </DropdownMenu>
+             <DropdownMenu 
+              title="Services" 
+              href="/services" 
+              :items="[
+                { label: 'Data Governance', href: '/services/data-governance' },
+                { label: 'Vocabularies', href: '/services/vocabularies' },
+                { label: 'Data Modelling', href: '/services/data-modelling' },
+                { label: 'System Design & Implementation', href: '/services/system-design' },
+                { label: 'Support', href: '/services/support' },
+                { label: 'Tools', href: '/services/tools' },
+                { label: 'Training', href: '/services/training' }
+              ]">
+            </DropdownMenu>
             <NavItem
               v-for="item in items"
               :label="item.label"

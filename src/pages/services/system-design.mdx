@@ -1,0 +1,71 @@
+---
+layout: ../../layouts/PageLayout.astro
+title: System Design
+---
+
+[Services](/services) > [System Design](./system-design)
+
+# System Design & Implementation
+
+## Service Offering
+
+We implement all aspects of Knowledge Graph systems, from RDF generation scripts to databases, adaptors for external systems to work with RDF data and APIs to deliver Knowledge Graph data online as [Linked Data](https://www.w3.org/standards/semanticweb/data).
+
+The main tasks we generally undertake for Knowledge Graph systems include:
+
+- **establishment**
+  - specification of infrastructure
+  - configuration, such as index creation
+  - containerisation and/or cloud infra coding
+- **getting data in**
+  - converting non-Knowledge Graph data into [RDF](https://www.w3.org/RDF/)
+  - data loading API configuration
+- **getting data out**
+  - making custom APIs with tools like [Prez](/products/prez)
+  - see about our Knowledge Graph [Tools](/services/tools) for what we can do to link your external systems with Knowledge Graph systems
+- **management**
+  - of large and/or growing data
+  - of complex data
+  - see [Olis](/products/olis), for our very own graph management API
+
+We provide commercial support for RDF databases (also known as _triplestores_), in particular [Fuseki](/products/fuseki). Find out about our approach to [products](/products) for more information.
+
+<br/>
+<div class="case-study"
+     style="border-width:3px; border-style:solid; border-color:#000000; padding: 1em;">
+  <a href="https://linked.data.gov.au/dataset/geofabric/hydroid/26968628">
+    <img
+      src="/catchment.png"
+      width="312"
+      height="204"
+      style="float:right; width:40%; border-width:1px; border-style:dotted; border-color:#000000;"
+    />
+  </a>
+  <h3>Case Study</h3>
+  <h4>Geofabric Linked Data System</h4>
+  <p>
+    <em>
+      This is an example of a large-scale, operational, Linked Data system.
+    </em>
+  </p>
+  <p>
+    KurrawongAI staff extracted hydrological catchment data from an offline
+    spatial data source using <a href="https://github.com/RDFLib/rdflib">RDFLib</a>{" "}
+    and created Knowledge Graph data (RDF) from it, based on the{" "}
+    <a href="https://linked.data.gov.au/def/geofabric">Geofabric Ontology</a> we
+    designed for it. We then loaded the data into a Knowledge Graph database (<a href="/products/fuseki">Fuseki</a>) and then delivered the
+    information online using <a href="/products/prez">Prez</a>.
+  </p>
+  <p>
+    This Geofabric Linked Data System is part of Geoscience Australia's Knowledge Graph-based <a href="https://geoscienceaustralia.github.io/fsdf-supermodel/supermodel.html">FSDF Data Platform</a>
+ which is being built to support their <em>Digital Atlas of Australia</em>.
+  </p>
+  <p>
+    We continue to support the operations of the Geofabric Linked Data System
+    and expect to enhance the data it delivers in the future due to international
+    interest in the delivery of spatial Semantic Web data.
+  </p>
+</div>
+<br/>
+---
+_Please contact us to find out more about our Knowledge Graph System Design & Implementation services!_
