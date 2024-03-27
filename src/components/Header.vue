@@ -22,22 +22,24 @@
               title="Products" 
               href="/products" 
               :items="[
-                { label: 'Fuseki', href: '/products/fuseki' },
-                { label: 'Olis', href: '/products/olis' },
-                { label: 'Prez', href: '/products/prez' }
+                { label: 'Products', href: '/products'},
+                { label: ' - Fuseki', href: '/products/fuseki' },
+                { label: ' - Olis', href: '/products/olis' },
+                { label: ' - Prez', href: '/products/prez' }
               ]">
             </DropdownMenu>
              <DropdownMenu 
               title="Services" 
               href="/services" 
               :items="[
-                { label: 'Data Governance', href: '/services/data-governance' },
-                { label: 'Vocabularies', href: '/services/vocabularies' },
-                { label: 'Data Modelling', href: '/services/data-modelling' },
-                { label: 'System Design & Implementation', href: '/services/system-design' },
-                { label: 'Support', href: '/services/support' },
-                { label: 'Tools', href: '/services/tools' },
-                { label: 'Training', href: '/services/training' }
+                { label: 'Services', href: '/services' },
+                { label: ' - Data Governance', href: '/services/data-governance' },
+                { label: ' - Vocabularies', href: '/services/vocabularies' },
+                { label: ' - Data Modelling', href: '/services/data-modelling' },
+                { label: ' - System Design & Implementation', href: '/services/system-design' },
+                { label: ' - Support', href: '/services/support' },
+                { label: ' - Tools', href: '/services/tools' },
+                { label: ' - Training', href: '/services/training' }
               ]">
             </DropdownMenu>
             <NavItem
