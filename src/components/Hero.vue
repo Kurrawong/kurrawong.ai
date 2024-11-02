@@ -1,6 +1,6 @@
 <template>
   <div class="bg-[#ffffff2d] py-14">
-    <h1 class="text-7xl font-bold tracking-tighter">
+    <h1 class="text-7xl font-bold tracking-tighter" style="line-height: 1.25em;">
       <slot />
     </h1>
     <div class="grid place-items-center pb-8 pt-12">
