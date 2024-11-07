@@ -56,13 +56,7 @@
                 href="/products"
                 class="hover:bg-gray-100 hover:text-gray-700 font-medium text-gray-700 visited:text-gray-700 rounded py-2 px-3"
                 ><span class="border-transparent border-b-0"
-                  >Product Range
-                </span></a
-              ><a
-                href="/supported-products"
-                class="hover:bg-gray-100 hover:text-gray-700 font-medium text-gray-700 visited:text-gray-700 rounded py-2 px-3"
-                ><span class="border-transparent border-b-0"
-                  >Supported Products
+                  >Products
                 </span></a
               ><a
                 href="/services"
