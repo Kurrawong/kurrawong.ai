@@ -26,7 +26,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ghcr.io/Kurrawong/kurrawongai:latest
+          tags: ghcr.io/kurrawong/kurrawongai:latest
   # deploy:
   #   needs: publish
   #   runs-on: ubuntu-latest
