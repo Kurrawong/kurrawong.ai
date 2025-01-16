@@ -27,16 +27,16 @@ jobs:
         with:
           push: true
           tags: ghcr.io/kurrawong/kurrawongai:latest
-  # deploy:
-  #   needs: publish
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Azure Login
-  #       uses: azure/login@v2
-  #       with:
-  #         creds: ${{ secrets.AZURE_CREDENTIALS }}
-  #     - name: Restart container app revision
-  #       uses: azure/cli@v2
-  #       with:
-  #         azcliversion: latest
-  #         inlineScript: az containerapp revision restart --revision <REVISION_NAME> --resource-group <RESOURCE_GROUP_NAME>
+  deploy:
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Restart container app revision
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: az containerapp revision restart --revision website--y1d43sa --resource-group DEV
