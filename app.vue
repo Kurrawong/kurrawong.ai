@@ -18,7 +18,12 @@ const useIdFunction = () => useId();
             <main class="grow mb-12">
                 <div class="mx-auto max-w-[1200px] px-5 prose dark:prose-invert">
                     <Breadcrumbs />
-                    <ContentDoc />
+                    <ContentDoc>
+                        <template #not-found>
+                            <h1>Not found</h1>
+                            <p>Sorry, this page does not exist. <NuxtLink to="/">Go home</NuxtLink></p>
+                        </template>
+                    </ContentDoc>
                 </div>
             </main>
             <footer class="bg-secondary">

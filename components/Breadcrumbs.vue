@@ -6,11 +6,15 @@ const route = useRoute();
 const breadcrumbs = ref(await getBreadcrumbs(route.path));
 
 async function getBreadcrumbs(path: string) {
-    let accPath = "";
-    return await Promise.all(path.split("/").filter(p => p !== "").map(async (p) => {
-        accPath += `/${p}`;
-        return await queryContent(accPath).only(["title", "_path"]).findOne();
-    }));
+    try {
+        let accPath = "";
+        return await Promise.all(path.split("/").filter(p => p !== "").map(async (p) => {
+            accPath += `/${p}`;
+            return await queryContent(accPath).only(["title", "_path"]).findOne();
+        }));
+    } catch {
+        return [];
+    }
 }
 
 watch(() => route.path, async (newValue) => {
