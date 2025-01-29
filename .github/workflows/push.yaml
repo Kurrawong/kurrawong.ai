@@ -3,7 +3,7 @@ name: Publish Docker image and deploy
 on:
   push:
     branches:
-      - feature/nuxt-refactor
+      - main
   workflow_dispatch:
 
 permissions:

@@ -1,5 +1,5 @@
 # KurrawongAI Website
-Will be available at [dev.kurrawong.ai](https://dev.kurrawong.ai).
+Available at [kurrawong.ai](https://kurrawong.ai).
 
 Written in [Nuxt](https://nuxt.com/), [Nuxt Content](https://content.nuxt.com/), [Shadcn-vue](https://www.shadcn-vue.com/) and [Tailwind](https://tailwindcss.com/).
 
