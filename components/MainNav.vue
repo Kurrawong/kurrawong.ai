@@ -72,7 +72,7 @@ watch(showSearch, (newValue) => {
                     </SheetClose>
                     <div class="flex justify-center">
                         <NuxtLink to="/">
-                            <NuxtImg v-show="colorMode.unknown || colorMode.value === 'light'" src="/img/kai-logo.png" alt="KurrawongAI Logo" height="40px" />
+                            <NuxtImg v-show="colorMode.unknown || colorMode.value === 'light'" src="/img/KurrawongAI_350.png" alt="KurrawongAI Logo" height="40px" />
                             <NuxtImg v-show="!colorMode.unknown && colorMode.value === 'dark'" src="/img/kurrawong-dark-150.png" alt="KurrawongAI Logo" height="40px" />
                         </NuxtLink>
                     </div>
@@ -116,7 +116,7 @@ watch(showSearch, (newValue) => {
         </Sheet>
         <div class="flex justify-center md:block">
             <NuxtLink to="/">
-                <NuxtImg v-show="colorMode.unknown || colorMode.value === 'light'" src="/img/kai-logo.png" alt="KurrawongAI Logo" height="54px" />
+                <NuxtImg v-show="colorMode.unknown || colorMode.value === 'light'" src="/img/KurrawongAI_350.png" alt="KurrawongAI Logo" height="54px" />
                 <NuxtImg v-show="!colorMode.unknown && colorMode.value === 'dark'" src="/img/kurrawong-dark-150.png" alt="KurrawongAI Logo" height="54px" />
             </NuxtLink>
         </div>

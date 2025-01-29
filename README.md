@@ -141,7 +141,7 @@ Card description
 Card footer
 
 #img
-![KurrawongAI Logo](/img/kai-logo.png)
+![KurrawongAI Logo](/img/KurrawongAI_350.png)
 ::
 ```
 
@@ -178,7 +178,7 @@ Case Study: Title
 Card description
 
 #img
-![KurrawongAI Logo](/img/kai-logo.png){height="60"}
+![KurrawongAI Logo](/img/KurrawongAI_350.png){height="60"}
 ::
 ```
 
