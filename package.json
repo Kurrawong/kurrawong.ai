@@ -1,22 +1,37 @@
 {
-  "name": "@example/basics",
-  "type": "module",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "@astrojs/mdx": "^0.18.0",
-    "@astrojs/tailwind": "^3.1.0",
-    "@astrojs/vue": "^2.1.0",
-    "@headlessui/vue": "^1.7.12",
-    "astro": "^2.1.2",
-    "tailwindcss": "^3.2.4",
-    "vue": "^3.2.45"
-  }
+    "name": "kurrawongai-website",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "nuxt build",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare"
+    },
+    "dependencies": {
+        "@nuxt/content": "2.13.4",
+        "@nuxt/image": "1.9.0",
+        "@nuxtjs/color-mode": "3.5.2",
+        "@nuxtjs/tailwindcss": "6.13.0",
+        "@unovis/ts": "^1.5.0",
+        "@unovis/vue": "^1.5.0",
+        "@vueuse/core": "^12.4.0",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "lucide-vue-next": "^0.471.0",
+        "n3": "^1.23.1",
+        "nuxt": "^3.15.1",
+        "radix-vue": "^1.9.12",
+        "shadcn-nuxt": "0.11.3",
+        "tailwind-merge": "^2.6.0",
+        "tailwindcss-animate": "^1.0.7",
+        "vue": "^3.5.13",
+        "vue-router": "^4.5.0"
+    },
+    "devDependencies": {
+        "@tailwindcss/typography": "^0.5.16",
+        "@types/n3": "^1.21.1",
+        "typescript": "^5.7.3"
+    }
 }

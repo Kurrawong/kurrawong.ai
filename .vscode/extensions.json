@@ -1,4 +1,6 @@
 {
-  "recommendations": [],
-  "unwantedRecommendations": []
+    "recommendations": [
+        "Nuxt.mdc",
+        "Vue.volar",
+    ]
 }

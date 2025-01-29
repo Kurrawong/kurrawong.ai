@@ -1,0 +1,22 @@
+PREFIX sdo: <https://schema.org/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+<https://kurrawong.ai>
+    a sdo:Organization ;
+    sdo:address "72 Yundah St, Shorncliffe QLD 4017 Australia" ;
+    sdo:contactPoint <https://orcid.org/0000-0002-8742-7730> ;
+    sdo:description "KurrawongAI is a small, Australian-based IT company, specialising in Knowledge Graphs, Data Modelling & AI." ;
+    sdo:email "info@kurrawong.ai" ;
+    sdo:identifier "31 353 542 036"^^<http://linked.data.gov.au/def/party-identifier-type/abn> ;
+    sdo:name "KurrawongAI" ;
+    sdo:url "https://kurrawong.ai"^^xsd:anyURI ;
+.
+
+<https://orcid.org/0000-0002-8742-7730>
+    a sdo:Person ;
+    sdo:email "nick@kurrawong.ai"^^xsd:anyURI ;
+    sdo:jobTitle "Director / data Architect" ;
+    sdo:name "Nicholas Car"@en ;
+    sdo:telephone "+61 477 560 177" ;
+    sdo:worksFor <https://kurrawong.ai> ;
+.

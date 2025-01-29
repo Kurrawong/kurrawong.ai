@@ -1,0 +1,72 @@
+---
+title: Prez
+---
+# Prez
+
+![Prez logo](/img/logo-prez.png){width="100"}
+
+[Prez](https://github.com/rdflib/prez/) is an open source, data-configurable, Linked Data API framework that delivers _profiles_ of Knowledge Graph data according to the Content Negotiation by Profile standard.
+
+We use Prez to deliver thematic views of data stored in Knowledge Graphs, for example, for the [Geological Survey of Queensland](https://www.business.qld.gov.au/industries/mining-energy-water/resources/geoscience-information/gsq), we support an instance of Prez configured to deliver business and scientific _vocabularies_, that is controlled lists of terms available in human- and machine-readable form.
+
+::KCaseStudy{logo}
+We deployed Prez for GSQ in 2019 to present a small number of scientific vocabularies that they were developing, such as [Sample Preparation Methods](http://linked.data.gov.au/def/sample-preparation-methods).
+
+Finding Prez easy to use, GSQ then characterised some of their administrative vocabularies, such as [Transaction Status](https://vocabs.gsq.digital/object?uri=http://linked.data.gov.au/def/transaction-status) and presented them via Prez too.
+
+GSQ continues to use Prez (see [all their vocabs](https://vocabs.gsq.digital/vocabulary/)) and are currently establishing a reference spatial dataset - the _Geological Features of Queensland_ which they will soon deliver as spatial data via Prez also.
+
+For GSQ, Prez is easy to use, long-term reliable, and easily expandable for more classes of data.
+
+#title
+Case Study: Prez for the Geological Survey of Queensland (GSQ)
+
+#description
+This is an example of how we deploy Prez for organisations.
+
+#img
+![GSQ logo](/img/logo-gsq.jpg){width="80"}
+::
+
+### We provide these services for Prez:
+
+<ins>Modes</ins>
+
+- **shared instance**
+  - we host a single shared KurrawongAI Prez instance available for use when you only have a few vocabularies to add
+- **hosted instance**
+  - we can host and manage a Prez instance on your behalf
+- **deployed instance**
+  - we can deploy your own instance, within your own infrastructure
+    
+    _for example: on-prem or in the cloud (Azure, AWS, OpenStack)_
+
+<ins>Support</ins>
+
+For any of the above modes:
+
+- **theming**
+  - Prez is designed to be re-branded to match your organisation's needs and we can do that
+  - see some branded instances: [OGC](http://defs.opengis.net/vocprez/vocab/), [GSSA](https://gssa-prez-linux-web-app.azurewebsites.net/vocab)
+- **configuration**
+  - we can create custom profiles of data you deliver via Prez
+  - we can also create RESTful endpoints for stored queries
+- **data creation**
+  - we can build data for your Prez instances from non-Knowledge Graph data
+
+    _for example: Excel files into vocabularies, File GeoDatabases into spatial Knowledge Graph data_
+- **operations**
+  - for deployed instances, we can work with your staff to ensure it's running nicely
+- **training**
+  - we can train your staff to operate Prez
+  - we can train your staff in the creation of your own data, custom profiles in Prez etc.
+- **interoperability**
+  - we can make your existing, or new, external systems work with Prez
+  - Prez has a couple of standard APIs and we can work with those but it can also have new APIs and endpoints added
+- **extension**
+  - we wrote most of the Prez code so can extend it if needed!
+
+
+---
+
+_Please contact us for Prez support!_

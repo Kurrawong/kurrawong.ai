@@ -1,3 +1,0 @@
-main h1 {
-  @apply container mx-auto text-center text-4xl md:text-6xl font-bold py-8 underline decoration-1 underline-offset-4 decoration-slate-900;
-}
