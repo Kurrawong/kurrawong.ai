@@ -15,9 +15,11 @@ However, we actively support a range of Knowledge Graph-related products: mostly
 ## Supported Products
 
 The products our team most actively support are:
-- **[Fuseki](/products/fuseki)** (an RDF Graph database)
-- **[Olis](/products/olis)** (our in-house developed Graph Management application)
-- **[Prez](/products/prez)** (a linked data configurable API, with a separate and customisable UI application)
+- **[Prez](/products/prez)** - a linked data configurable API, with a separate and customisable UI application
+- **[Olis](/products/olis)** - our in-house developed Graph Management application
+- **[Fuseki](/products/fuseki)** - an RDF Graph database
+- **[kurra](/products/kurra)** - RDF management software
+
 
 ## Supported Tools
 
