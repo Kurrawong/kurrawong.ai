@@ -10,6 +10,7 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 COPY --link package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
+RUN npm --platform=linux --arch=arm64 --libc=musl rebuild sharp
 COPY --link . .
 RUN pnpm build
 
