@@ -5,35 +5,41 @@ title: Data Modelling
 
 ## Service Offering
 
-KurrawongAI is extremely experienced with the creation and implementation of Knowledge Graphs, including [OWL](https://www.w3.org/TR/owl2-primer/) / Semantic Web data modelling.
+KurrawongAI is extremely experienced with the creation and implementation of many forms of data models. While increasingly we focus on Knowledge Graphs / Semantic Web data modelling, we have decades of collective experience in relational systems, UML and other forms of data modelling too.
+
+Our preferred modelling systems are:
+
+* [Wen Ontology Language (OWL)](https://www.w3.org/TR/owl2-primer/)
+* [Shapes Constraint Language (SHACL)](https://www.w3.org/TR/shacl/)
+* Relational Database modelling
 
 ::KCaseStudy
-KurrawongAI responded to a request to implement a new Addresses data model for the Queensland government that catered for future address data requirements, as specified in the [ICSM Addressing 2035 strategy](https://www.icsm.gov.au/publications/addressing-2035).
+KurrawongAI implemented a new Addressing data model for the Queensland government that catered for future address data requirements, as specified in the [ICSM Addressing 2035 strategy](https://www.icsm.gov.au/publications/addressing-2035). This model is now accepted as an [ICSM](https://www.icsm.gov.au/) Australian & NZ standard for use in all jurisdictions.
 
-In 2022 we produced an OWL model of address information derived from the [Geocoded National Address file relational model](https://data.gov.au/dataset/ds-dga-19432f89-dc3a-4ef3-b943-5326ef1dbecc) and an OWL version of the [ISO 19160 international address model](https://linked.data.gov.au/def/iso19160-1-address) that KurrawongAI staff developed during 2017 while at CSIRO.
+This built on previous OWL model of address information derived from the [Geocoded National Address file relational model](https://data.gov.au/dataset/ds-dga-19432f89-dc3a-4ef3-b943-5326ef1dbecc) and an OWL version of the [ISO 19160 international address model](https://linked.data.gov.au/def/iso19160-1-address) that KurrawongAI staff developed during 2017 - 2019 while working in previous employment.
 
-We implemented example data for this model within a Knowledge Graph system ([Fuseki](/products/fuseki)) and also a relational system (Postgres) to demonstrate the models competence.
+We implemented example data for this model within a Knowledge Graph system ([Fuseki](/products/fuseki)) and also a relational database system (Postgres) to demonstrate the model's platform independence.
 
-The work was well received by the client - the [Queensland Department of Resources](https://www.resources.qld.gov.au/) as evidenced by follow-on Solutions Architecture work in 2023 that designs the systems needed to implement this model in production.
+Queensland has now operationalised a new state address database using the Knowledge Graph implementation of this model.
 
 #title
 Case Study: Address Model for ANZ
 
 #description
-This is an example of an OWL modelling and implementation project.
+This is an example of an OWL modelling and multi-system implementation project. <https://linked.data.gov.au/def/addr>
 
 #img
 ![Address model diagram](/img/addr-model.png)
 ::
 
 
-We offer the following Knowledge Graph data modelling services:
+We offer the following data modelling services:
 
 - **domain-specific data modelling**
-  - we've modelled in many domains, such as archiving, environmental science, spatial data and data provenance
+  - we've modelled in many domains, such as <span style="color:darkgrey;">archiving</span>, <span style="color:green;">environmental science</span>, <span style="color:darkblue;">spatial data</span> and <span style="color:darkred;">mining</span>
   - we are able to pair up with your domain experts and develop models with them
 - **enterprise data modelling**
-  - so-called "Supermodel" modelling whereby we model a broad scenario's requirements as a data model
+  - so-called "Supermodel" modelling whereby we model a broad scenario's requirements as a data model and include individual systems/datasets models within it
   - Supermodels are compartmentalised allowing for staged implementation
 - **model skill demonstration**
   - query-based competency testing of models
@@ -43,6 +49,22 @@ We offer the following Knowledge Graph data modelling services:
 - **data transform**
   - from existing systems to new Knowledge Graph models
   - see more about our Knowledge Graph [Tools](/services/tools) service offering
+
+
+::KCaseStudy
+KurrawongAI is implementing a "Supermodel", that is a integrated set of models, for the [Geological Survey of Western Australia (GSWA)](http://www.dmp.wa.gov.au/geological-survey/geological-survey-262.aspx). This allows originally internal siloed data to be combined and delivered publicly. It also makes it interoperable with national & international geological data.
+
+The [GSWA Supermodel](https://kurrawong.github.io/gswa-supermodel/) implements an overarching "backbone" model that integrates "component models" for each internal silo through the use of standardised "background models". These models use [GSWA controlled vocabularies](https://vocabulary.gswa.kurrawong.ai/) and many external vocabularies, such as the [international chronostratigraphic chart](https://stratigraphy.org/chart-data/) to ensure common values across datasets. 
+
+#title
+Case Study: GSWA Supermodel
+
+#description
+This enterprise & domain data modelling in the mining sector.
+
+#img
+![Address model diagram](/img/gswa-supermodel-overview.png)
+::
 
 
 ---

@@ -108,12 +108,13 @@ A button
 ::
 ```
 
-Prop|Type|Required|Default|Description
--|-|:-:|-|-
-to|string|||The link for the button to point to. Can be an internal or external URL
-variant|"default" \| "secondary" \| "outline" \| "destructive" \| "ghost" \| "link"||"default"|The type or style of the button (see [shadcn-vue](https://www.shadcn-vue.com/docs/components/button.html) for more info)
-size|"default" \| "sm" \| "lg" \| "icon" ||"default"|The size of the button (see [shadcn-vue](https://www.shadcn-vue.com/docs/components/button.html) for more info)
-class|string|||HTML classes, which can include Tailwind styling classes for convenience
+| Prop    | Type                                                                        | Required | Default   | Description                                                                                                              |
+|---------|-----------------------------------------------------------------------------|:--------:|-----------|--------------------------------------------------------------------------------------------------------------------------|
+| to      | string                                                                      |          |           | The link for the button to point to. Can be an internal or external URL                                                  |
+| variant | "default" \| "secondary" \| "outline" \| "destructive" \| "ghost" \| "link" |          | "default" | The type or style of the button (see [shadcn-vue](https://www.shadcn-vue.com/docs/components/button.html) for more info) |
+| size    | "default" \| "sm" \| "lg" \| "icon"                                         |          | "default" | The size of the button (see [shadcn-vue](https://www.shadcn-vue.com/docs/components/button.html) for more info)          |
+| class   | string                                                                      |          |           | HTML classes, which can include Tailwind styling classes for convenience                                                 |
+
 <!-- &check; -->
 
 Slot|Description
@@ -145,20 +146,21 @@ Card footer
 ::
 ```
 
-Prop|Type|Required|Default|Description
--|-|:-:|-|-
-imgPosition|"top" \| "right" \| "bottom" \| "left"||"right"|The position of the image if included
-imgHalf|boolean||false|Whether the image should take up exactly half the width/height of the card
-class|string|||HTML classes, which can include Tailwind styling classes for convenience
+| Prop        | Type                                   | Required | Default | Description                                                                |
+|-------------|----------------------------------------|:--------:|---------|----------------------------------------------------------------------------|
+| imgPosition | "top" \| "right" \| "bottom" \| "left" |          | "right" | The position of the image if included                                      |
+| imgHalf     | boolean                                |          | false   | Whether the image should take up exactly half the width/height of the card |
+| class       | string                                 |          |         | HTML classes, which can include Tailwind styling classes for convenience   |
+
 <!-- &check; -->
 
-Slot|Description
--|-
-default|The card's body
-title|The title of the card
-description|A smaller subtitle for the card
-footer|A footer that goes below the card main body
-img|An image that can be positioned with the `imgPosition` prop
+| Slot        | Description                                                 |
+|-------------|-------------------------------------------------------------|
+| default     | The card's body                                             |
+| title       | The title of the card                                       |
+| description | A smaller subtitle for the card                             |
+| footer      | A footer that goes below the card main body                 |
+| img         | An image that can be positioned with the `imgPosition` prop |
 
 ##### KCaseStudy
 For making case study cards. Uses the KCard component underneath.
@@ -182,17 +184,18 @@ Card description
 ::
 ```
 
-Prop|Type|Required|Default|Description
--|-|:-:|-|-
-logo|boolean||false|Whether the image (if provided) should be in line with the title, for use with logos, instead of the image taking up half the card's width.
+| Prop | Type    | Required | Default | Description                                                                                                                                 |
+|------|---------|:--------:|---------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| logo | boolean |          | false   | Whether the image (if provided) should be in line with the title, for use with logos, instead of the image taking up half the card's width. |
+
 <!-- &check; -->
 
-Slot|Description
--|-
-default|The card's body
-title|The title of the card
-description|A smaller subtitle for the card
-img|An image
+| Slot        | Description                     |
+|-------------|---------------------------------|
+| default     | The card's body                 |
+| title       | The title of the card           |
+| description | A smaller subtitle for the card |
+| img         | An image                        |
 
 ##### KHero
 The hero component for the home page. Includes the graph diagram rendering.
