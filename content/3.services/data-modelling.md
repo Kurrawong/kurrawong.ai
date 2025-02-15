@@ -46,8 +46,11 @@ We offer the following data modelling services:
   - demonstrate the power of Knowledge Graph models
 - **example data generation**
   - we can hand-make data to assist with model demonstration for specific scenarios
-- **data transform**
-  - from existing systems to new Knowledge Graph models
+- **data model review**
+  - reviewing your data models to ensure quality
+  - to align with other models
+- **model-based data transform**
+  - transforming data from one system to another, based on models
   - see more about our Knowledge Graph [Tools](/services/tools) service offering
 
 
