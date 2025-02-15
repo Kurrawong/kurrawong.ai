@@ -60,4 +60,23 @@ We use and develop cor clients multi-part cloud architectures using infracode sy
 
 We can deploy any work we do using any of these or similar tools that meet with your required architectural patterns.
 
+::KCaseStudy
+For the Australian national [Biodiversity Data Repository (BDR)](https://bdr.gov.au/), KurrawongAI initially provided a number of possible Solution Architecture to the [Department of Climate Change, Energy, the Environment & Water (DCCEEW)](https://www.dcceew.gov.au/). 
+
+From there, three particular Knowledge Graph DB systems were selected for testing by loading in the BDR's large data holdings and montoring query performance.
+
+One product was chosen for initial use and deployed within an architecture to a particular public cloud. After a change in policy at DCCEEW, the architecture was moved to a different public cloud and partially rebuilt: same DB product, same APIs but different networking components and infracode scripting.
+
+This entire system that now meets DCCEEW architectural patterns and security requirements will be handed over to DCCEEW for long-term operations by KurrawongAI in 2025.
+
+#title
+Case Study: BDR Architecture
+
+#description
+A multi KG DB selection process and cloud computing platform change.
+
+#img
+![BDR logo](/img/logo-bdr-big.png)
+::
+
 ## _See our dedicated [Tools Website](https://tools.dev.kurrawong.ai/)._
