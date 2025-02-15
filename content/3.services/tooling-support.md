@@ -63,7 +63,7 @@ We can deploy any work we do using any of these or similar tools that meet with 
 ::KCaseStudy
 For the Australian national [Biodiversity Data Repository (BDR)](https://bdr.gov.au/), KurrawongAI initially provided a number of possible Solution Architecture to the [Department of Climate Change, Energy, the Environment & Water (DCCEEW)](https://www.dcceew.gov.au/). 
 
-From there, three particular Knowledge Graph DB systems were selected for testing by loading in the BDR's large data holdings and montoring query performance.
+From there, three particular Knowledge Graph DB systems were selected for testing by loading in the BDR's large data holdings and monitoring query performance.
 
 One product was chosen for initial use and deployed within an architecture to a particular public cloud. After a change in policy at DCCEEW, the architecture was moved to a different public cloud and partially rebuilt: same DB product, same APIs but different networking components and infracode scripting.
 
