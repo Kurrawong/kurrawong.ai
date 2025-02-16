@@ -25,22 +25,21 @@ We ue these tools to "uplift" legacy data into Knowledge Graph form and to creat
 
 KurrawongAI staff currently lead the maintenance of RDFLib and are active participants in the Jena community too.
 
-
-![Jena logo](/img/logo-jena-text.png){style="float:right;"}
+![Jena logo](/img/logo-jena-text.png){style="float:right; width:250px;"}
 
 ## Data Storage
 
 We use many database systems for our work and anything we work on we can support you in using too. The main databases we know and use are:
 
-![GraphDB logo](/img/logo-graphdb.png){style="float:right"}
+![GraphDB logo](/img/logo-graphdb.png){style="float:right; width:250px;"}
 
 3. [Fuseki](https://jena.apache.org/documentation/fuseki2/) - a leading open-source Knowledge Graph DB
 4. [GraphDB](https://graphdb.ontotext.com/) - a cutting-edge commercial KG DB
 
 ## Data Delivery
 
-![Olis logo.](/img/logo-olis.png){style="float:right;"}
-![Prez logo](/img/logo-prez.png){style="float:right;"}
+![Olis logo.](/img/logo-olis.png){style="float:right; width:100px;"}
+![Prez logo](/img/logo-prez.png){style="float:right; width:100px;"}
 
 We make data available via a number of standard and custom APIs, in particular:
 
