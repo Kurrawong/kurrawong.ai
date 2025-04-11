@@ -1,22 +1,95 @@
-PREFIX sdo: <https://schema.org/>
+PREFIX schema: <https://schema.org/>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
-<https://kurrawong.ai>
-    a sdo:Organization ;
-    sdo:address "72 Yundah St, Shorncliffe QLD 4017 Australia" ;
-    sdo:contactPoint <https://orcid.org/0000-0002-8742-7730> ;
-    sdo:description "KurrawongAI is a small, Australian-based IT company, specialising in Knowledge Graphs, Data Modelling & AI." ;
-    sdo:email "info@kurrawong.ai" ;
-    sdo:identifier "31 353 542 036"^^<http://linked.data.gov.au/def/party-identifier-type/abn> ;
-    sdo:name "KurrawongAI" ;
-    sdo:url "https://kurrawong.ai"^^xsd:anyURI ;
+<https://kurrawong.ai/people/#david-habgood>
+    a schema:Person ;
+    schema:email "david@kurrawong.ai"^^xsd:anyURI ;
+    schema:jobTitle "Data Scientist, Knowledge Graph Systems Senior Developer" ;
+    schema:name "David Habgood"@en ;
+    schema:worksFor <https://kurrawong.ai> ;
+.
+
+<https://kurrawong.ai/people/#edmond-chuc>
+    a schema:Person ;
+    schema:email "edmond@kurrawong.ai"^^xsd:anyURI ;
+    schema:jobTitle "Knowledge Graph Senior Developer" ;
+    schema:name "Edmond Chuc"@en ;
+    schema:worksFor <https://kurrawong.ai> ;
+.
+
+<https://kurrawong.ai/people/#howard-johns>
+    a schema:Person ;
+    schema:email "howard@kurrawong.ai"^^xsd:anyURI ;
+    schema:jobTitle "Solution Architect" ;
+    schema:name "Howard Johns"@en ;
+    schema:worksFor <https://kurrawong.ai> ;
+.
+
+<https://kurrawong.ai/people/#jamie-feiss>
+    a schema:Person ;
+    schema:email "jamie@kurrawong.ai"^^xsd:anyURI ;
+    schema:jobTitle "Knowledge Graph Senior Developer" ;
+    schema:name "Jamie Feiss"@en ;
+    schema:worksFor <https://kurrawong.ai> ;
+.
+
+<https://kurrawong.ai/people/#lawson-lewis>
+    a schema:Person ;
+    schema:email "lawson@kurrawong.ai"^^xsd:anyURI ;
+    schema:jobTitle "Infrastructure and Python Developer" ;
+    schema:name "Lawson Lewis"@en ;
+    schema:worksFor <https://kurrawong.ai> ;
+.
+
+<https://kurrawong.ai/people/#les-kneebone>
+    a schema:Person ;
+    schema:email "les@kurrawong.ai"^^xsd:anyURI ;
+    schema:jobTitle "Vocabulary Specialist" ;
+    schema:name "Les Kneebone"@en ;
+    schema:worksFor <https://kurrawong.ai> ;
+.
+
+<https://kurrawong.ai/people/#margie-smith>
+    a schema:Person ;
+    schema:email "margie@kurrawong.ai"^^xsd:anyURI ;
+    schema:jobTitle "Data Governance Coach" ;
+    schema:name "Margie Smith"@en ;
+    schema:worksFor <https://kurrawong.ai> ;
+.
+
+<https://kurrawong.ai/people/#monique-harris>
+    a schema:Person ;
+    schema:email "monique@kurrawong.ai"^^xsd:anyURI ;
+    schema:jobTitle "Business Support Coordinator" ;
+    schema:name "Monique Harris"@en ;
+    schema:worksFor <https://kurrawong.ai> ;
+.
+
+<https://kurrawong.ai/people/#sophie-darnell>
+    a schema:Person ;
+    schema:email "sophie@kurrawong.ai"^^xsd:anyURI ;
+    schema:jobTitle "Data Governance Advisor & Business Analyst" ;
+    schema:name "Sophie Darnell"@en ;
+    schema:worksFor <https://kurrawong.ai> ;
 .
 
 <https://orcid.org/0000-0002-8742-7730>
-    a sdo:Person ;
-    sdo:email "nick@kurrawong.ai"^^xsd:anyURI ;
-    sdo:jobTitle "Director / data Architect" ;
-    sdo:name "Nicholas Car"@en ;
-    sdo:telephone "+61 477 560 177" ;
-    sdo:worksFor <https://kurrawong.ai> ;
+    a schema:Person ;
+    schema:email "nick@kurrawong.ai"^^xsd:anyURI ;
+    schema:jobTitle "Director / data Architect" ;
+    schema:name "Nicholas Car"@en ;
+    schema:telephone "+61 477 560 177" ;
+    schema:worksFor <https://kurrawong.ai> ;
 .
+
+<https://kurrawong.ai>
+    a schema:Organization ;
+    schema:address "72 Yundah St, Shorncliffe QLD 4017 Australia" ;
+    schema:contactPoint <https://orcid.org/0000-0002-8742-7730> ;
+    schema:description "KurrawongAI is a small, Australian-based IT company, specialising in Knowledge Graphs, Data Modelling & AI." ;
+    schema:email "info@kurrawong.ai" ;
+    schema:identifier "31 353 542 036"^^<http://linked.data.gov.au/def/party-identifier-type/abn> ;
+    schema:name "KurrawongAI" ;
+    schema:url "https://kurrawong.ai"^^xsd:anyURI ;
+.
+
