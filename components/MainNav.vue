@@ -8,7 +8,7 @@ const colorMode = useColorMode();
 const externalLinks = [
     {
         title: "Tools",
-        url: "https://tools.dev.kurrawong.ai/"
+        url: "https://tools.kurrawong.ai/"
     },
     {
         title: "Docs",
