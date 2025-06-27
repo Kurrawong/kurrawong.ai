@@ -78,4 +78,4 @@ A multi KG DB selection process and cloud computing platform change.
 ![BDR logo](/img/logo-bdr-big.png)
 ::
 
-## _See our dedicated [Tools Website](https://tools.dev.kurrawong.ai/)._
+## _See our dedicated [Tools Website](https://tools.kurrawong.ai/)._
