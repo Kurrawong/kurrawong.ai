@@ -24,15 +24,15 @@ The products our team most actively support are:
 ## Supported Tools
 
 Where KurrawongAI has developed tools through our work with RDF and Semantic Web technologies that we feel have value for the broader technology community, we do our best to share and maintain these. This includes several to which we provide access via an online user-interface for ease of use:
-- **[RDF Converter](https://tools.dev.kurrawong.ai/convert)** - convert between different RDF formats
-- **[RDF Validator](https://tools.dev.kurrawong.ai/validate)** - Validate RDF data against SHACL rules
-- **[VocExcel](https://tools.dev.kurrawong.ai/vocexcel)** - convert Excel data to SKOS vocabularies
+- **[pyLODE](https:/tools.kurrawong.ai/tools/pylode)** - used to generate human-readable HTML documentation from ontologies
+- **[RDF Converter](https://tools.kurrawong.ai/tools/convert)** - convert between different RDF formats
+- **[SHACL Validator](https://tools.kurrawong.ai/tools/validate)** - Validate RDF data against SHACL rules
+- **[VocExcel](https://tools.kurrawong.ai/tools/vocexcel)** - convert Excel data to SKOS vocabularies
 
 In other instances, please see the relevant GitHub repositories:
 - **[kurra](https://github.com/Kurrawong/kurrawong-python)** - a command line tool for interactions with Fuseki databases
 - **[RDFrame](https://github.com/Kurrawong/rdframe-lib)**
-- **[labilify](https://github.com/Kurrawong/labelify)**
-- **[pyLODE](https://github.com/RDFLib/pyLODE)** - used to generate human-readable HTML documentation from ontologies
+- **[labelify](https://github.com/Kurrawong/labelify)** - checks whether the subjects, predicates and/or objects in an RDF graph have a label property given
 - **[SPARQL parser](https://github.com/Kurrawong/sparql)**
 
 
