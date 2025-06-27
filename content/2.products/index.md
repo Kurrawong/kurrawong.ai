@@ -24,7 +24,7 @@ The products our team most actively support are:
 ## Supported Tools
 
 Where KurrawongAI has developed tools through our work with RDF and Semantic Web technologies that we feel have value for the broader technology community, we do our best to share and maintain these. This includes several to which we provide access via an online user-interface for ease of use:
-- **[pyLODE](https:/tools.kurrawong.ai/tools/pylode)** - used to generate human-readable HTML documentation from ontologies
+- **[pyLODE](https://tools.kurrawong.ai/tools/pylode)** - used to generate human-readable HTML documentation from ontologies
 - **[RDF Converter](https://tools.kurrawong.ai/tools/convert)** - convert between different RDF formats
 - **[SHACL Validator](https://tools.kurrawong.ai/tools/validate)** - Validate RDF data against SHACL rules
 - **[VocExcel](https://tools.kurrawong.ai/tools/vocexcel)** - convert Excel data to SKOS vocabularies
