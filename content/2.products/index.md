@@ -16,14 +16,13 @@ However, we actively support a range of Knowledge Graph-related products: mostly
 
 The products our team most actively support are:
 - **[Prez](/products/prez)** - a linked data configurable API, with a separate and customisable UI application
+- **[KurraScop](/products/kurrascope)** - RDF management software
 - **[Olis](/products/olis)** - our in-house developed Graph Management application
 - **[kurra](/products/kurra)** - RDF management software
-- **[kurra](/products/kurrascope)** - RDF management software
 
 ## Supported 3rd Party Products
 
 - **[Fuseki](/products/fuseki)** - an RDF Graph database
-
 
 ## Supported Tools
 
@@ -35,35 +34,35 @@ Where KurrawongAI has developed tools through our work with RDF and Semantic Web
 - **[VocExcel](https://tools.kurrawong.ai/tools/vocexcel)** - convert Excel data to SKOS vocabularies
 
 In other instances, please see the relevant GitHub repositories:
-- **[RDFrame](https://github.com/Kurrawong/rdframe-lib)**
-- **[SPARQL parser](https://github.com/Kurrawong/sparql)**
+
+- **[SPARQL parser](https://github.com/Kurrawong/sparql)** - a command line and web page tool that can parse and validate SPARQL queries
 
 
 See our [Services Page](/services) for more details on how our support services can help your organisation.
 
 ---
 
-Other products that we work with extensively and promote the use of are:
+Other 3rd party products that we work with extensively and promote the use of are:
 
 **RDF graph databases**
-- RDF4J
-- GraphDB
+- [RDF4J](https://rdf4j.org) - the Eclipse Foundation's open-source RDF database, reasoning engine and API
+- [GraphDB](https://graphdb.ontotext.com/) - a powerful commercial, enterprise RDF database
 - RDFLib stores
 
 **RDF manipulation & analysis tools**
-- Jena
-- RDFLib
+- [Jena](https://jena.apache.org/) - an Apache Software Foundation RDF manipulation toolkit in Java
+- [RDFLib](https://github.com/rdflib/rdflib/) -  a Python RDF manipulation toolkit
 - PANDAS
 
 **Geographic Information Systems**
-- QGIS
-- ArcGIS Pro
+- [QGIS](https://qgis.org) - the leading open-source spatial data platform
+- [ArcGIS](https://www.arcgis.com) - ESRI's flagship spatial data manipulation and delivery platform
 
-**Data visualisaion**
-- PowerBI
+**Data visualisation**
+- [PowerBI](https://www.microsoft.com/en-us/power-platform/products/power-bi) - Microsoft's flagship data visualisation prlatform
 
 **Development tools**
-- Jupyter Notebooks
+- [Jupyter Notebooks](https://jupyter.org) - open source executable Python code and documentation workbooks 
 
 **Relational databases**
-- PostgresDB
+- [PostgresDB](https://www.postgresql.org) - probably the world's leading open-source, enterprise relational database
