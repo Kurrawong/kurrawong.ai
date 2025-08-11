@@ -69,7 +69,6 @@ This enterprise & domain data modelling in the mining sector.
 ![Address model diagram](/img/gswa-supermodel-overview.png)
 ::
 
-
 ---
 
 _Please contact us to find out more about our Data Modelling services!_

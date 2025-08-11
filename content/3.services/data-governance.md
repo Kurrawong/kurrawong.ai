@@ -23,6 +23,6 @@ Having developed and implemented data governance for a number of organisations o
   - after you have policies defined, you'll need social infrastructure to implement it
   - we can assist you in creating the committee structures, role definitions and role allocations needed to implement your policy
 
-<br/>
 ---
+
 _Please contact us to find out more about our Data Governance services!_

@@ -19,6 +19,6 @@ We suggest you consider these questions _before_ undertaking a larger AI project
 
 Our Business Analytics, AI and Data Modelling staff can work with your staff to proceed through the above questions which providing insights into procedural and technology choices, backed-up by our experience on previous projects. 
 
-<br/>
 ---
+
 _We offer this form of consulting as a stand-alone service, where no guarantees of follow-on work are considered, as well as part of our general AI consulting, including engineering._
