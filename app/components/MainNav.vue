@@ -29,7 +29,7 @@ router.beforeEach((from, to) => {
 </script>
 
 <template>
-    <header class="top-nav sticky top-0 bg-background border-b-2 border-b-tertiary grid grid-cols-3 md:flex md:flex-row md:justify-between items-center px-2 z-50">
+    <header class="top-nav sticky top-0 bg-background border-b-2 border-b-tertiary grid grid-cols-3 md:flex md:flex-row md:justify-between items-center gap-2 px-2 z-50">
         <Sheet v-model:open="showSidenav">
             <SheetTrigger as-child>
                 <Button variant="ghost" size="icon" class="md:hidden">
@@ -124,7 +124,7 @@ router.beforeEach((from, to) => {
                 <a :href="extLink.url" target="_blank" rel="noopener noreferrer">{{ extLink.title }} <ExternalLink class="size-4" /></a>
             </Button>
         </div>
-        <div class="flex flex-row justify-end items-center">
+        <div class="flex flex-row justify-end items-center gap-2">
             <SearchCommand />
             <Button variant="ghost" size="icon" @click="!colorMode.unknown ? colorMode.value === 'dark' ? colorMode.preference = 'light' : colorMode.preference = 'dark' : undefined">
                 <SunMoon v-show="colorMode.unknown" />

@@ -3,14 +3,17 @@ import { VisSingleContainer, VisGraph } from "@unovis/vue";
 import { type GraphLinkLabel, type GraphConfigInterface, Graph, GraphNodeSelectionHighlightMode, type GraphNode as Node, type VisEventType } from "@unovis/ts";
 import { Eye, EyeClosed } from "lucide-vue-next";
 import { useWindowSize } from "@vueuse/core";
-import turtleData from "#shared/rdf.ttl?raw";
 
 const { width: windowWidth } = useWindowSize();
+
+const { data: turtleData } = await useAsyncData("rdf", () => $fetch<string>("/?_mediatype=text/turtle"), {
+    default: () => "",
+});
 
 const showLabels = ref(false);
 const selectedNodeId = ref<string | number | undefined>(undefined);
 
-const data = rdfToChart(turtleData);
+const data = computed(() => rdfToChart(turtleData.value));
 
 const nodeLabel = (n: GraphNode, i: number) => n.label;
 const linkLabel = (l: GraphLink, i: number): GraphLinkLabel => ({ text: l.label });
