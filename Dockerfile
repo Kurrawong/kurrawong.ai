@@ -1,5 +1,4 @@
-ARG NODE_VERSION=21.7.1
-FROM node:${NODE_VERSION}-alpine as base
+FROM node:alpine as base
 ARG PORT=3000
 WORKDIR /src
 
@@ -8,9 +7,9 @@ FROM base as build
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
-COPY --link package.json pnpm-lock.yaml ./
+RUN apk add --no-cache python3 py3-pip make build-base
+COPY --link package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
-RUN npm --platform=linux --arch=x64 --libc=musl rebuild sharp
 COPY --link . .
 RUN pnpm build
 

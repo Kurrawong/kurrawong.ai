@@ -233,11 +233,11 @@ img|The profile picture
 See the [NuxtImage docs](https://image.nuxt.com/usage/nuxt-img) for how to include images in Markdown files. The syntax is the same as regular Markdown, but you can provide extra props to be passed to the underlying `<NuxtImg />` component, such as placeholder info, provider, quality, densities, etc.
 
 ## Serving RDF
-The home page does content negotiation and also accepts the `_mediatype` query parameter like Prez to optionally serve RDF, e.g. `https://dev.kurrawong.ai/?_mediatype=text/turtle` or with the header `"Accept": "text/turtle"`.
+The home page does content negotiation and also accepts the `_mediatype` query parameter like Prez to optionally serve RDF, e.g. `https://kurrawong.ai/?_mediatype=text/turtle` or with the header `"Accept": "text/turtle"`.
 
-The RDF is a Turtle file in `server/assets/rdf.ttl`. This RDF is also rendered as a graph diagram in the hero component on the home page.
+The RDF is a Turtle file in [`server/assets/rdf.ttl`](server/assets/rdf.ttl). This RDF is also rendered as a graph diagram in the hero component on the home page.
 
 ## Styling & Tailwind
-Variables to be used in Tailwind classes must be defined as CSS variables in `assets/css/tailwind.css`. For colours, define them in HSL values ***without*** the `hsl()` function. You can also define dark mode-specific values inside the `.dark` class in that file.
+Variables to be used in Tailwind classes must be defined as CSS variables in `assets/css/tailwind.css`. For colours, define them in HSL values without commas. You can also define dark mode-specific values inside the `.dark` class in that file.
 
-These variables should then be listed in `tailwind.config.js`. For colours, call the `hsl()` function here.
+For referencing colour variables elsewhere in CSS, use the convention `var(--color-<variable>)`.
