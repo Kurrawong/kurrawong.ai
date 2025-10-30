@@ -36,7 +36,7 @@ This is an example of an OWL modelling and multi-system implementation project. 
 We offer the following data modelling services:
 
 - **domain-specific data modelling**
-  - we've modelled in many domains, such as <span style="color:darkgrey;">archiving</span>, <span style="color:green;">environmental science</span>, <span style="color:darkblue;">spatial data</span> and <span style="color:darkred;">mining</span>
+  - we've modelled in many domains, such as <span style="color:darkgrey;">archiving</span>, <span style="color:green;">environmental science</span>, <span class="text-[darkblue] dark:text-[#3636ff]">spatial data</span> and <span class="text-[darkred] dark:text-[red]">mining</span>
   - we are able to pair up with your domain experts and develop models with them
 - **enterprise data modelling**
   - so-called "Supermodel" modelling whereby we model a broad scenario's requirements as a data model and include individual systems/datasets models within it

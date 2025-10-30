@@ -16,7 +16,7 @@ However, we actively support a range of Knowledge Graph-related products: mostly
 
 The products our team most actively support are:
 - **[Prez](/products/prez)** - a linked data configurable API, with a separate and customisable UI application
-- **[KurraScop](/products/kurrascope)** - RDF management software
+- **[KurraScope](/products/kurrascope)** - RDF management software
 - **[Olis](/products/olis)** - our in-house developed Graph Management application
 - **[kurra](/products/kurra)** - RDF management software
 

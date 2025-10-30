@@ -162,6 +162,16 @@ Card footer
 | footer      | A footer that goes below the card main body                 |
 | img         | An image that can be positioned with the `imgPosition` prop |
 
+##### KGrid
+A simple utility component for easily wrapping other components in a CSS grid. You can configure the grid by using Tailwind classes on this component in Markdown.
+
+Usage:
+```
+::KGrid{class="grid-cols-1 md:grid-cols-2 lg:grid-cols-3"}
+...
+::
+```
+
 ##### KCaseStudy
 For making case study cards. Uses the KCard component underneath.
 
