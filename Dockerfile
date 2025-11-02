@@ -1,4 +1,4 @@
-FROM node:alpine as base
+FROM node:24.9.0-alpine AS base
 ARG PORT=3000
 WORKDIR /src
 
