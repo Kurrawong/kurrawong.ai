@@ -1,4 +1,5 @@
-import type { MimeType } from "h3";
+import { type MimeType, sendStream } from "h3";
+import fs from "node:fs";
 
 function acceptQualities(acceptHeader: string): Record<MimeType, number> {
     return acceptHeader.split(",").reduce((obj, curr) => {
