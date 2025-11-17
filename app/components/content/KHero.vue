@@ -52,8 +52,8 @@ const events = {
 <template>
     <div class="flex flex-col items-center justify-center p-4 -mx-4 relative h-[350px] sm:h-[450px]">
         <div class="flex flex-col gap-2 absolute top-4 pointer-events-none z-10 bg-secondary/20 backdrop-blur-sm p-4 rounded-lg">
-            <div class="text-5xl sm:text-6xl font-bold text-foreground">Graphs, Models, AI?</div>
-            <div class="text-5xl sm:text-6xl font-bold text-foreground">Hello KurrawongAI!</div>
+            <h1 class="text-5xl sm:text-6xl font-bold text-foreground !m-0">Graphs, Models, AI?</h1>
+            <h1 class="text-5xl sm:text-6xl font-bold text-foreground !m-0">Hello KurrawongAI!</h1>
         </div>
         <VisSingleContainer :data="data" :height="windowWidth < 640 ? 300 : 400">
             <VisGraph
