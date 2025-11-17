@@ -1,9 +1,5 @@
 <script lang="ts" setup>
-useHead({
-    titleTemplate: (titleChunk) => {
-        return titleChunk && titleChunk !== 'KurrawongAI' ? `${titleChunk} | KurrawongAI` : 'KurrawongAI';
-    }
-});
+import {findPageBreadcrumb} from "@nuxt/content/utils";
 
 const route = useRoute();
 
@@ -12,6 +8,20 @@ const { data: page } = await useAsyncData(route.path, () => {
 });
 
 const { data: navigation } = await useAsyncData("navigation", () => queryCollectionNavigation("content"));
+
+useHead({
+	titleTemplate: (titleChunk) => {
+		let title = "KurrawongAI";
+		if (page.value) {
+			if (page.value.path !== "/") {
+				title = `${page.value.title} | ${title}`;
+			}
+		} else {
+			title = `Not found | ${title}`;
+		}
+		return title;
+	}
+});
 </script>
 
 <template>
@@ -19,10 +29,12 @@ const { data: navigation } = await useAsyncData("navigation", () => queryCollect
         <MainNav :navigation="navigation" />
         <main class="grow mb-12">
             <div class="mx-auto max-w-[1200px] px-5 prose dark:prose-invert">
-                <Breadcrumbs :navigation="navigation" :page="page" />
-                <ContentRenderer v-if="page" :value="page" />
+                <template v-if="page">
+	                <Breadcrumbs :navigation="navigation" :page="page" />
+	                <ContentRenderer :value="page" />
+                </template>
                 <div v-else>
-                    <h1>Page not found</h1>
+                    <h1 class="mt-4">Page not found</h1>
                     <p>Sorry, this page does not exist. <NuxtLink to="/">Go home</NuxtLink>.</p>
                 </div>
             </div>
