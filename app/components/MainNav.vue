@@ -29,15 +29,16 @@ router.beforeEach((from, to) => {
 </script>
 
 <template>
-    <header class="top-nav sticky top-0 bg-background border-b-2 border-b-tertiary grid grid-cols-3 md:flex md:flex-row md:justify-between items-center gap-2 px-2 z-50">
-        <Sheet v-model:open="showSidenav">
+    <header class="top-nav sticky top-0 bg-background border-b-2 border-b-tertiary grid grid-cols-[1fr_max-content_1fr] md:flex md:flex-row md:justify-between items-center gap-2 px-2 py-1 z-50">
+<!--        mobile nav-->
+	    <Sheet v-model:open="showSidenav">
             <SheetTrigger as-child>
                 <Button variant="ghost" size="icon" class="md:hidden">
                     <Menu class="size-4" />
                 </Button>
             </SheetTrigger>
             <SheetContent side="left" class="p-2" hideClose>
-                <SheetHeader class="grid grid-cols-3 gap-2 mb-4">
+                <SheetHeader class="grid grid-cols-[1fr_max-content_1fr] gap-2 mb-4">
                     <SheetClose as-child>
                         <Button variant="ghost" size="icon">
                             <Menu class="size-4" />
@@ -46,7 +47,7 @@ router.beforeEach((from, to) => {
                     <div class="flex justify-center">
                         <NuxtLink to="/">
                             <NuxtImg v-show="colorMode.unknown || colorMode.value === 'light'" src="/img/KurrawongAI_350.png" alt="KurrawongAI Logo" class="h-[40px]" />
-                            <NuxtImg v-show="!colorMode.unknown && colorMode.value === 'dark'" src="/img/kurrawong-dark-150.png" alt="KurrawongAI Logo" class="h-[40px]" />
+                            <NuxtImg v-show="!colorMode.unknown && colorMode.value === 'dark'" src="/img/KurrawongAI_inverted_350.png" alt="KurrawongAI Logo" class="h-[40px]" />
                         </NuxtLink>
                     </div>
                     <div></div>
@@ -87,10 +88,11 @@ router.beforeEach((from, to) => {
         </Sheet>
         <div class="flex justify-center md:block">
             <NuxtLink to="/">
-                <NuxtImg v-show="colorMode.unknown || colorMode.value === 'light'" src="/img/KurrawongAI_350.png" alt="KurrawongAI Logo" class="h-[54px]" />
-                <NuxtImg v-show="!colorMode.unknown && colorMode.value === 'dark'" src="/img/kurrawong-dark-150.png" alt="KurrawongAI Logo" class="h-[54px]" />
+                <NuxtImg v-show="colorMode.unknown || colorMode.value === 'light'" src="/img/KurrawongAI_350.png" alt="KurrawongAI Logo" class="h-[48px]" />
+                <NuxtImg v-show="!colorMode.unknown && colorMode.value === 'dark'" src="/img/KurrawongAI_inverted_350.png" alt="KurrawongAI Logo" class="h-[48px]" />
             </NuxtLink>
         </div>
+<!--	    desktop nav-->
         <div class="ml-auto md:flex md:flex-row gap-2 hidden">
             <template v-for="link of props.navigation">
                 <DropdownMenu v-if="link.children && link.children.length > 1" v-slot="{open}">

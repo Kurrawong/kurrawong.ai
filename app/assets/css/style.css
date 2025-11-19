@@ -9,7 +9,7 @@ h4,
 h5,
 h6 {
     font-family: Candara, Arial, Helvetica, sans-serif;
-    font-weight: 700;
+    font-weight: bold;
 }
 
 .prose :where(a):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
