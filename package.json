@@ -37,5 +37,16 @@
         "@tailwindcss/typography": "^0.5.19",
         "@types/n3": "^1.26.0",
         "typescript": "^5.9.2"
+    },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "@parcel/watcher",
+            "@tailwindcss/oxide",
+            "better-sqlite3",
+            "esbuild",
+            "maplibre-gl",
+            "sharp",
+            "vue-demi"
+        ]
     }
 }
