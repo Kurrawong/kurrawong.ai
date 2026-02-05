@@ -19,6 +19,7 @@ The products our team most actively support are:
 - **[KurraScope](/products/kurrascope)** - RDF management software
 - **[Olis](/products/olis)** - our in-house developed Graph Management application
 - **[kurra](/products/kurra)** - RDF management software
+- **[Semantic Background](/products/semback)** - a Semantic Web reference data product
 
 ## Supported 3rd Party Products
 
