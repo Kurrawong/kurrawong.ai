@@ -15,6 +15,7 @@ However, we actively support a range of Knowledge Graph-related products: mostly
 ## Our Products
 
 The products our team most actively support are:
+- **[Bower](/products/bower)** - multi-system AI platform that aggregates, classifies and searches your data — grounded by Knowledge Graphs
 - **[Prez](/products/prez)** - a linked data configurable API, with a separate and customisable UI application
 - **[KurraScope](/products/kurrascope)** - RDF management software
 - **[Olis](/products/olis)** - our in-house developed Graph Management application
