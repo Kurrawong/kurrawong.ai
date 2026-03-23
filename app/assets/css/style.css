@@ -20,7 +20,7 @@ h6 {
     color: var(--color-link);
 }
 
-main a, footer a {
+main a:not(.k-btn), footer a:not(.k-btn) {
     color: var(--color-link);
 }
 
