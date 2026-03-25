@@ -47,6 +47,10 @@ For K-Maker to work for you, all it needs is your KG data model. If your organis
 
 <!-- for future, we may add links to a relevant case study-->
 
+### Bower
+
+**[Bower](/products/bower)** is our multi-system AI platform that aggregates, classifies and searches your own data, grounded by Knowledge Graphs.
+
 ### Olis 
 
 **[Olis](/products/olis)** is our in-house developed Graph Management application, designed to leverage data across different aspects of your business, to break down institutional information silos while retaining the ability for respoonsive querying, granular access management, and contextual data use.
