@@ -6,30 +6,36 @@ title: About Us
 
 ## Use of AI in daily work
 
-At KurrawongAI, we value the unique expertise and experience of our team, and encourage them to combine this with the best tools at their disposal to deliver effective and quality outcomes for our clients. We don't just use AI — we understand how it works, where it fails, and how to structure information so it performs reliably. As such, many of our day-to-day tasks are made more efficient through leveraging current AI resources and tools.  
-This can include a broad range of tasks, across differing roles and technical experience level. All of our team are expected to remain informed and proactive in understanding the privacy, security and ethical impacts of our AI use, but we are always ready to discuss new ways of working with our clients. If there is any aspect of our approach that does not align with the expectations of a specific project, we can adjust this to meet your needs.  
-While we always expect the human behind the keyboard to provide the final decision on quality delivery, expanded below are some of the aspects of our work that can be streamlined through the use of everyday AI tools.
-AI outputs are used to provide rapid prototypes or draft content, using AI to move faster on more routine tasks, so we can focus our expertise on solving the underlying challenges we will help you solve. 
+We value the unique expertise and experience of our team, and encourage them to combine this with the best tools at their disposal. We both create AI systems and use it in our own work. We understand how it works, where it fails, and how to structure information so it can be used by AI well. Many of our day-to-day tasks are made more efficient through leveraging AI.
 
+All of our team are required to remain informed and proactive in understanding the privacy, security and ethical impacts of our AI use, but we are always ready to discuss new ways of working with our clients. If there is any aspect of our approach that does not align with the expectations of a specific project, we can adjust our approaches to meet your needs.
+
+While we use AI, we always require the human behind the keyboard to provide the final decision on product delivery
+
+Expanded below are some aspects of our work that are streamlined through the use of everyday AI tools.
 
 ::KCard
-- Rapid generation of content utilising project documentation, aligned to meet a specific use case (lessons learned; case studies; methodologies; outcomes)
-- Easy organisation of project artefacts, documentation and meeting notes
-- Highlighting relevant similar project patterns when reviewing prospects
+- Rapid generation of content using documented requirements. We know how to validate generated data very well
+- Generation of documentation from data
+- Highlighting patterns in data that can be reused
 
 #title
 Knowledge Management
 ::
 
+<div style="height:10px;"></div>
+
 ::KCard
-- Code generation or review
-- Automating technical document generation
+- Code generation and review
+- Automating generation of documentation
 - AI-assisted debugging and performance testing
 - Generating potential test cases
 
 #title
 Software & Technical work
 ::
+
+<div style="height:10px;"></div>
 
 ::KCard
 - Summarising meeting notes and extracting action items into tasks
@@ -41,11 +47,13 @@ Software & Technical work
 Project Operations
 ::
 
+<div style="height:10px;"></div>
+
 ::KCard
 - Using AI to critique and review content or recommendations
 - Generating test data for testing  pipelines and models
 - Rapid template generation for documentation
 
 #title
-Consulting a& Delivery
+Consulting & Delivery
 ::
