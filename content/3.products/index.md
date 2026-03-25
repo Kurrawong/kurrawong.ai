@@ -14,52 +14,10 @@ However, we actively support a range of Knowledge Graph-related products: mostly
 ---
 ## Our Products
 
-With our extensive experience in management of KG data, KurrawongAI have developed certain products in-house to meet our clients need for consistent and reliable ways of managing data. These include:
-
-### K-Maker
-
-<!-- describes a common problem-->
-
-Organisation's are increasingly realising that the future of enterprise data management is graph-native. However, while the shift from more traditional, rigid relational systems is relatively simple, few organisations find existing solutions represent their specific business needs and data in a way that allows for existing teams to transition readily to this way of data management. 
-
-<!-- this provides a simple summary of the product -->
-
-This is where KurrawongAI has developed K-Maker. This solution utilises our experience in transforming disparate organisational data into a single Knowledge Graph linking information and metada into a coherent structure. As part of a unified data model, we provide User Interfaces (UIs) that are simple, and easy to understand for your own people to administer. 
-
-<!-- this provides an overview of features -->
-
-
-K-Maker UIs leverage our expertise in KG technology to provide ready-to-implement features that can be combined to provide a custom solution without the overhead of typical from-the-ground-up software development. These include:
-
-- interfaces built using SHACL (Shapes Constraint Language) to ensure that data is valid for your own graph at every user interaction.
-
-- custom web components based upon our existing library of common components
- 
-- incorporation of data management workflows for provenance and approvals
-
-- the ability to link to RDF databases, high availability data-replication services or version-controlled file stores (depending upon the best fit for your use-case).
-
-<!-- what does this mean for clients-->
-
-Our solution allows the transition (or improvement) of organisational, domain specific data to Knowledge Graphs with self-management of reference data available to the team members relying upon it most. This provides a low-tech entry point for future-proofing your data.
-
-For K-Maker to work for you, all it needs is your KG data model. If your organisation hasn't modelled your data for Knowledge Graphs, we can help to develop this with you.
-
-<!-- for future, we may add links to a relevant case study-->
-
-### Bower
-
-**[Bower](/products/bower)** is our multi-system AI platform that aggregates, classifies and searches your own data, grounded by Knowledge Graphs.
-
-### Olis 
-
-**[Olis](/products/olis)** is our in-house developed Graph Management application, designed to leverage data across different aspects of your business, to break down institutional information silos while retaining the ability for respoonsive querying, granular access management, and contextual data use.
-
----
-
-The other products our team most actively support are:
+- **[K-Maker](/products/k-maker)** - our Knowledge Graph editing and management too. Often used for reference data
+- **[Bower](/products/bower)** is our multi-AI platform that aggregates, classifies and searches your own data, grounded by Knowledge Graphs.
+- **[Olis](/products/olis)** is our multi-graph technical management application. Used to provide role-based access control to Knowledge Graphs
 - **[Prez](/products/prez)** - a linked data configurable API, with a separate and customisable UI application
-- **[KurraScope](/products/kurrascope)** - RDF management software
 - **[kurra](/products/kurra)** - RDF management software
 
 ## Supported 3rd Party Products
