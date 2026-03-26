@@ -5,6 +5,7 @@ Written in [Nuxt](https://nuxt.com/), [Nuxt Content](https://content.nuxt.com/),
 
 ## Contents
 - [Install & Run](#install--run)
+  - [Windows](#windows)
 - [Markdown Content](#markdown-content)
     - [Front Matter](#front-matter)
     - [Content Components](#content-components)
@@ -23,6 +24,17 @@ Then to run locally, run:
 ```bash
 pnpm dev
 ```
+
+### Windows
+Windows users may experience slow install & dev times or other issues. Add pnpm to Defender's list by running the following command in PowerShell as admin:
+
+```powershell
+Add-MpPreference -ExclusionPath $(pnpm store path)
+```
+
+This should help improve the speed of installing packages. See https://pnpm.io/installation#on-windows for details.
+
+The Nuxt dev server may also take a long time to start and load in browsers. Instead of going to http://localhost:3000, try [http://[::1]:3000](http://[::1]:3000). If your computer doesn't support that, try http://127.0.0.1:3000 instead.
 
 ## Markdown Content
 See [Nuxt Content docs](https://content.nuxt.com/usage/markdown) for more info.
