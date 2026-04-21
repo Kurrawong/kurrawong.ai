@@ -57,3 +57,7 @@ h1 > a:hover::before, h2 > a:hover::before, h3 > a:hover::before, h4 > a:hover::
     -ms-transform: scale(-1, 1);
     transform: scale(-1, 1);
 }
+
+:target {
+  scroll-margin-top: 80px;
+}
