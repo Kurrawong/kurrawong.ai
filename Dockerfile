@@ -6,8 +6,9 @@ FROM base as build
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+# RUN corepack enable
 RUN apk add --no-cache python3 py3-pip make build-base
+RUN npm install -g pnpm@10
 COPY --link package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY --link . .
