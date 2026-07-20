@@ -14,6 +14,7 @@ However, we actively support a range of Knowledge Graph-related products: mostly
 ---
 ## Our Products
 
+- **[Address Manager](/products/address-manager)** - our street address amanagement application for [ICSM ANZ Addresss Model](https://linked.data.gov.au/def/addr) data
 - **[K-Maker](/products/k-maker)** - our Knowledge Graph editing and management too. Often used for reference data
 - **[Bower](/products/bower)** is our multi-AI platform that aggregates, classifies and searches your own data, grounded by Knowledge Graphs.
 - **[Olis](/products/olis)** is our multi-graph technical management application. Used to provide role-based access control to Knowledge Graphs
@@ -52,7 +53,7 @@ Other 3rd party products that we work with extensively and promote the use of ar
 **RDF manipulation & analysis tools**
 - [Jena](https://jena.apache.org/) - an Apache Software Foundation RDF manipulation toolkit in Java
 - [RDFLib](https://github.com/rdflib/rdflib/) -  a Python RDF manipulation toolkit
-- PANDAS
+- [PANDAS](https://pandas.pydata.org/) - a general-purpose data analysis and manipulation tool we often use to convert data to RDF
 
 **Geographic Information Systems**
 - [QGIS](https://qgis.org) - the leading open-source spatial data platform
