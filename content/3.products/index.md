@@ -17,8 +17,9 @@ However, we actively support a range of Knowledge Graph-related products: mostly
 - **[Address Manager](/products/address-manager)** - our street address amanagement application for [ICSM ANZ Addresss Model](https://linked.data.gov.au/def/addr) data
 - **[K-Maker](/products/k-maker)** - our Knowledge Graph editing and management too. Often used for reference data
 - **[Bower](/products/bower)** is our multi-AI platform that aggregates, classifies and searches your own data, grounded by Knowledge Graphs.
-- **[Olis](/products/olis)** is our multi-graph technical management application. Used to provide role-based access control to Knowledge Graphs
 - **[Prez](/products/prez)** - a linked data configurable API, with a separate and customisable UI application
+- **[KG Validator](https://tools.kurrawong.ai/validate)** - an online [SHACL](https://www.w3.org/TR/shacl/) validator tool that has many validtors and data examples pre-loaded
+- **[Olis](/products/olis)** is our multi-graph technical management application. Used to provide role-based access control to Knowledge Graphs
 - **[kurra](/products/kurra)** - RDF management software
 
 ## Supported 3rd Party Products
