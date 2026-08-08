@@ -14,11 +14,11 @@ However, we actively support a range of Knowledge Graph-related products: mostly
 ---
 ## Our Products
 
-- **[Address Manager](/products/address-manager)** - our street address amanagement application for [ICSM ANZ Addresss Model](https://linked.data.gov.au/def/addr) data
+- **[Address Manager](/products/address-manager)** - our street address management application for [ICSM ANZ Address Model](https://linked.data.gov.au/def/addr) data
 - **[K-Maker](/products/k-maker)** - our Knowledge Graph editing and management too. Often used for reference data
 - **[Bower](/products/bower)** is our multi-AI platform that aggregates, classifies and searches your own data, grounded by Knowledge Graphs.
 - **[Prez](/products/prez)** - a linked data configurable API, with a separate and customisable UI application
-- **[KG Validator](https://tools.kurrawong.ai/validate)** - an online [SHACL](https://www.w3.org/TR/shacl/) validator tool that has many validtors and data examples pre-loaded
+- **[KG Validator](https://tools.kurrawong.ai/validate)** - an online [SHACL](https://www.w3.org/TR/shacl/) validator tool that has many validators and data examples preloaded
 - **[Olis](/products/olis)** is our multi-graph technical management application. Used to provide role-based access control to Knowledge Graphs
 - **[kurra](/products/kurra)** - RDF management software
 
@@ -29,7 +29,7 @@ However, we actively support a range of Knowledge Graph-related products: mostly
 ## Supported Tools
 
 Where KurrawongAI has developed tools through our work with RDF and Semantic Web technologies that we feel have value for the broader technology community, we do our best to share and maintain these. This includes several to which we provide access via an online user-interface for ease of use:
-- **[PrezManifest](https://tools.kurrawong.ai/cmd/prezmanifest)** - a Python command line and workflow application that helps manage parts of Knowledge Graphs
+- **[KGM](https://docs.kurrawong.ai/products/tools/kgm/)** - a Python command line and workflow application that helps manage parts of Knowledge Graphs
 - **[pyLODE](https://tools.kurrawong.ai/tools/pylode)** - used to generate human-readable HTML documentation from ontologies
 - **[RDF Converter](https://tools.kurrawong.ai/tools/convert)** - convert between different RDF formats
 - **[SHACL Validator](https://tools.kurrawong.ai/tools/validate)** - Validate RDF data against SHACL rules
