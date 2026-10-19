@@ -53,9 +53,9 @@ function render() {
         .selectAll<SVGGElement, SimNode>(".kgraph-node")
         .data(simNodes)
         .join("g")
-        .attr("class", d => `kgraph-node kgraph-type-${d.type}`);
+        .attr("class", d => `kgraph-node kgraph-type-${d.type}${d.url ? " kgraph-key" : ""}`);
 
-    node.append("circle").attr("r", 10);
+    node.append("circle").attr("r", d => (d.url ? 12 : 7));
     node.append("title").text(d => `${d.label}\n${d.id}${d.description ? `\n\n${d.description}` : ""}`);
     node.append("text")
         .text(d => d.label)
@@ -195,12 +195,25 @@ onBeforeUnmount(() => {
     fill: var(--muted-foreground);
 }
 
+.kgraph-node.kgraph-key circle {
+    stroke: var(--foreground);
+    stroke-width: 2.5;
+}
+
+.kgraph-node.kgraph-key {
+    cursor: pointer;
+}
+
+.kgraph-node:not(.kgraph-key) circle {
+    opacity: 0.75;
+}
+
 .kgraph-node circle {
     transition: r 0.15s;
 }
 
 .kgraph-node:hover circle {
-    r: 14;
+    r: 15;
 }
 
 .kgraph-node:not([data-active]) circle,

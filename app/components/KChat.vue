@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { MessageCircle, Send, X } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const APP_NAME = "sparql_agent";
@@ -9,13 +10,14 @@ const { public: { kchatUrl } } = useRuntimeConfig();
 const { pendingQuestion } = useKChatBar();
 const route = useRoute();
 
+// The landing page shows the chat bar in the top-left corner; other pages get
+// the floating launcher in the bottom-right.
+const isLanding = computed(() => route.path === "/");
+
 const open = ref(false);
-const messages = ref<{ role: "user" | "assistant"; text: string; artifacts: { name: string; version: number; label: string }[]; error?: boolean }[]>([]);
+const messages = ref<{ role: "user" | "assistant"; text: string; artifacts: { name: string; version: number; label: string }[]; error?: boolean; typing?: boolean }[]>([]);
 const input = ref("");
 const busy = ref(false);
-
-// The landing page has its own front-and-centre chat bar; hide the launcher there.
-const showLauncher = computed(() => route.path !== "/");
 
 let userId = "";
 let sessionId = "";
@@ -43,10 +45,17 @@ watch(open, value => {
 
 watch(pendingQuestion, value => {
     if (!value || !kchatUrl) return;
-    open.value = true;
-    nextTick(() => submit(value));
+    sendQuestion(value);
     pendingQuestion.value = null;
 });
+
+function sendQuestion(value: string) {
+    const trimmed = value.trim();
+    if (!trimmed || busy.value) return;
+    open.value = true;
+    input.value = "";
+    submit(trimmed);
+}
 
 function sessionBase(): string {
     return `${kchatUrl}/apps/${APP_NAME}/users/${encodeURIComponent(userId)}/sessions/${encodeURIComponent(sessionId)}`;
@@ -178,10 +187,7 @@ async function submit(message: string) {
 }
 
 function onFormSubmit() {
-    const value = input.value.trim();
-    if (!value || busy.value) return;
-    input.value = "";
-    submit(value);
+    sendQuestion(input.value);
 }
 
 function onInputKeydown(event: KeyboardEvent) {
@@ -194,8 +200,37 @@ function onInputKeydown(event: KeyboardEvent) {
 
 <template>
     <div v-if="kchatUrl" class="font-sans">
+        <!-- Landing page: chat bar in the top-left corner. -->
+        <div v-if="isLanding && !open" class="fixed top-5 left-5 z-[80] w-[min(calc(100vw-2.5rem),400px)]">
+            <form class="bg-card flex items-center gap-2 rounded-full border p-1.5 pl-4 shadow-lg" @submit.prevent="onFormSubmit">
+                <input
+                    id="kchat-input"
+                    v-model="input"
+                    type="text"
+                    placeholder="Ask about KurrawongAI…"
+                    aria-label="Ask a question about KurrawongAI"
+                    class="h-9 flex-1 bg-transparent text-sm outline-none"
+                >
+                <Button type="submit" size="icon" class="size-9 shrink-0 rounded-full" aria-label="Send question" :disabled="!input.trim()">
+                    <Send />
+                </Button>
+            </form>
+            <div class="mt-2 flex flex-wrap gap-1.5">
+                <button
+                    v-for="suggestion in KCHAT_SUGGESTIONS"
+                    :key="suggestion"
+                    type="button"
+                    class="bg-card/80 hover:bg-accent rounded-full border px-2.5 py-1 text-xs shadow-sm backdrop-blur-sm"
+                    @click="sendQuestion(suggestion)"
+                >
+                    {{ suggestion }}
+                </button>
+            </div>
+        </div>
+
+        <!-- Other pages: floating launcher in the bottom-right corner. -->
         <Button
-            v-if="!open && showLauncher"
+            v-if="!isLanding && !open"
             size="lg"
             class="fixed bottom-5 right-5 z-[80] rounded-full pr-5 shadow-lg"
             aria-label="Open chat"
@@ -205,9 +240,12 @@ function onInputKeydown(event: KeyboardEvent) {
             Ask KurrawongAI
         </Button>
 
+        <!-- Chat panel: expands out of the top-left bar on the landing page,
+             bottom-right elsewhere. -->
         <div
             v-if="open"
-            class="bg-card text-card-foreground fixed bottom-5 right-5 z-[80] flex h-[min(70vh,600px)] w-[min(calc(100vw-2.5rem),400px)] flex-col overflow-hidden rounded-lg border shadow-xl"
+            class="bg-card text-card-foreground fixed z-[80] flex h-[min(70vh,600px)] w-[min(calc(100vw-2.5rem),400px)] flex-col overflow-hidden rounded-lg border shadow-xl"
+            :class="isLanding ? 'top-5 left-5' : 'bottom-5 right-5'"
             role="dialog"
             aria-label="KurrawongAI chat"
         >
@@ -231,7 +269,7 @@ function onInputKeydown(event: KeyboardEvent) {
                             :key="suggestion"
                             type="button"
                             class="bg-background hover:bg-accent rounded-full border px-3 py-1.5 text-xs"
-                            @click="submit(suggestion)"
+                            @click="sendQuestion(suggestion)"
                         >
                             {{ suggestion }}
                         </button>
@@ -247,18 +285,25 @@ function onInputKeydown(event: KeyboardEvent) {
                             :class="{ 'text-destructive': message.error }"
                             v-html="kchatMarkdown(message.text)"
                         />
-                        <div v-if="message.artifacts.length" class="mt-2 flex flex-wrap gap-1.5">
-                            <button
-                                v-for="artifact in message.artifacts"
-                                :key="`${artifact.name}:${artifact.version}`"
-                                type="button"
-                                class="bg-background hover:bg-accent rounded-full border px-2.5 py-0.5 text-xs"
-                                :title="`Open ${artifact.name}`"
-                                @click="openArtifact(artifact.name, artifact.version)"
-                            >
-                                {{ artifact.label }} · v{{ artifact.version }}
-                            </button>
-                        </div>
+                        <Collapsible v-if="message.artifacts.length" class="mt-2">
+                            <CollapsibleTrigger class="text-muted-foreground hover:text-foreground text-xs underline-offset-2 hover:underline">
+                                SPARQL queries &amp; results ({{ message.artifacts.length }})
+                            </CollapsibleTrigger>
+                            <CollapsibleContent>
+                                <div class="mt-1.5 flex flex-wrap gap-1.5">
+                                    <button
+                                        v-for="artifact in message.artifacts"
+                                        :key="`${artifact.name}:${artifact.version}`"
+                                        type="button"
+                                        class="bg-background hover:bg-accent rounded-full border px-2.5 py-0.5 text-xs"
+                                        :title="`Open ${artifact.name}`"
+                                        @click="openArtifact(artifact.name, artifact.version)"
+                                    >
+                                        {{ artifact.label }} · v{{ artifact.version }}
+                                    </button>
+                                </div>
+                            </CollapsibleContent>
+                        </Collapsible>
                         <span v-if="message.typing" class="mt-1 inline-flex gap-1">
                             <span class="bg-muted-foreground size-1.5 animate-bounce rounded-full [animation-delay:-0.3s]" />
                             <span class="bg-muted-foreground size-1.5 animate-bounce rounded-full [animation-delay:-0.15s]" />

@@ -56,7 +56,7 @@ Open http://localhost:3000 and use the "Ask KurrawongAI" button in the bottom-ri
 The chat widget (`app/components/KChat.vue`) is enabled by setting `NUXT_PUBLIC_KCHAT_URL` to the kchat service's base URL; when unset, the widget is not rendered.
 
 ### Landing page
-The landing page hero (see `app/components/content/KHero.vue`) puts the chat front and centre: a large question bar with suggested-question pills, a concise company summary derived from the RDF (no chat request needed), and a fullscreen d3.js network diagram of the RDF behind it, blurred as a backdrop. The "Explore the graph" button in the bottom-right un-blurs the diagram and hides the rest of the site so the graph can be explored (drag nodes, zoom, hover to highlight connections, click a node for its details).
+The landing page hero (see `app/components/content/KHero.vue`) keeps the site minimal: a headline and a concise company summary derived from the RDF (no chat request needed) sit over a fullscreen d3.js network diagram of the RDF, lightly blurred as a backdrop. Key nodes (entities with website page links, such as products and services) are drawn larger and outlined. The chat bar sits in the top-left corner (see `app/components/KChat.vue`) with suggested-question pills; after you ask a question, the chat window expands out of the bar. The "Explore the graph" button in the bottom-right un-blurs the diagram and hides the rest of the site so the graph can be explored (drag nodes, zoom, hover to highlight connections, click a node for its details and page link). A chevron at the bottom of the hero indicates more content below.
 
 ### Guardrails
 Two protections are configured through the kchat container (see `compose.yaml` and `.env.example`):
