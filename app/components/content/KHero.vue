@@ -18,9 +18,30 @@ const LEGEND = [
     { label: "External / other", type: "other" },
 ];
 
+const colorMode = useColorMode();
+const backdropFade = ref(1);
+
+function onScroll() {
+    const start = window.innerHeight * 0.2;
+    const end = window.innerHeight * 0.9;
+    const progress = (window.scrollY - start) / (end - start);
+    backdropFade.value = Math.min(1, Math.max(0, 1 - progress));
+}
+
+const backdropStyle = computed(() => {
+    if (exploring.value) return undefined;
+    const base = colorMode.value === "dark" ? 0.3 : 0.45;
+    return { opacity: base * backdropFade.value };
+});
+
 function scrollDown() {
     window.scrollBy({ top: window.innerHeight * 0.9, behavior: "smooth" });
 }
+
+onMounted(() => {
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+});
 
 watch(exploring, value => {
     document.body.style.overflow = value ? "hidden" : "";
@@ -28,17 +49,21 @@ watch(exploring, value => {
 });
 
 onBeforeUnmount(() => {
+    window.removeEventListener("scroll", onScroll);
     document.body.style.overflow = "";
 });
 </script>
 
 <template>
-    <div class="relative -mx-5 not-prose overflow-hidden rounded-lg min-h-[calc(100svh-4.5rem)]">
+    <div class="relative -mx-5 not-prose rounded-lg min-h-[calc(100svh-4.5rem)]">
+        <!-- Fullscreen backdrop behind all page content (negative z-index),
+             fading out as the page scrolls past the hero. -->
         <div
-            class="absolute inset-0 transition-all duration-500"
+            class="transition-all duration-500"
             :class="exploring
-                ? 'fixed inset-0 z-[60] bg-background blur-0 opacity-100'
-                : 'opacity-45 blur-[2px] pointer-events-none dark:opacity-30'"
+                ? 'fixed inset-0 z-[60] bg-background blur-0'
+                : 'fixed inset-0 -z-10 blur-[2px] pointer-events-none'"
+            :style="backdropStyle"
         >
             <ClientOnly>
                 <KGraphCanvas :turtle="turtleData" @select="selectedNode = $event" />
