@@ -30,6 +30,8 @@ const messages = ref<ChatMessage[]>([]);
 const input = ref("");
 const busy = ref(false);
 const suggestions = ref<string[]>([]);
+// The initial suggestions hide permanently once a question is asked.
+const initialSuggestionsVisible = ref(true);
 
 let userId = "";
 let sessionId = "";
@@ -48,7 +50,7 @@ onMounted(() => {
     localStorage.setItem("kchat.user", userId);
     localStorage.setItem("kchat.session", sessionId);
     // Random picks are made client-side so server and client markup match.
-    suggestions.value = kchatRandomSuggestions(3);
+    suggestions.value = kchatRandomSuggestions(13);
 });
 
 watch(open, value => {
@@ -65,7 +67,9 @@ watch(pendingQuestion, value => {
 
 function sendQuestion(value: string) {
     const trimmed = value.trim();
-    if (!trimmed || busy.value) return;
+    if (!trimmed) return;
+    initialSuggestionsVisible.value = false;
+    if (busy.value) return;
     open.value = true;
     input.value = "";
     submit(trimmed);
@@ -239,9 +243,9 @@ function onInputKeydown(event: KeyboardEvent) {
                 </Button>
             </form>
 
-            <!-- Suggested questions: three random picks, hidden once the
-                 conversation has started. -->
-            <div v-if="!messages.length" class="mt-2 flex flex-wrap gap-1.5">
+            <!-- Suggested questions: random picks, hidden permanently once a
+                 question has been asked. -->
+            <div v-if="initialSuggestionsVisible" class="mt-2 flex flex-wrap gap-1.5">
                 <button
                     v-for="suggestion in suggestions"
                     :key="suggestion"

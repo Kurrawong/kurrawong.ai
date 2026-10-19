@@ -13,10 +13,28 @@ export const KCHAT_SUGGESTIONS = [
     "What training does KurrawongAI offer?",
     "Tell me about the Indigenous Data Network Catalogue project",
     "Where is KurrawongAI based?",
+    "What is Bower?",
+    "What is K-Maker used for?",
+    "What is Olis?",
+    "What does kurra do?",
+    "Who founded KurrawongAI?",
+    "What is the KG Validator?",
+    "What is VocExcel used for?",
+    "Tell me about the OGC RAINBOW platform project",
+    "What data governance services does KurrawongAI offer?",
+    "What is pyLODE?",
+    "Does KurrawongAI support RDFLib?",
+    "What is KurrawongAI's ABN?",
+    "Who is the director of KurrawongAI?",
+    "What reference data services does KurrawongAI offer?",
+    "Tell me about the Queensland spatial datasets rebuild",
+    "What was the National Address Model project?",
+    "What does KurrawongAI's support service cover?",
+    "What vocabularies has KurrawongAI created for clients?",
 ];
 
 /** Pick `count` distinct suggestions at random. Call client-side only. */
-export function kchatRandomSuggestions(count = 3): string[] {
+export function kchatRandomSuggestions(count = 13): string[] {
     const pool = [...KCHAT_SUGGESTIONS];
     for (let i = pool.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));

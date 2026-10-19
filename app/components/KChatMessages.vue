@@ -17,7 +17,7 @@ const suggestions = ref<string[]>([]);
 
 onMounted(() => {
     // Random picks are made client-side so server and client markup match.
-    suggestions.value = kchatRandomSuggestions(3);
+    suggestions.value = kchatRandomSuggestions(13);
 });
 
 const parsed = computed(() => props.messages.map(message => {
