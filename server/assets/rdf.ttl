@@ -178,7 +178,9 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:additionalType "Product" ;
     schema:applicationCategory "Validation tool" ;
     schema:description "KurrawongAI's online SHACL validator, at tools.kurrawong.ai/validate, is a user interface and API used to validate RDF data according to provided SHACL constraints. It contains many pre-loaded SHACL shapes graphs developed for different models and systems, arranged in dependency hierarchies."@en ;
+    schema:isPartOf <https://kurrawong.ai/#tools-website> ;
     schema:name "KG Validator"@en ;
+    schema:sameAs "https://docs.kurrawong.ai/products/tools/shacl-validator/"^^xsd:anyURI ;
     schema:provider <https://kurrawong.ai> ;
     schema:sameAs "https://tools.kurrawong.ai/validate"^^xsd:anyURI ;
     schema:url "https://kurrawong.ai/products/validator"^^xsd:anyURI ;
@@ -212,6 +214,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:description "kurra is an open source toolkit, supported commercially by KurrawongAI, for the management of Knowledge Graph data. It provides functions to validate, query, convert, export and load RDF data and is built on RDFLib."@en ;
     schema:isBasedOn <https://kurrawong.ai/products/#rdflib> ;
     schema:name "kurra"@en ;
+    schema:sameAs "https://docs.kurrawong.ai/products/tools/kurra/"^^xsd:anyURI ;
     schema:provider <https://kurrawong.ai> ;
     schema:url "https://kurrawong.ai/products/kurra"^^xsd:anyURI ;
 .
@@ -454,6 +457,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:additionalType "Tool" ;
     schema:applicationCategory "Knowledge Graph management tool" ;
     schema:description "KGM is a Python command line and workflow application, developed by KurrawongAI, that helps manage parts of Knowledge Graphs."@en ;
+    schema:isPartOf <https://kurrawong.ai/#docs-website> ;
     schema:name "KGM"@en ;
     schema:provider <https://kurrawong.ai> ;
     schema:url "https://docs.kurrawong.ai/products/tools/kgm/"^^xsd:anyURI ;
@@ -464,6 +468,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:additionalType "Tool" ;
     schema:applicationCategory "Ontology documentation tool" ;
     schema:description "pyLODE is an online tool used to generate human-readable HTML documentation from ontologies."@en ;
+    schema:isPartOf <https://kurrawong.ai/#tools-website> ;
     schema:name "pyLODE"@en ;
     schema:provider <https://kurrawong.ai> ;
     schema:url "https://tools.kurrawong.ai/tools/pylode"^^xsd:anyURI ;
@@ -474,6 +479,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:additionalType "Tool" ;
     schema:applicationCategory "RDF conversion tool" ;
     schema:description "The RDF Converter is an online tool used to convert between different RDF formats."@en ;
+    schema:isPartOf <https://kurrawong.ai/#tools-website> ;
     schema:name "RDF Converter"@en ;
     schema:provider <https://kurrawong.ai> ;
     schema:url "https://tools.kurrawong.ai/tools/convert"^^xsd:anyURI ;
@@ -484,6 +490,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:additionalType "Tool" ;
     schema:applicationCategory "Vocabulary conversion tool" ;
     schema:description "VocExcel is an online tool used to convert Excel data to SKOS vocabularies."@en ;
+    schema:isPartOf <https://kurrawong.ai/#tools-website> ;
     schema:name "VocExcel"@en ;
     schema:provider <https://kurrawong.ai> ;
     schema:url "https://tools.kurrawong.ai/tools/vocexcel"^^xsd:anyURI ;
@@ -497,4 +504,77 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:name "SPARQL parser"@en ;
     schema:provider <https://kurrawong.ai> ;
     schema:url "https://github.com/Kurrawong/sparql"^^xsd:anyURI ;
+.
+
+# --- Tool Websites ---
+
+<https://kurrawong.ai/#tools-website>
+    a schema:WebSite ;
+    schema:description "KurrawongAI's website of free online RDF and Semantic Web tools, including pyLODE ontology documentation, RDF format conversion, SHACL validation and SKOS vocabulary conversion."@en ;
+    schema:name "KurrawongAI Tools"@en ;
+    schema:publisher <https://kurrawong.ai> ;
+    schema:url "https://tools.kurrawong.ai"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/#docs-website>
+    a schema:WebSite ;
+    schema:description "KurrawongAI's knowledge base with information about the RDF and Semantic Web-related tools that KurrawongAI maintains, plus its products and modelling concepts."@en ;
+    schema:name "KurrawongAI Knowledge Base"@en ;
+    schema:publisher <https://kurrawong.ai> ;
+    schema:url "https://docs.kurrawong.ai"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#ogc-tests>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Tool" ;
+    schema:applicationCategory "OGC test suite" ;
+    schema:description "An unofficial, open source, Python implementation of the Open Geospatial Consortium's Java-based test suite."@en ;
+    schema:isPartOf <https://kurrawong.ai/#docs-website> ;
+    schema:name "OGC Tests"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://docs.kurrawong.ai/products/tools/ogc-tests/"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#prefix-lookup>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Tool" ;
+    schema:applicationCategory "RDF namespace tool" ;
+    schema:description "Prefix Lookup gets RDF namespaces from prefixes."@en ;
+    schema:isPartOf <https://kurrawong.ai/#docs-website> ;
+    schema:name "Prefix Lookup"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://docs.kurrawong.ai/products/tools/prefix-lookup/"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#provworkflow>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Tool" ;
+    schema:applicationCategory "Provenance tool" ;
+    schema:description "ProvWorkflow records the provenance of Python workflows in RDF."@en ;
+    schema:isPartOf <https://kurrawong.ai/#docs-website> ;
+    schema:name "ProvWorkflow"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://docs.kurrawong.ai/products/tools/provworkflow/"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#rdf-merger>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Tool" ;
+    schema:applicationCategory "RDF tool" ;
+    schema:description "The RDF Merger merges RDF graphs together."@en ;
+    schema:isPartOf <https://kurrawong.ai/#docs-website> ;
+    schema:name "RDF Merger"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://docs.kurrawong.ai/products/tools/rdf-merger/"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#vocedit>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Tool" ;
+    schema:applicationCategory "SKOS vocabulary tool" ;
+    schema:description "VocEdit is an online tool for SKOS vocabulary creation and editing."@en ;
+    schema:isPartOf <https://kurrawong.ai/#docs-website> ;
+    schema:name "VocEdit"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://docs.kurrawong.ai/products/tools/vocedit/"^^xsd:anyURI ;
 .

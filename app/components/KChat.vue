@@ -29,6 +29,7 @@ const open = ref(false);
 const messages = ref<ChatMessage[]>([]);
 const input = ref("");
 const busy = ref(false);
+const suggestions = ref<string[]>([]);
 
 let userId = "";
 let sessionId = "";
@@ -46,6 +47,8 @@ onMounted(() => {
     sessionId = localStorage.getItem("kchat.session") || `chat-${crypto.randomUUID()}`;
     localStorage.setItem("kchat.user", userId);
     localStorage.setItem("kchat.session", sessionId);
+    // Random picks are made client-side so server and client markup match.
+    suggestions.value = kchatRandomSuggestions(3);
 });
 
 watch(open, value => {
@@ -236,9 +239,11 @@ function onInputKeydown(event: KeyboardEvent) {
                 </Button>
             </form>
 
-            <div class="mt-2 flex flex-wrap gap-1.5">
+            <!-- Suggested questions: three random picks, hidden once the
+                 conversation has started. -->
+            <div v-if="!messages.length" class="mt-2 flex flex-wrap gap-1.5">
                 <button
-                    v-for="suggestion in KCHAT_SUGGESTIONS"
+                    v-for="suggestion in suggestions"
                     :key="suggestion"
                     type="button"
                     class="bg-card/80 hover:bg-accent rounded-full border px-2.5 py-1 text-xs shadow-sm backdrop-blur-sm"

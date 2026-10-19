@@ -13,6 +13,13 @@ const emit = defineEmits<{
     send: [question: string];
 }>();
 
+const suggestions = ref<string[]>([]);
+
+onMounted(() => {
+    // Random picks are made client-side so server and client markup match.
+    suggestions.value = kchatRandomSuggestions(3);
+});
+
 const parsed = computed(() => props.messages.map(message => {
     if (message.role !== "assistant" || message.error) return { body: message.text, followUps: [] as string[] };
     return kchatExtractFollowUps(message.text);
@@ -25,9 +32,9 @@ const parsed = computed(() => props.messages.map(message => {
             <p class="text-muted-foreground mt-4 text-center text-sm">
                 Ask a question about KurrawongAI, our people, products, services or projects.
             </p>
-            <div class="flex flex-wrap justify-center gap-2">
+            <div v-if="suggestions.length" class="flex flex-wrap justify-center gap-2">
                 <button
-                    v-for="suggestion in KCHAT_SUGGESTIONS"
+                    v-for="suggestion in suggestions"
                     :key="suggestion"
                     type="button"
                     class="bg-background hover:bg-accent rounded-full border px-3 py-1.5 text-xs"
