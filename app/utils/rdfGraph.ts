@@ -121,7 +121,7 @@ export function turtleToSummary(turtle: string): SiteSummary | null {
         description: org.description,
         counts: {
             people: typeCounts.person,
-            products: typeCounts.product - 1, // exclude the chat assistant
+            products: typeCounts.product,
             services: typeCounts.service,
             projects: typeCounts.project,
         },
