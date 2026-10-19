@@ -7,7 +7,7 @@ import type { ChatMessage } from "@/utils/kchat";
 const APP_NAME = "sparql_agent";
 
 const { public: { kchatUrl } } = useRuntimeConfig();
-const { pendingQuestion } = useKChatBar();
+const { pendingQuestion, conversationActive } = useKChatBar();
 const { exploring } = useGraphExplore();
 const route = useRoute();
 
@@ -64,6 +64,22 @@ watch(pendingQuestion, value => {
     sendQuestion(value);
     pendingQuestion.value = null;
 });
+
+watch([open, messages, isLanding], () => {
+    conversationActive.value = isLanding.value && open.value && messages.value.length > 0;
+}, { deep: true });
+
+/** Clear the conversation and start a fresh session with new suggestions. */
+function clearSession() {
+    messages.value = [];
+    knownArtifacts.clear();
+    sessionId = `chat-${crypto.randomUUID()}`;
+    localStorage.setItem("kchat.session", sessionId);
+    suggestions.value = kchatRandomSuggestions(13);
+    initialSuggestionsVisible.value = true;
+    open.value = false;
+    busy.value = false;
+}
 
 function sendQuestion(value: string) {
     const trimmed = value.trim();
@@ -219,50 +235,67 @@ function onInputKeydown(event: KeyboardEvent) {
     <div v-if="kchatUrl" class="font-sans">
         <!-- Landing page: title, blurb and chat bar in the top-left corner.
              Hidden while the graph is being explored. -->
-        <div v-if="isLanding && !exploring" class="fixed top-24 left-5 z-[80] w-[min(calc(100vw-2.5rem),420px)]">
+        <div v-if="isLanding && !exploring" class="fixed top-24 left-5 z-[80] max-h-[calc(100svh-7rem)] w-[min(calc(100vw-2.5rem),420px)] overflow-y-auto overscroll-contain">
             <div>
                 <h1 class="text-4xl font-bold text-foreground !m-0 sm:text-5xl">Graphs, Models, AI?</h1>
                 <p class="text-lg text-muted-foreground !m-0">Hello KurrawongAI!</p>
                 <p v-if="summary" class="mt-1 text-sm leading-relaxed text-foreground/80 !my-0">{{ summary.description }}</p>
             </div>
 
-            <form class="bg-card mt-4 flex items-center gap-1 rounded-md border p-1.5 pl-4 shadow-lg" @submit.prevent="onFormSubmit">
-                <input
-                    id="kchat-input"
-                    v-model="input"
-                    type="text"
-                    placeholder="Ask about KurrawongAI…"
-                    aria-label="Ask a question about KurrawongAI"
-                    class="h-9 flex-1 bg-transparent text-sm outline-none"
-                >
-                <Button v-if="open" variant="ghost" size="icon" class="size-9 shrink-0 rounded-md" aria-label="Close chat" @click="open = false">
-                    <X />
-                </Button>
-                <Button type="submit" size="icon" class="size-9 shrink-0 rounded-md" aria-label="Send question" :disabled="busy || !input.trim()">
-                    <Send />
-                </Button>
-            </form>
+            <!-- Initial layout: chat bar with suggested questions below it. -->
+            <template v-if="initialSuggestionsVisible">
+                <form class="bg-card mt-4 flex items-center gap-1 rounded-md border p-1.5 pl-4 shadow-lg" @submit.prevent="onFormSubmit">
+                    <input
+                        id="kchat-input"
+                        v-model="input"
+                        type="text"
+                        placeholder="Ask about KurrawongAI…"
+                        aria-label="Ask a question about KurrawongAI"
+                        class="h-9 flex-1 bg-transparent text-sm outline-none"
+                    >
+                    <Button type="submit" size="icon" class="size-9 shrink-0 rounded-md" aria-label="Send question" :disabled="busy || !input.trim()">
+                        <Send />
+                    </Button>
+                </form>
 
-            <!-- Suggested questions: random picks, hidden permanently once a
-                 question has been asked. -->
-            <div v-if="initialSuggestionsVisible" class="mt-2 flex flex-wrap gap-1.5">
-                <button
-                    v-for="suggestion in suggestions"
-                    :key="suggestion"
-                    type="button"
-                    class="bg-card/80 hover:bg-accent rounded-full border px-2.5 py-1 text-xs shadow-sm backdrop-blur-sm"
-                    :disabled="busy"
-                    @click="sendQuestion(suggestion)"
-                >
-                    {{ suggestion }}
-                </button>
-            </div>
+                <div class="mt-2 flex flex-wrap gap-1.5">
+                    <button
+                        v-for="suggestion in suggestions"
+                        :key="suggestion"
+                        type="button"
+                        class="bg-card/80 hover:bg-accent rounded-full border px-2.5 py-1 text-xs shadow-sm backdrop-blur-sm"
+                        :disabled="busy"
+                        @click="sendQuestion(suggestion)"
+                    >
+                        {{ suggestion }}
+                    </button>
+                </div>
+            </template>
 
             <Transition name="kchat-conversation">
                 <div v-if="open" ref="messagesEl" class="mt-3 max-h-[55vh] overflow-y-auto overscroll-contain pr-1">
                     <KChatMessages :messages="messages" @open-artifact="openArtifact" @send="sendQuestion" />
                 </div>
             </Transition>
+
+            <!-- Conversation layout: messages above, bar at the bottom with a
+                 button to clear the session and start anew. -->
+            <form v-if="!initialSuggestionsVisible" class="bg-card sticky bottom-0 mt-3 flex items-center gap-1 rounded-md border p-1.5 pl-4 shadow-lg" @submit.prevent="onFormSubmit">
+                <input
+                    id="kchat-input"
+                    v-model="input"
+                    type="text"
+                    placeholder="Type a follow-up question…"
+                    aria-label="Ask a follow-up question"
+                    class="h-9 flex-1 bg-transparent text-sm outline-none"
+                >
+                <Button variant="ghost" size="icon" class="size-9 shrink-0 rounded-md" aria-label="Clear chat and start a new one" title="Clear chat and start a new one" @click="clearSession">
+                    <X />
+                </Button>
+                <Button type="submit" size="icon" class="size-9 shrink-0 rounded-md" aria-label="Send question" :disabled="busy || !input.trim()">
+                    <Send />
+                </Button>
+            </form>
         </div>
 
         <!-- Other pages: floating launcher in the bottom-right corner. -->

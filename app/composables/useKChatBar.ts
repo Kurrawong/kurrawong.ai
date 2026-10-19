@@ -45,13 +45,16 @@ export function kchatRandomSuggestions(count = 13): string[] {
 
 export function useKChatBar() {
     const pendingQuestion = useState<string | null>("kchat-pending-question", () => null);
+    // True while a landing-page conversation is open, so the hero can keep its
+    // fixed buttons clear of the chat column on small screens.
+    const conversationActive = useState<boolean>("kchat-conversation-active", () => false);
 
     /** Queue a question for the KChat widget to submit. */
     function ask(question: string) {
         pendingQuestion.value = question;
     }
 
-    return { ask, pendingQuestion };
+    return { ask, pendingQuestion, conversationActive };
 }
 
 export function useGraphExplore() {

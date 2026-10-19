@@ -7,6 +7,7 @@ const { data: turtleData } = await useAsyncData("rdf", () => $fetch<string>("/?_
 });
 
 const { exploring } = useGraphExplore();
+const { conversationActive } = useKChatBar();
 const selectedNode = ref<{ label: string; type: string; description?: string; url?: string; id: string } | null>(null);
 
 const LEGEND = [
@@ -71,10 +72,10 @@ onBeforeUnmount(() => {
         </div>
 
         <Button
-            v-show="!exploring"
+            v-show="!exploring && backdropFade > 0 && !conversationActive"
             variant="ghost"
             size="icon"
-            class="fixed bottom-3 left-1/2 z-40 -translate-x-1/2"
+            class="fixed bottom-3 left-1/2 z-[90] -translate-x-1/2"
             aria-label="Scroll down for more content"
             title="Scroll down for more"
             @click="scrollDown"
@@ -83,9 +84,9 @@ onBeforeUnmount(() => {
         </Button>
 
         <Button
-            v-show="!exploring"
+            v-show="!exploring && backdropFade > 0 && !conversationActive"
             size="lg"
-            class="fixed bottom-5 right-5 z-40 pr-5 shadow-lg"
+            class="fixed bottom-5 right-5 z-[90] pr-5 shadow-lg"
             @click="exploring = true"
         >
             <Waypoints />
