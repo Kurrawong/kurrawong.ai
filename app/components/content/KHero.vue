@@ -6,8 +6,17 @@ const { data: turtleData } = await useAsyncData("rdf", () => $fetch<string>("/?_
     default: () => "",
 });
 
-const exploring = ref(false);
+const { exploring } = useGraphExplore();
 const selectedNode = ref<{ label: string; type: string; description?: string; url?: string; id: string } | null>(null);
+
+const LEGEND = [
+    { label: "People", type: "person" },
+    { label: "Organization", type: "organization" },
+    { label: "Products", type: "product" },
+    { label: "Services", type: "service" },
+    { label: "Projects", type: "project" },
+    { label: "External / other", type: "other" },
+];
 
 function scrollDown() {
     window.scrollBy({ top: window.innerHeight * 0.9, behavior: "smooth" });
@@ -60,6 +69,21 @@ onBeforeUnmount(() => {
 
         <template v-if="exploring">
             <div
+                class="bg-card/90 fixed bottom-5 left-5 z-[70] rounded-lg border p-3 text-xs shadow-lg backdrop-blur-sm"
+                aria-label="Diagram legend"
+            >
+                <div class="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                    <span v-for="item in LEGEND" :key="item.type" class="flex items-center gap-1.5">
+                        <span class="kgraph-legend-dot" :class="`kgraph-legend-${item.type}`" />
+                        {{ item.label }}
+                    </span>
+                </div>
+                <p class="text-muted-foreground mt-2 max-w-56">
+                    Larger outlined nodes link to website pages. Drag nodes to arrange, scroll to zoom, click a node for details.
+                </p>
+            </div>
+
+            <div
                 v-if="selectedNode"
                 class="bg-card text-card-foreground fixed top-20 right-5 z-[70] max-w-sm rounded-lg border p-4 text-sm shadow-lg"
             >
@@ -87,3 +111,37 @@ onBeforeUnmount(() => {
         </template>
     </div>
 </template>
+
+<style scoped>
+.kgraph-legend-dot {
+    display: inline-block;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 9999px;
+    flex-shrink: 0;
+}
+
+.kgraph-legend-person {
+    background: var(--chart-2);
+}
+
+.kgraph-legend-organization {
+    background: var(--chart-1);
+}
+
+.kgraph-legend-product {
+    background: var(--chart-4);
+}
+
+.kgraph-legend-service {
+    background: var(--chart-3);
+}
+
+.kgraph-legend-project {
+    background: var(--chart-5);
+}
+
+.kgraph-legend-other {
+    background: var(--muted-foreground);
+}
+</style>

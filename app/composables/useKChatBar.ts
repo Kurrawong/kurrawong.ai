@@ -1,4 +1,4 @@
-// Shared state between the landing page chat bar and the KChat widget.
+// Shared state between the landing page hero and the KChat widget.
 
 export const KCHAT_SUGGESTIONS = [
     "What products does KurrawongAI make?",
@@ -17,4 +17,9 @@ export function useKChatBar() {
     }
 
     return { ask, pendingQuestion };
+}
+
+export function useGraphExplore() {
+    const exploring = useState<boolean>("kgraph-exploring", () => false);
+    return { exploring };
 }

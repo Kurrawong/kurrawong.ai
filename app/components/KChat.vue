@@ -8,6 +8,7 @@ const APP_NAME = "sparql_agent";
 
 const { public: { kchatUrl } } = useRuntimeConfig();
 const { pendingQuestion } = useKChatBar();
+const { exploring } = useGraphExplore();
 const route = useRoute();
 
 // The landing page shows the chat bar in the top-left corner; other pages get
@@ -204,8 +205,9 @@ function onInputKeydown(event: KeyboardEvent) {
 
 <template>
     <div v-if="kchatUrl" class="font-sans">
-        <!-- Landing page: title, blurb and chat bar in the top-left corner. -->
-        <div v-if="isLanding" class="fixed top-24 left-5 z-[80] w-[min(calc(100vw-2.5rem),420px)]">
+        <!-- Landing page: title, blurb and chat bar in the top-left corner.
+             Hidden while the graph is being explored. -->
+        <div v-if="isLanding && !exploring" class="fixed top-24 left-5 z-[80] w-[min(calc(100vw-2.5rem),420px)]">
             <div>
                 <h1 class="text-4xl font-bold text-foreground !m-0 sm:text-5xl">Graphs, Models, AI?</h1>
                 <p class="text-lg text-muted-foreground !m-0">Hello KurrawongAI!</p>
@@ -224,17 +226,18 @@ function onInputKeydown(event: KeyboardEvent) {
                 <Button v-if="open" variant="ghost" size="icon" class="size-9 shrink-0 rounded-full" aria-label="Close chat" @click="open = false">
                     <X />
                 </Button>
-                <Button type="submit" size="icon" class="size-9 shrink-0 rounded-full" aria-label="Send question" :disabled="!input.trim()">
+                <Button type="submit" size="icon" class="size-9 shrink-0 rounded-full" aria-label="Send question" :disabled="busy || !input.trim()">
                     <Send />
                 </Button>
             </form>
 
-            <div v-if="!open" class="mt-2 flex flex-wrap gap-1.5">
+            <div class="mt-2 flex flex-wrap gap-1.5">
                 <button
                     v-for="suggestion in KCHAT_SUGGESTIONS"
                     :key="suggestion"
                     type="button"
                     class="bg-card/80 hover:bg-accent rounded-full border px-2.5 py-1 text-xs shadow-sm backdrop-blur-sm"
+                    :disabled="busy"
                     @click="sendQuestion(suggestion)"
                 >
                     {{ suggestion }}
@@ -242,7 +245,7 @@ function onInputKeydown(event: KeyboardEvent) {
             </div>
 
             <Transition name="kchat-conversation">
-                <div v-if="open" ref="messagesEl" class="mt-3 max-h-[55vh] overflow-y-auto pr-1">
+                <div v-if="open" ref="messagesEl" class="mt-3 max-h-[55vh] overflow-y-auto overscroll-contain pr-1">
                     <KChatMessages :messages="messages" @open-artifact="openArtifact" @send="sendQuestion" />
                 </div>
             </Transition>
@@ -275,7 +278,7 @@ function onInputKeydown(event: KeyboardEvent) {
                 </div>
             </div>
 
-            <div ref="messagesEl" class="flex-1 overflow-y-auto px-4 py-4">
+            <div ref="messagesEl" class="flex-1 overflow-y-auto overscroll-contain px-4 py-4">
                 <KChatMessages :messages="messages" show-suggestions @open-artifact="openArtifact" @send="sendQuestion" />
             </div>
 
@@ -285,7 +288,6 @@ function onInputKeydown(event: KeyboardEvent) {
                         id="kchat-input"
                         v-model="input"
                         rows="1"
-                        :disabled="busy"
                         placeholder="Type a message…"
                         class="bg-background min-h-9 max-h-25 flex-1 resize-none rounded-md border px-3 py-2 text-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
                         @keydown="onInputKeydown"
