@@ -79,7 +79,7 @@ onBeforeUnmount(() => {
                     </span>
                 </div>
                 <p class="text-muted-foreground mt-2 max-w-56">
-                    Larger outlined nodes link to website pages. Drag nodes to arrange, scroll to zoom, click a node for details.
+                    Click a cluster to expand its nodes; click the background to cluster them again. Larger outlined nodes link to website pages. Drag to arrange, scroll to zoom.
                 </p>
             </div>
 

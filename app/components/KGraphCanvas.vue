@@ -2,33 +2,152 @@
 import * as d3 from "d3";
 import type { RdfGraphNode } from "@/utils/rdfGraph";
 
-interface SimNode extends RdfGraphNode, d3.SimulationNodeDatum {}
-interface SimLink extends d3.SimulationLinkDatum<SimNode> {
+interface SimNode extends d3.SimulationNodeDatum {
+    id: string;
     label: string;
+    type: string;
+    cluster: string;
+    description?: string;
+    url?: string;
+    isCluster?: boolean;
+    count?: number;
+    r: number;
 }
+
+interface SimLink extends d3.SimulationLinkDatum<SimNode> {}
 
 const props = defineProps<{
     turtle: string;
-    selectedId?: string | null;
 }>();
 
 const emit = defineEmits<{
     select: [node: RdfGraphNode | null];
 }>();
 
+const CLUSTER_LABELS: Record<string, string> = {
+    person: "People",
+    organization: "Organization",
+    product: "Products",
+    service: "Services",
+    project: "Projects",
+    other: "External / other",
+};
+
+function clusterOf(node: RdfGraphNode): string {
+    const iri = node.id;
+    if (iri.startsWith("https://kurrawong.ai/people/#") || node.type === "person") return "person";
+    if (iri.startsWith("https://kurrawong.ai/products/#")) return "product";
+    if (iri.startsWith("https://kurrawong.ai/services/#")) return "service";
+    if (iri.startsWith("https://kurrawong.ai/projects/#")) return "project";
+    if (node.type === "organization" || node.type === "website") return "organization";
+    return "other";
+}
+
 const container = ref<HTMLElement | null>(null);
+const expandedClusters = new Set<string>();
+const lastPositions = new Map<string, { x: number; y: number }>();
+const previousVisible = new Set<string>();
 let simulation: d3.Simulation<SimNode, SimLink> | null = null;
 let observer: ResizeObserver | null = null;
 
 function render() {
     if (!container.value) return;
     const host = container.value;
-    const { nodes, links } = turtleToGraph(props.turtle);
+    const { nodes: allNodes, links: allLinks } = turtleToGraph(props.turtle);
     host.replaceChildren();
-    if (!nodes.length) return;
+    if (!allNodes.length) return;
 
-    const simNodes: SimNode[] = nodes.map(node => ({ ...node }));
-    const simLinks: SimLink[] = links.map(link => ({ ...link }));
+    const membersByCluster = new Map<string, RdfGraphNode[]>();
+    for (const node of allNodes) {
+        const cluster = clusterOf(node);
+        const members = membersByCluster.get(cluster) ?? [];
+        members.push(node);
+        membersByCluster.set(cluster, members);
+    }
+
+    // Clusters expanded since the previous render: their members burst out
+    // of the cluster's last position.
+    const justExpanded = new Set<string>();
+    for (const cluster of expandedClusters) {
+        if (previousVisible.has(`cluster:${cluster}`)) justExpanded.add(cluster);
+    }
+
+    // Visible nodes: an expanded cluster shows its members, otherwise one
+    // aggregate node per cluster.
+    const simNodes: SimNode[] = [];
+    const idToVisible = new Map<string, SimNode>();
+    for (const [cluster, members] of membersByCluster) {
+        if (expandedClusters.has(cluster)) {
+            for (const member of members) {
+                const simNode: SimNode = { ...member, cluster, isCluster: false, r: member.url ? 12 : 7 };
+                simNodes.push(simNode);
+                idToVisible.set(member.id, simNode);
+            }
+        } else {
+            const r = 14 + Math.min(24, members.length * 2);
+            const simNode: SimNode = {
+                id: `cluster:${cluster}`,
+                label: `${CLUSTER_LABELS[cluster] ?? cluster} (${members.length})`,
+                type: cluster,
+                cluster,
+                isCluster: true,
+                count: members.length,
+                r,
+                description: `${members.length} ${CLUSTER_LABELS[cluster] ?? cluster}. Click to show the individual nodes.`,
+            };
+            simNodes.push(simNode);
+            for (const member of members) idToVisible.set(member.id, simNode);
+        }
+    }
+
+    // Seed positions: keep previous positions for stable layout, start
+    // just-expanded members at their cluster's position, and place a
+    // just-collapsed cluster at the centroid of its members.
+    for (const simNode of simNodes) {
+        if (simNode.isCluster) continue;
+        if (justExpanded.has(simNode.cluster)) continue;
+        const seed = lastPositions.get(simNode.id);
+        if (seed) {
+            simNode.x = seed.x;
+            simNode.y = seed.y;
+        }
+    }
+    for (const simNode of simNodes) {
+        if (simNode.isCluster) continue;
+        if (simNode.x !== undefined) continue;
+        const clusterPos = lastPositions.get(`cluster:${simNode.cluster}`);
+        if (clusterPos) {
+            simNode.x = clusterPos.x;
+            simNode.y = clusterPos.y;
+        }
+    }
+    for (const [cluster, members] of membersByCluster) {
+        if (expandedClusters.has(cluster)) continue;
+        const clusterNode = simNodes.find(node => node.id === `cluster:${cluster}`);
+        if (!clusterNode || clusterNode.x !== undefined) continue;
+        const positioned = members.map(member => lastPositions.get(member.id)).filter(Boolean) as { x: number; y: number }[];
+        if (positioned.length) {
+            clusterNode.x = positioned.reduce((sum, position) => sum + position.x, 0) / positioned.length;
+            clusterNode.y = positioned.reduce((sum, position) => sum + position.y, 0) / positioned.length;
+        }
+    }
+
+    // Visible links: endpoints collapse to their cluster unless expanded.
+    const simLinks: SimLink[] = [];
+    const seenLinks = new Set<string>();
+    for (const link of allLinks) {
+        const source = idToVisible.get(link.source);
+        const target = idToVisible.get(link.target);
+        if (!source || !target || source === target) continue;
+        const key = source.id < target.id ? `${source.id}|${target.id}` : `${target.id}|${source.id}`;
+        if (seenLinks.has(key)) continue;
+        seenLinks.add(key);
+        simLinks.push({ source: source.id, target: target.id });
+    }
+
+    const entering = new Set(simNodes.filter(node => !previousVisible.has(node.id)).map(node => node.id));
+    previousVisible.clear();
+    for (const node of simNodes) previousVisible.add(node.id);
 
     const width = host.clientWidth || 800;
     const height = host.clientHeight || 600;
@@ -47,19 +166,23 @@ function render() {
         .data(simLinks)
         .join("line")
         .classed("kgraph-link", true);
-    link.append("title").text(d => d.label);
 
     const node = g
         .selectAll<SVGGElement, SimNode>(".kgraph-node")
         .data(simNodes)
         .join("g")
-        .attr("class", d => `kgraph-node kgraph-type-${d.type}${d.url ? " kgraph-key" : ""}`);
+        .attr("class", d => `kgraph-node kgraph-type-${d.type}${d.isCluster ? " kgraph-cluster" : ""}${d.url && !d.isCluster ? " kgraph-key" : ""}`)
+        .attr("opacity", d => (entering.has(d.id) ? 0 : 1))
+        .transition()
+        .duration(300)
+        .attr("opacity", 1)
+        .selection();
 
-    node.append("circle").attr("r", d => (d.url ? 12 : 7));
+    node.append("circle").attr("r", d => d.r);
     node.append("title").text(d => `${d.label}\n${d.id}${d.description ? `\n\n${d.description}` : ""}`);
     node.append("text")
         .text(d => d.label)
-        .attr("dy", "1.4em")
+        .attr("dy", d => d.r + 14)
         .attr("text-anchor", "middle")
         .classed("kgraph-label", true);
 
@@ -89,9 +212,20 @@ function render() {
 
     node.on("click", (event, d) => {
         event.stopPropagation();
-        emit("select", d);
+        if (d.isCluster) {
+            expandedClusters.add(d.cluster);
+            render();
+        } else {
+            emit("select", { id: d.id, label: d.label, type: d.type, description: d.description, url: d.url });
+        }
     });
-    svg.on("click", () => emit("select", null));
+    svg.on("click", () => {
+        if (expandedClusters.size) {
+            expandedClusters.clear();
+            render();
+        }
+        emit("select", null);
+    });
 
     const dragBehaviour = d3
         .drag<SVGGElement, SimNode>()
@@ -113,11 +247,12 @@ function render() {
 
     simulation = d3
         .forceSimulation<SimNode>(simNodes)
-        .force("link", d3.forceLink<SimNode, SimLink>(simLinks).id(d => d.id).distance(90))
+        .force("link", d3.forceLink<SimNode, SimLink>(simLinks).id(d => d.id).distance(120))
         .force("charge", d3.forceManyBody().strength(-350))
         .force("center", d3.forceCenter(width / 2, height / 2))
-        .force("collide", d3.forceCollide(28))
+        .force("collide", d3.forceCollide<SimNode>(d => d.r + 10))
         .on("tick", () => {
+            for (const d of simNodes) lastPositions.set(d.id, { x: d.x ?? 0, y: d.y ?? 0 });
             link
                 .attr("x1", d => (d.source as SimNode).x ?? 0)
                 .attr("y1", d => (d.source as SimNode).y ?? 0)
@@ -204,24 +339,37 @@ onBeforeUnmount(() => {
     cursor: pointer;
 }
 
-.kgraph-node:not(.kgraph-key) circle {
+.kgraph-cluster {
+    cursor: pointer;
+}
+
+.kgraph-cluster circle {
+    stroke: var(--foreground);
+    stroke-width: 2.5;
+}
+
+/* Base dimming; hover states below override it. */
+.kgraph-node:not(.kgraph-key):not(.kgraph-cluster) circle {
     opacity: 0.75;
+}
+
+.kgraph-cluster circle {
+    opacity: 0.95;
 }
 
 .kgraph-node circle {
     transition: r 0.15s;
 }
 
-.kgraph-node:hover circle {
+.kgraph-node:not(.kgraph-cluster):hover circle {
     r: 15;
 }
 
-.kgraph-node:not([data-active]) circle,
 .kgraph-node[data-active="true"] circle {
     opacity: 1;
 }
 
-.kgraph-node[data-active="false"] circle {
+.kgraph-svg .kgraph-node[data-active="false"] circle {
     opacity: 0.25;
 }
 
