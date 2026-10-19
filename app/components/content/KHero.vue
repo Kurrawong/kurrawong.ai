@@ -8,6 +8,7 @@ const { data: turtleData } = await useAsyncData("rdf", () => $fetch<string>("/?_
 
 const { exploring } = useGraphExplore();
 const { conversationActive } = useKChatBar();
+const { scrollFade } = useScrollFade();
 const selectedNode = ref<{ label: string; type: string; description?: string; url?: string; id: string } | null>(null);
 
 const LEGEND = [
@@ -20,19 +21,18 @@ const LEGEND = [
 ];
 
 const colorMode = useColorMode();
-const backdropFade = ref(1);
 
 function onScroll() {
     const start = window.innerHeight * 0.2;
     const end = window.innerHeight * 0.9;
     const progress = (window.scrollY - start) / (end - start);
-    backdropFade.value = Math.min(1, Math.max(0, 1 - progress));
+    scrollFade.value = Math.min(1, Math.max(0, 1 - progress));
 }
 
 const backdropStyle = computed(() => {
     if (exploring.value) return undefined;
     const base = colorMode.value === "dark" ? 0.3 : 0.45;
-    return { opacity: base * backdropFade.value };
+    return { opacity: base * scrollFade.value };
 });
 
 function scrollDown() {
@@ -72,10 +72,10 @@ onBeforeUnmount(() => {
         </div>
 
         <Button
-            v-show="!exploring && backdropFade > 0 && !conversationActive"
+            v-show="!exploring && scrollFade > 0 && !conversationActive"
             variant="ghost"
             size="icon"
-            class="fixed bottom-3 left-1/2 z-[90] -translate-x-1/2"
+            class="bg-card/80 fixed bottom-3 left-1/2 z-[90] size-10 -translate-x-1/2 rounded-full border shadow-lg backdrop-blur-sm"
             aria-label="Scroll down for more content"
             title="Scroll down for more"
             @click="scrollDown"
@@ -84,7 +84,7 @@ onBeforeUnmount(() => {
         </Button>
 
         <Button
-            v-show="!exploring && backdropFade > 0 && !conversationActive"
+            v-show="!exploring && scrollFade > 0 && !conversationActive"
             size="lg"
             class="fixed bottom-5 right-5 z-[90] pr-5 shadow-lg"
             @click="exploring = true"

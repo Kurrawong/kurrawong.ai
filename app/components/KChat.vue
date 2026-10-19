@@ -9,11 +9,17 @@ const APP_NAME = "sparql_agent";
 const { public: { kchatUrl } } = useRuntimeConfig();
 const { pendingQuestion, conversationActive } = useKChatBar();
 const { exploring } = useGraphExplore();
+const { scrollFade } = useScrollFade();
 const route = useRoute();
 
 // The landing page shows the chat bar in the top-left corner; other pages get
 // the floating launcher in the bottom-right.
 const isLanding = computed(() => route.path === "/");
+
+// On small screens the chat overlays the content, so it hides once the user
+// scrolls to the main page content and returns when they scroll back up.
+const isMobile = ref(false);
+const chatHiddenByScroll = computed(() => isLanding.value && isMobile.value && !exploring.value && scrollFade.value <= 0);
 
 // The landing hero (KHero) fetches the RDF under this key; share it for the
 // company summary shown above the chat bar. Off the landing page the fetch is
@@ -51,6 +57,12 @@ onMounted(() => {
     localStorage.setItem("kchat.session", sessionId);
     // Random picks are made client-side so server and client markup match.
     suggestions.value = kchatRandomSuggestions(kchatSuggestionCount());
+    const media = window.matchMedia("(max-width: 639px)");
+    isMobile.value = media.matches;
+    media.addEventListener("change", event => {
+        isMobile.value = event.matches;
+        suggestions.value = kchatRandomSuggestions(kchatSuggestionCount());
+    });
 });
 
 watch(open, value => {
@@ -243,7 +255,11 @@ function onInputKeydown(event: KeyboardEvent) {
     <div v-if="kchatUrl" class="font-sans">
         <!-- Landing page: title, blurb and chat bar in the top-left corner.
              Hidden while the graph is being explored. -->
-        <div v-if="isLanding && !exploring" class="fixed top-24 left-5 z-[80] max-h-[calc(100svh-7rem)] w-[min(calc(100vw-2.5rem),420px)] overflow-y-auto overscroll-contain">
+        <div
+            v-if="isLanding && !exploring"
+            v-show="!chatHiddenByScroll"
+            class="fixed top-24 left-5 z-[80] max-h-[calc(100svh-7rem)] w-[min(calc(100vw-2.5rem),420px)] overflow-y-auto overscroll-contain"
+        >
             <div>
                 <h1 class="text-4xl font-bold text-foreground !m-0 sm:text-5xl">Graphs, Models, AI?</h1>
                 <p class="text-lg text-muted-foreground !m-0">Hello KurrawongAI!</p>

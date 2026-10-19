@@ -74,3 +74,13 @@ export function useGraphExplore() {
     const exploring = useState<boolean>("kgraph-exploring", () => false);
     return { exploring };
 }
+
+/**
+ * Shared scroll fade for the landing hero: 1 at the top of the page, fading to
+ * 0 as the main content scrolls into view. KHero updates it; other landing
+ * widgets (e.g. the chat column) react to it.
+ */
+export function useScrollFade() {
+    const scrollFade = useState<number>("kgraph-scroll-fade", () => 1);
+    return { scrollFade };
+}
