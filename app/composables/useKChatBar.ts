@@ -33,14 +33,27 @@ export const KCHAT_SUGGESTIONS = [
     "What vocabularies has KurrawongAI created for clients?",
 ];
 
-/** Pick `count` distinct suggestions at random. Call client-side only. */
+/** The contact question is always included in the suggestions and answered locally. */
+export const KCHAT_CONTACT_QUESTION = "How can I contact KurrawongAI?";
+
+/** Pick `count` distinct suggestions at random, always including the contact question. Call client-side only. */
 export function kchatRandomSuggestions(count = 13): string[] {
-    const pool = [...KCHAT_SUGGESTIONS];
-    for (let i = pool.length - 1; i > 0; i--) {
+    const rest = KCHAT_SUGGESTIONS.filter(suggestion => suggestion !== KCHAT_CONTACT_QUESTION);
+    for (let i = rest.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
+        [rest[i], rest[j]] = [rest[j], rest[i]];
     }
-    return pool.slice(0, count);
+    const picked = [...rest.slice(0, Math.max(0, count - 1)), KCHAT_CONTACT_QUESTION];
+    for (let i = picked.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [picked[i], picked[j]] = [picked[j], picked[i]];
+    }
+    return picked;
+}
+
+/** Fewer suggestions on small screens. Call client-side only. */
+export function kchatSuggestionCount(): number {
+    return window.matchMedia("(max-width: 639px)").matches ? 5 : 13;
 }
 
 export function useKChatBar() {

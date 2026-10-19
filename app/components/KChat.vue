@@ -50,7 +50,7 @@ onMounted(() => {
     localStorage.setItem("kchat.user", userId);
     localStorage.setItem("kchat.session", sessionId);
     // Random picks are made client-side so server and client markup match.
-    suggestions.value = kchatRandomSuggestions(13);
+    suggestions.value = kchatRandomSuggestions(kchatSuggestionCount());
 });
 
 watch(open, value => {
@@ -75,7 +75,7 @@ function clearSession() {
     knownArtifacts.clear();
     sessionId = `chat-${crypto.randomUUID()}`;
     localStorage.setItem("kchat.session", sessionId);
-    suggestions.value = kchatRandomSuggestions(13);
+    suggestions.value = kchatRandomSuggestions(kchatSuggestionCount());
     initialSuggestionsVisible.value = true;
     open.value = false;
     busy.value = false;
@@ -85,6 +85,14 @@ function sendQuestion(value: string) {
     const trimmed = value.trim();
     if (!trimmed) return;
     initialSuggestionsVisible.value = false;
+    if (kchatIsContactQuestion(trimmed)) {
+        // Pre-canned response; no agent request is made.
+        input.value = "";
+        open.value = true;
+        messages.value.push({ role: "user", text: KCHAT_CONTACT_QUESTION, artifacts: [] });
+        messages.value.push({ role: "assistant", kind: "contact", text: "", artifacts: [] });
+        return;
+    }
     if (busy.value) return;
     open.value = true;
     input.value = "";

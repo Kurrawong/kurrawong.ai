@@ -17,11 +17,11 @@ const suggestions = ref<string[]>([]);
 
 onMounted(() => {
     // Random picks are made client-side so server and client markup match.
-    suggestions.value = kchatRandomSuggestions(13);
+    suggestions.value = kchatRandomSuggestions(kchatSuggestionCount());
 });
 
 const parsed = computed(() => props.messages.map(message => {
-    if (message.role !== "assistant" || message.error) return { body: message.text, followUps: [] as string[] };
+    if (message.kind === "contact" || message.role !== "assistant" || message.error) return { body: message.text, followUps: [] as string[] };
     return kchatExtractFollowUps(message.text);
 }));
 </script>
@@ -55,8 +55,9 @@ const parsed = computed(() => props.messages.map(message => {
                 class="max-w-[85%] rounded-lg px-3 py-2 text-sm shadow-sm"
                 :class="message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-card text-foreground border'"
             >
+                <KContactCard v-if="message.kind === 'contact'" />
                 <div
-                    v-if="parsed[index].body"
+                    v-else-if="parsed[index].body"
                     class="kchat-markdown"
                     :class="{ 'text-destructive': message.error }"
                     v-html="kchatMarkdown(parsed[index].body)"

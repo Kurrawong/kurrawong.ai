@@ -142,6 +142,14 @@ export interface ChatMessage {
     artifacts: { name: string; version: number; label: string }[];
     error?: boolean;
     typing?: boolean;
+    /** "contact" renders the pre-canned contact card instead of markdown. */
+    kind?: "contact";
+}
+
+/** True when a question matches the pre-canned contact question. */
+export function kchatIsContactQuestion(question: string): boolean {
+    const normalise = (value: string) => value.toLowerCase().replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+    return normalise(question) === "how can i contact kurrawongai";
 }
 
 const LIST_ITEM = /^\s*(?:[-*]|\d+\.)\s+/;
