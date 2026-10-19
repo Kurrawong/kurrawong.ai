@@ -94,7 +94,15 @@ export function kchatEventText(event: KchatEvent): string {
 
 /** Consume an SSE response body, invoking the callback once per JSON event. */
 export async function kchatConsumeSse(response: Response, onEvent: (event: KchatEvent) => void): Promise<void> {
-    if (!response.ok) throw new Error((await response.text()) || `Chat request failed (${response.status})`);
+    if (!response.ok) {
+        let message = (await response.text()) || `Chat request failed (${response.status})`;
+        try {
+            message = JSON.parse(message).detail ?? message;
+        } catch {
+            // Not a JSON error body: show the raw text.
+        }
+        throw new Error(message);
+    }
     const reader = response.body!.getReader();
     const decoder = new TextDecoder();
     let buffer = "";

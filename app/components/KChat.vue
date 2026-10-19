@@ -6,13 +6,16 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 const APP_NAME = "sparql_agent";
 
 const { public: { kchatUrl } } = useRuntimeConfig();
+const { pendingQuestion } = useKChatBar();
+const route = useRoute();
 
 const open = ref(false);
 const messages = ref<{ role: "user" | "assistant"; text: string; artifacts: { name: string; version: number; label: string }[]; error?: boolean }[]>([]);
 const input = ref("");
 const busy = ref(false);
-const configInfo = ref<string | null>(null);
-const usage = ref<{ input: number | null; output: number | null }>({ input: null, output: null });
+
+// The landing page has its own front-and-centre chat bar; hide the launcher there.
+const showLauncher = computed(() => route.path !== "/");
 
 let userId = "";
 let sessionId = "";
@@ -34,22 +37,16 @@ onMounted(() => {
 
 watch(open, value => {
     if (value) {
-        loadConfig();
         nextTick(() => document.getElementById("kchat-input")?.focus());
     }
 });
 
-async function loadConfig() {
-    if (configInfo.value !== null || !kchatUrl) return;
-    try {
-        const response = await fetch(`${kchatUrl}/kchat-config`);
-        if (!response.ok) throw new Error(String(response.status));
-        const config = await response.json();
-        configInfo.value = `${config.sparqlEndpointType || "SPARQL endpoint"} · ${config.model || "unknown model"}`;
-    } catch {
-        configInfo.value = "Unavailable";
-    }
-}
+watch(pendingQuestion, value => {
+    if (!value || !kchatUrl) return;
+    open.value = true;
+    nextTick(() => submit(value));
+    pendingQuestion.value = null;
+});
 
 function sessionBase(): string {
     return `${kchatUrl}/apps/${APP_NAME}/users/${encodeURIComponent(userId)}/sessions/${encodeURIComponent(sessionId)}`;
@@ -159,13 +156,6 @@ async function submit(message: string) {
             }),
         });
         await kchatConsumeSse(response, event => {
-            const usageMetadata = event.usageMetadata;
-            if (usageMetadata) {
-                const incoming = usageMetadata.promptTokenCount ?? usageMetadata.prompt_token_count ?? usageMetadata.inputTokenCount ?? usageMetadata.input_token_count;
-                const outgoing = usageMetadata.candidatesTokenCount ?? usageMetadata.candidates_token_count ?? usageMetadata.outputTokenCount ?? usageMetadata.output_token_count;
-                if (typeof incoming === "number") usage.value.input = incoming;
-                if (typeof outgoing === "number") usage.value.output = outgoing;
-            }
             const chunk = kchatEventText(event);
             if (chunk) {
                 if (event.partial === false && answer && chunk.startsWith(answer)) answer = chunk;
@@ -205,9 +195,9 @@ function onInputKeydown(event: KeyboardEvent) {
 <template>
     <div v-if="kchatUrl" class="font-sans">
         <Button
-            v-if="!open"
+            v-if="!open && showLauncher"
             size="lg"
-            class="fixed bottom-5 right-5 z-50 rounded-full pr-5 shadow-lg"
+            class="fixed bottom-5 right-5 z-[80] rounded-full pr-5 shadow-lg"
             aria-label="Open chat"
             @click="open = true"
         >
@@ -217,7 +207,7 @@ function onInputKeydown(event: KeyboardEvent) {
 
         <div
             v-if="open"
-            class="bg-card text-card-foreground fixed bottom-5 right-5 z-50 flex h-[min(70vh,600px)] w-[min(calc(100vw-2.5rem),400px)] flex-col overflow-hidden rounded-lg border shadow-xl"
+            class="bg-card text-card-foreground fixed bottom-5 right-5 z-[80] flex h-[min(70vh,600px)] w-[min(calc(100vw-2.5rem),400px)] flex-col overflow-hidden rounded-lg border shadow-xl"
             role="dialog"
             aria-label="KurrawongAI chat"
         >
@@ -228,13 +218,24 @@ function onInputKeydown(event: KeyboardEvent) {
                         <X />
                     </Button>
                 </div>
-                <p class="text-muted-foreground mt-0.5 text-xs">{{ configInfo ?? "Connecting…" }}</p>
             </div>
 
             <div ref="messagesEl" class="flex-1 space-y-4 overflow-y-auto px-4 py-4">
-                <div v-if="!messages.length" class="text-muted-foreground mt-8 text-center text-sm">
-                    <p>Ask a question about KurrawongAI, our people, products, services or projects.</p>
-                    <p class="mt-2 text-xs">Answers are generated from the website's RDF data with SPARQL queries.</p>
+                <div v-if="!messages.length" class="flex flex-col items-center gap-4">
+                    <p class="text-muted-foreground mt-8 text-center text-sm">
+                        Ask a question about KurrawongAI, our people, products, services or projects.
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <button
+                            v-for="suggestion in KCHAT_SUGGESTIONS"
+                            :key="suggestion"
+                            type="button"
+                            class="bg-background hover:bg-accent rounded-full border px-3 py-1.5 text-xs"
+                            @click="submit(suggestion)"
+                        >
+                            {{ suggestion }}
+                        </button>
+                    </div>
                 </div>
                 <div v-for="(message, index) in messages" :key="index" class="flex" :class="message.role === 'user' ? 'justify-end' : 'justify-start'">
                     <div
@@ -282,9 +283,6 @@ function onInputKeydown(event: KeyboardEvent) {
                         <Send />
                     </Button>
                 </div>
-                <p v-if="usage.input !== null || usage.output !== null" class="text-muted-foreground mt-1.5 text-right text-xs">
-                    {{ usage.input?.toLocaleString() ?? "—" }} in / {{ usage.output?.toLocaleString() ?? "—" }} out tokens
-                </p>
             </form>
         </div>
 

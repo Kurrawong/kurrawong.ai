@@ -21,6 +21,7 @@
         "better-sqlite3": "^12.4.1",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
+        "d3": "^7.9.0",
         "lucide-vue-next": "^0.544.0",
         "mermaid": "^11.12.2",
         "minisearch": "^7.2.0",
@@ -36,6 +37,7 @@
     },
     "devDependencies": {
         "@tailwindcss/typography": "^0.5.19",
+        "@types/d3": "^7.4.3",
         "@types/n3": "^1.26.0",
         "typescript": "^5.9.2"
     }
