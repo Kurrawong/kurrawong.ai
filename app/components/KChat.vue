@@ -15,10 +15,15 @@ const route = useRoute();
 // the floating launcher in the bottom-right.
 const isLanding = computed(() => route.path === "/");
 
-// The landing hero (KHero) fetches the RDF under this key; reuse it for the
-// company summary shown above the chat bar.
-const { data: turtleData } = useNuxtData<string>("rdf");
-const summary = computed(() => (isLanding.value ? turtleToSummary(turtleData.value ?? "") : null));
+// The landing hero (KHero) fetches the RDF under this key; share it for the
+// company summary shown above the chat bar. Off the landing page the fetch is
+// not needed, so it is never started there.
+const { data: turtleData } = await useAsyncData(
+    "rdf",
+    () => $fetch<string>("/?_mediatype=text/turtle"),
+    { default: () => "", ...(isLanding.value ? {} : { immediate: false, server: false }) },
+);
+const summary = computed(() => (isLanding.value ? turtleToSummary(turtleData.value) : null));
 
 const open = ref(false);
 const messages = ref<ChatMessage[]>([]);
