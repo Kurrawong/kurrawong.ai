@@ -18,6 +18,13 @@ export default defineNuxtConfig({
         fallback: 'light'
     },
     css: ["@/assets/css/tailwind.css", "@/assets/css/style.css"],
+    runtimeConfig: {
+        public: {
+            // Set with NUXT_PUBLIC_KCHAT_URL, e.g. http://localhost:8000 (see compose.yaml).
+            // When empty, the chat widget is not rendered.
+            kchatUrl: "",
+        },
+    },
     app: {
         head: {
             link: [

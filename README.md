@@ -36,6 +36,32 @@ This should help improve the speed of installing packages. See https://pnpm.io/i
 
 The Nuxt dev server may also take a long time to start and load in browsers. Instead of going to http://localhost:3000, try [http://[::1]:3000](http://[::1]:3000). If your computer doesn't support that, try http://127.0.0.1:3000 instead.
 
+## Chat Agent (kchat)
+The website includes an AI chat agent, [kchat](https://github.com/Kurrawong/kchat), which answers questions about KurrawongAI's people, products, services and projects. The agent is a separate container: this repo provides its data and interface.
+
+### RDF data
+The agent's answers are grounded in [`server/assets/rdf.ttl`](server/assets/rdf.ttl), a schema.org model of the important website content (organisation, people, products, services, projects). This same file is served as Turtle at the site root via content negotiation (see [`server/middleware/rdf.ts`](server/middleware/rdf.ts)), so the RDF is both the agent's knowledge base and the site's own linked data. Update it when website content changes.
+
+### Run locally
+Requires the [kchat](https://github.com/Kurrawong/kchat) repo checked out next to this one (e.g. `../kchat`) and Docker.
+
+```bash
+cp .env.example .env  # set LLM_API_KEY and NUXT_PUBLIC_KCHAT_URL
+docker compose up --build  # kchat on http://localhost:8000
+pnpm dev                   # website on http://localhost:3000
+```
+
+Open http://localhost:3000 and use the "Ask KurrawongAI" button in the bottom-right corner. The kchat API docs are at http://localhost:8000/docs.
+
+The chat widget (`app/components/KChat.vue`) is enabled by setting `NUXT_PUBLIC_KCHAT_URL` to the kchat service's base URL; when unset, the widget is not rendered.
+
+### Deployment
+The intended deployment is Azure Container Apps:
+- one container app running the kchat image, with `server/assets/rdf.ttl` either baked into the image or mounted via an Azure Files volume at `/rdf`, `SPARQL_ENDPOINT=/rdf`, and `LLM_API_KEY`/`LLM_MODEL` as container app secrets;
+- the static site (`pnpm generate`) hosted as a static container app, with `NUXT_PUBLIC_KCHAT_URL` set to the kchat container app's public URL.
+
+kchat already allows cross-origin requests, so the browser widget talks to it directly; no proxy is required. For multi-instance deployments, set `SESSION_DATABASE_URL` to a PostgreSQL database (see the [kchat README](https://github.com/Kurrawong/kchat)).
+
 ## Markdown Content
 See [Nuxt Content docs](https://content.nuxt.com/usage/markdown) for more info.
 
