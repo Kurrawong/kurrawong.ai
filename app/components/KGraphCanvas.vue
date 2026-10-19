@@ -44,11 +44,20 @@ function clusterOf(node: RdfGraphNode): string {
 }
 
 const container = ref<HTMLElement | null>(null);
-const expandedClusters = new Set<string>();
+const { exploring } = useGraphExplore();
+// Clusters the user has expanded while exploring. Outside explore mode the
+// diagram always shows every node unclustered.
+const userExpanded = new Set<string>();
 const lastPositions = new Map<string, { x: number; y: number }>();
 const previousVisible = new Set<string>();
 let simulation: d3.Simulation<SimNode, SimLink> | null = null;
 let observer: ResizeObserver | null = null;
+
+/** Entering explore mode clusters the diagram; leaving it shows all nodes. */
+watch(exploring, () => {
+    userExpanded.clear();
+    render();
+});
 
 function render() {
     if (!container.value) return;
@@ -65,15 +74,17 @@ function render() {
         membersByCluster.set(cluster, members);
     }
 
+    // Visible nodes: an expanded cluster shows its members, otherwise one
+    // aggregate node per cluster. All clusters are expanded unless exploring.
+    const expandedClusters = new Set(exploring.value ? userExpanded : membersByCluster.keys());
+
     // Clusters expanded since the previous render: their members burst out
     // of the cluster's last position.
     const justExpanded = new Set<string>();
-    for (const cluster of expandedClusters) {
+    for (const cluster of userExpanded) {
         if (previousVisible.has(`cluster:${cluster}`)) justExpanded.add(cluster);
     }
 
-    // Visible nodes: an expanded cluster shows its members, otherwise one
-    // aggregate node per cluster.
     const simNodes: SimNode[] = [];
     const idToVisible = new Map<string, SimNode>();
     for (const [cluster, members] of membersByCluster) {
@@ -213,15 +224,15 @@ function render() {
     node.on("click", (event, d) => {
         event.stopPropagation();
         if (d.isCluster) {
-            expandedClusters.add(d.cluster);
+            userExpanded.add(d.cluster);
             render();
         } else {
             emit("select", { id: d.id, label: d.label, type: d.type, description: d.description, url: d.url });
         }
     });
     svg.on("click", () => {
-        if (expandedClusters.size) {
-            expandedClusters.clear();
+        if (userExpanded.size) {
+            userExpanded.clear();
             render();
         }
         emit("select", null);

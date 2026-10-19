@@ -60,7 +60,7 @@ onBeforeUnmount(() => {
         <Button
             v-show="!exploring"
             size="lg"
-            class="fixed bottom-5 right-5 z-40 rounded-full pr-5 shadow-lg"
+            class="fixed bottom-5 right-5 z-40 pr-5 shadow-lg"
             @click="exploring = true"
         >
             <Waypoints />
@@ -104,7 +104,7 @@ onBeforeUnmount(() => {
                 >{{ selectedNode.url }}</a>
             </div>
 
-            <Button size="lg" variant="outline" class="fixed bottom-5 right-5 z-[70] rounded-full pr-5 shadow-lg" @click="exploring = false">
+            <Button size="lg" variant="outline" class="fixed bottom-5 right-5 z-[70] pr-5 shadow-lg" @click="exploring = false">
                 <X />
                 Back to the site
             </Button>

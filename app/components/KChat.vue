@@ -219,7 +219,7 @@ function onInputKeydown(event: KeyboardEvent) {
                 <p v-if="summary" class="mt-1 text-sm leading-relaxed text-foreground/80 !my-0">{{ summary.description }}</p>
             </div>
 
-            <form class="bg-card mt-4 flex items-center gap-1 rounded-full border p-1.5 pl-4 shadow-lg" @submit.prevent="onFormSubmit">
+            <form class="bg-card mt-4 flex items-center gap-1 rounded-md border p-1.5 pl-4 shadow-lg" @submit.prevent="onFormSubmit">
                 <input
                     id="kchat-input"
                     v-model="input"
@@ -228,10 +228,10 @@ function onInputKeydown(event: KeyboardEvent) {
                     aria-label="Ask a question about KurrawongAI"
                     class="h-9 flex-1 bg-transparent text-sm outline-none"
                 >
-                <Button v-if="open" variant="ghost" size="icon" class="size-9 shrink-0 rounded-full" aria-label="Close chat" @click="open = false">
+                <Button v-if="open" variant="ghost" size="icon" class="size-9 shrink-0 rounded-md" aria-label="Close chat" @click="open = false">
                     <X />
                 </Button>
-                <Button type="submit" size="icon" class="size-9 shrink-0 rounded-full" aria-label="Send question" :disabled="busy || !input.trim()">
+                <Button type="submit" size="icon" class="size-9 shrink-0 rounded-md" aria-label="Send question" :disabled="busy || !input.trim()">
                     <Send />
                 </Button>
             </form>
