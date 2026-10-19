@@ -135,3 +135,42 @@ export function kchatArtifactLabel(name: string): string {
     if (name.endsWith(".ttl")) return "Turtle result";
     return name;
 }
+
+export interface ChatMessage {
+    role: "user" | "assistant";
+    text: string;
+    artifacts: { name: string; version: number; label: string }[];
+    error?: boolean;
+    typing?: boolean;
+}
+
+const LIST_ITEM = /^\s*(?:[-*]|\d+\.)\s+/;
+
+/**
+ * Split a trailing list of question suggestions out of an assistant answer.
+ * The list is only treated as follow-ups when the preceding text mentions
+ * "follow-up", so answer lists of questions are left intact.
+ */
+export function kchatExtractFollowUps(text: string): { body: string; followUps: string[] } {
+    const lines = text.split("\n");
+    let end = lines.length;
+    while (end > 0 && !lines[end - 1].trim()) end--;
+    let start = end;
+    while (start > 0 && LIST_ITEM.test(lines[start - 1])) start--;
+    if (start === end) return { body: text, followUps: [] };
+
+    // Look back past blanks and horizontal rules for a follow-up mention.
+    let marker = start;
+    while (marker > 0 && (!lines[marker - 1].trim() || lines[marker - 1].trim() === "---")) marker--;
+    const before = lines.slice(Math.max(0, marker - 2), start).join(" ");
+    if (!/follow[- ]?up/i.test(before)) return { body: text, followUps: [] };
+
+    const items = lines.slice(start, end).map(line => line.replace(LIST_ITEM, "").replace(/\*\*/g, "").trim());
+    if (!items.length || !items.every(item => item.endsWith("?"))) return { body: text, followUps: [] };
+
+    let bodyEnd = marker;
+    if (bodyEnd > 0 && /follow[- ]?up/i.test(lines[bodyEnd - 1]) && !LIST_ITEM.test(lines[bodyEnd - 1])) bodyEnd -= 1;
+    while (bodyEnd > 0 && (!lines[bodyEnd - 1].trim() || lines[bodyEnd - 1].trim() === "---")) bodyEnd -= 1;
+    const body = lines.slice(0, bodyEnd).join("\n").replace(/\s+$/, "");
+    return { body: body || text, followUps: items };
+}

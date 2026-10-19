@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { MessageCircle, Send, X } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import type { ChatMessage } from "@/utils/kchat";
 
 const APP_NAME = "sparql_agent";
 
@@ -14,8 +14,13 @@ const route = useRoute();
 // the floating launcher in the bottom-right.
 const isLanding = computed(() => route.path === "/");
 
+// The landing hero (KHero) fetches the RDF under this key; reuse it for the
+// company summary shown above the chat bar.
+const { data: turtleData } = useNuxtData<string>("rdf");
+const summary = computed(() => (isLanding.value ? turtleToSummary(turtleData.value ?? "") : null));
+
 const open = ref(false);
-const messages = ref<{ role: "user" | "assistant"; text: string; artifacts: { name: string; version: number; label: string }[]; error?: boolean; typing?: boolean }[]>([]);
+const messages = ref<ChatMessage[]>([]);
 const input = ref("");
 const busy = ref(false);
 
@@ -83,8 +88,8 @@ async function listArtifacts(): Promise<{ name: string; version: number }[]> {
     return found.sort((a, b) => a.version - b.version || a.name.localeCompare(b.name));
 }
 
-async function attachArtifacts(message: (typeof messages.value)[number]) {
-    const found: typeof message.artifacts = [];
+async function attachArtifacts(message: ChatMessage) {
+    const found: ChatMessage["artifacts"] = [];
     for (const artifact of await listArtifacts()) {
         const key = `${artifact.name}:${artifact.version}`;
         if (!knownArtifacts.has(key)) {
@@ -143,9 +148,8 @@ function scrollToEnd() {
 }
 
 async function submit(message: string) {
-    const userMessage = { role: "user" as const, text: message, artifacts: [] };
-    messages.value.push(userMessage);
-    const assistant = reactive({ role: "assistant" as const, text: "", artifacts: [], typing: true });
+    messages.value.push({ role: "user", text: message, artifacts: [] });
+    const assistant = reactive<ChatMessage>({ role: "assistant", text: "", artifacts: [], typing: true });
     messages.value.push(assistant);
     busy.value = true;
     scrollToEnd();
@@ -200,9 +204,15 @@ function onInputKeydown(event: KeyboardEvent) {
 
 <template>
     <div v-if="kchatUrl" class="font-sans">
-        <!-- Landing page: chat bar in the top-left corner. -->
-        <div v-if="isLanding && !open" class="fixed top-5 left-5 z-[80] w-[min(calc(100vw-2.5rem),400px)]">
-            <form class="bg-card flex items-center gap-2 rounded-full border p-1.5 pl-4 shadow-lg" @submit.prevent="onFormSubmit">
+        <!-- Landing page: title, blurb and chat bar in the top-left corner. -->
+        <div v-if="isLanding" class="fixed top-24 left-5 z-[80] w-[min(calc(100vw-2.5rem),420px)]">
+            <div>
+                <h1 class="text-4xl font-bold text-foreground !m-0 sm:text-5xl">Graphs, Models, AI?</h1>
+                <p class="text-lg text-muted-foreground !m-0">Hello KurrawongAI!</p>
+                <p v-if="summary" class="mt-1 text-sm leading-relaxed text-foreground/80 !my-0">{{ summary.description }}</p>
+            </div>
+
+            <form class="bg-card mt-4 flex items-center gap-1 rounded-full border p-1.5 pl-4 shadow-lg" @submit.prevent="onFormSubmit">
                 <input
                     id="kchat-input"
                     v-model="input"
@@ -211,11 +221,15 @@ function onInputKeydown(event: KeyboardEvent) {
                     aria-label="Ask a question about KurrawongAI"
                     class="h-9 flex-1 bg-transparent text-sm outline-none"
                 >
+                <Button v-if="open" variant="ghost" size="icon" class="size-9 shrink-0 rounded-full" aria-label="Close chat" @click="open = false">
+                    <X />
+                </Button>
                 <Button type="submit" size="icon" class="size-9 shrink-0 rounded-full" aria-label="Send question" :disabled="!input.trim()">
                     <Send />
                 </Button>
             </form>
-            <div class="mt-2 flex flex-wrap gap-1.5">
+
+            <div v-if="!open" class="mt-2 flex flex-wrap gap-1.5">
                 <button
                     v-for="suggestion in KCHAT_SUGGESTIONS"
                     :key="suggestion"
@@ -226,6 +240,12 @@ function onInputKeydown(event: KeyboardEvent) {
                     {{ suggestion }}
                 </button>
             </div>
+
+            <Transition name="kchat-conversation">
+                <div v-if="open" ref="messagesEl" class="mt-3 max-h-[55vh] overflow-y-auto pr-1">
+                    <KChatMessages :messages="messages" @open-artifact="openArtifact" @send="sendQuestion" />
+                </div>
+            </Transition>
         </div>
 
         <!-- Other pages: floating launcher in the bottom-right corner. -->
@@ -240,12 +260,9 @@ function onInputKeydown(event: KeyboardEvent) {
             Ask KurrawongAI
         </Button>
 
-        <!-- Chat panel: expands out of the top-left bar on the landing page,
-             bottom-right elsewhere. -->
         <div
-            v-if="open"
-            class="bg-card text-card-foreground fixed z-[80] flex h-[min(70vh,600px)] w-[min(calc(100vw-2.5rem),400px)] flex-col overflow-hidden rounded-lg border shadow-xl"
-            :class="isLanding ? 'top-5 left-5' : 'bottom-5 right-5'"
+            v-if="!isLanding && open"
+            class="bg-card text-card-foreground fixed bottom-5 right-5 z-[80] flex h-[min(70vh,600px)] w-[min(calc(100vw-2.5rem),400px)] flex-col overflow-hidden rounded-lg border shadow-xl"
             role="dialog"
             aria-label="KurrawongAI chat"
         >
@@ -258,59 +275,8 @@ function onInputKeydown(event: KeyboardEvent) {
                 </div>
             </div>
 
-            <div ref="messagesEl" class="flex-1 space-y-4 overflow-y-auto px-4 py-4">
-                <div v-if="!messages.length" class="flex flex-col items-center gap-4">
-                    <p class="text-muted-foreground mt-8 text-center text-sm">
-                        Ask a question about KurrawongAI, our people, products, services or projects.
-                    </p>
-                    <div class="flex flex-wrap justify-center gap-2">
-                        <button
-                            v-for="suggestion in KCHAT_SUGGESTIONS"
-                            :key="suggestion"
-                            type="button"
-                            class="bg-background hover:bg-accent rounded-full border px-3 py-1.5 text-xs"
-                            @click="sendQuestion(suggestion)"
-                        >
-                            {{ suggestion }}
-                        </button>
-                    </div>
-                </div>
-                <div v-for="(message, index) in messages" :key="index" class="flex" :class="message.role === 'user' ? 'justify-end' : 'justify-start'">
-                    <div
-                        class="max-w-[85%] rounded-lg px-3 py-2 text-sm"
-                        :class="message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground border'"
-                    >
-                        <div
-                            class="kchat-markdown"
-                            :class="{ 'text-destructive': message.error }"
-                            v-html="kchatMarkdown(message.text)"
-                        />
-                        <Collapsible v-if="message.artifacts.length" class="mt-2">
-                            <CollapsibleTrigger class="text-muted-foreground hover:text-foreground text-xs underline-offset-2 hover:underline">
-                                SPARQL queries &amp; results ({{ message.artifacts.length }})
-                            </CollapsibleTrigger>
-                            <CollapsibleContent>
-                                <div class="mt-1.5 flex flex-wrap gap-1.5">
-                                    <button
-                                        v-for="artifact in message.artifacts"
-                                        :key="`${artifact.name}:${artifact.version}`"
-                                        type="button"
-                                        class="bg-background hover:bg-accent rounded-full border px-2.5 py-0.5 text-xs"
-                                        :title="`Open ${artifact.name}`"
-                                        @click="openArtifact(artifact.name, artifact.version)"
-                                    >
-                                        {{ artifact.label }} · v{{ artifact.version }}
-                                    </button>
-                                </div>
-                            </CollapsibleContent>
-                        </Collapsible>
-                        <span v-if="message.typing" class="mt-1 inline-flex gap-1">
-                            <span class="bg-muted-foreground size-1.5 animate-bounce rounded-full [animation-delay:-0.3s]" />
-                            <span class="bg-muted-foreground size-1.5 animate-bounce rounded-full [animation-delay:-0.15s]" />
-                            <span class="bg-muted-foreground size-1.5 animate-bounce rounded-full" />
-                        </span>
-                    </div>
-                </div>
+            <div ref="messagesEl" class="flex-1 overflow-y-auto px-4 py-4">
+                <KChatMessages :messages="messages" show-suggestions @open-artifact="openArtifact" @send="sendQuestion" />
             </div>
 
             <form class="border-t p-3" @submit.prevent="onFormSubmit">
@@ -347,39 +313,12 @@ function onInputKeydown(event: KeyboardEvent) {
 </template>
 
 <style scoped>
-.kchat-markdown :deep(p) {
-    margin: 0 0 0.5rem;
+.kchat-conversation-enter-active {
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }
 
-.kchat-markdown :deep(p:last-child) {
-    margin-bottom: 0;
-}
-
-.kchat-markdown :deep(h1),
-.kchat-markdown :deep(h2),
-.kchat-markdown :deep(h3) {
-    font-weight: 600;
-    margin: 0.5rem 0;
-}
-
-.kchat-markdown :deep(ul),
-.kchat-markdown :deep(ol) {
-    margin: 0 0 0.5rem;
-    padding-left: 1.25rem;
-    list-style: revert;
-}
-
-.kchat-markdown :deep(pre) {
-    background: color-mix(in srgb, currentColor 8%, transparent);
-    margin: 0.5rem 0;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-    overflow-x: auto;
-    font-size: 0.75rem;
-}
-
-.kchat-markdown :deep(a) {
-    text-decoration: underline;
-    text-underline-offset: 2;
+.kchat-conversation-enter-from {
+    opacity: 0;
+    transform: translateY(-8px);
 }
 </style>

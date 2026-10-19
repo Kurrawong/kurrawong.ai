@@ -6,8 +6,6 @@ const { data: turtleData } = await useAsyncData("rdf", () => $fetch<string>("/?_
     default: () => "",
 });
 
-const summary = computed(() => turtleToSummary(turtleData.value));
-
 const exploring = ref(false);
 const selectedNode = ref<{ label: string; type: string; description?: string; url?: string; id: string } | null>(null);
 
@@ -26,7 +24,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="relative -mx-5 not-prose overflow-hidden rounded-lg min-h-[calc(100svh-4.5rem)] flex">
+    <div class="relative -mx-5 not-prose overflow-hidden rounded-lg min-h-[calc(100svh-4.5rem)]">
         <div
             class="absolute inset-0 transition-all duration-500"
             :class="exploring
@@ -36,17 +34,6 @@ onBeforeUnmount(() => {
             <ClientOnly>
                 <KGraphCanvas :turtle="turtleData" @select="selectedNode = $event" />
             </ClientOnly>
-        </div>
-
-        <div v-show="!exploring" class="relative z-10 m-auto flex w-full max-w-3xl flex-col items-center gap-4 px-4 py-16 text-center">
-            <div class="flex flex-col gap-2">
-                <h1 class="text-5xl font-bold text-foreground !m-0 sm:text-6xl">Graphs, Models, AI?</h1>
-                <p class="text-xl text-muted-foreground !m-0">Hello KurrawongAI!</p>
-            </div>
-
-            <p v-if="summary" class="bg-secondary/50 dark:bg-secondary/30 max-w-xl rounded-lg p-3 text-sm leading-relaxed !my-0 backdrop-blur-sm">
-                {{ summary.description }}
-            </p>
         </div>
 
         <Button
@@ -74,7 +61,7 @@ onBeforeUnmount(() => {
         <template v-if="exploring">
             <div
                 v-if="selectedNode"
-                class="bg-card text-card-foreground fixed top-20 left-5 z-[70] max-w-sm rounded-lg border p-4 text-sm shadow-lg"
+                class="bg-card text-card-foreground fixed top-20 right-5 z-[70] max-w-sm rounded-lg border p-4 text-sm shadow-lg"
             >
                 <div class="flex items-start justify-between gap-2">
                     <h2 class="text-base font-semibold !m-0">{{ selectedNode.label }}</h2>
