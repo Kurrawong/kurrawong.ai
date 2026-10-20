@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { ChatMessage } from "@/utils/kchat";
+import { ChevronDown } from "lucide-vue-next";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const props = defineProps<{
@@ -67,15 +68,17 @@ const parsed = computed(() => props.messages.map(message => {
                         v-for="followUp in parsed[index].followUps"
                         :key="followUp"
                         type="button"
-                        class="bg-background hover:bg-accent rounded-full border px-2.5 py-1 text-xs"
+                        class="bg-background hover:bg-accent dark:bg-white/90 dark:border-black/10 dark:text-neutral-900 dark:hover:bg-neutral-100 rounded-full border px-2.5 py-1 text-xs"
                         @click="emit('send', followUp)"
                     >
                         {{ followUp }}
                     </button>
                 </div>
-                <Collapsible v-if="message.artifacts.length" class="mt-2">
-                    <CollapsibleTrigger class="text-muted-foreground hover:text-foreground text-xs underline-offset-2 hover:underline">
-                        SPARQL queries &amp; results ({{ message.artifacts.length }})
+                <Collapsible v-if="message.artifacts.length && !message.typing" v-slot="{ open }" class="mt-2.5">
+                    <CollapsibleTrigger class="text-muted-foreground hover:text-foreground hover:bg-accent/60 inline-flex items-center gap-1.5 rounded-md border border-border/70 px-2 py-1 text-xs transition-colors">
+                        <ChevronDown class="size-3.5 transition-transform" :class="open ? 'rotate-180' : ''" />
+                        SPARQL queries &amp; results
+                        <span class="bg-muted rounded px-1 text-[10px] font-medium">{{ message.artifacts.length }}</span>
                     </CollapsibleTrigger>
                     <CollapsibleContent>
                         <div class="mt-1.5 flex flex-wrap gap-1.5">
@@ -83,11 +86,12 @@ const parsed = computed(() => props.messages.map(message => {
                                 v-for="artifact in message.artifacts"
                                 :key="`${artifact.name}:${artifact.version}`"
                                 type="button"
-                                class="bg-background hover:bg-accent rounded-full border px-2.5 py-0.5 text-xs"
+                                class="bg-background/60 hover:bg-accent inline-flex items-center gap-1 rounded-md border border-border/70 px-2 py-0.5 text-xs transition-colors"
                                 :title="`Open ${artifact.name}`"
                                 @click="emit('open-artifact', artifact.name, artifact.version)"
                             >
-                                {{ artifact.label }} · v{{ artifact.version }}
+                                {{ artifact.label }}
+                                <span class="text-muted-foreground text-[10px]">v{{ artifact.version }}</span>
                             </button>
                         </div>
                     </CollapsibleContent>

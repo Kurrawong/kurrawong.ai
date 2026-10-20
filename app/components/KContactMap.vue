@@ -12,6 +12,7 @@ const LON_LAT: [number, number] = [153.0831598, -27.325541];
 
 const target = ref<HTMLElement | null>(null);
 let map: Map | null = null;
+let resizeObserver: ResizeObserver | null = null;
 
 onMounted(() => {
     if (!target.value) return;
@@ -34,9 +35,15 @@ onMounted(() => {
         ],
         view: new View({ center: position, zoom: 16 }),
     });
+    // The card mounts inside an animating chat bubble, so its size can still
+    // be settling when OpenLayers reads it; re-sync the canvas whenever the
+    // container's size changes so the map renders without manual zooming.
+    resizeObserver = new ResizeObserver(() => map?.updateSize());
+    resizeObserver.observe(target.value);
 });
 
 onBeforeUnmount(() => {
+    resizeObserver?.disconnect();
     map?.dispose();
     map = null;
 });

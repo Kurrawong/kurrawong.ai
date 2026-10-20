@@ -152,12 +152,27 @@ export function kchatIsContactQuestion(question: string): boolean {
     return normalise(question) === "how can i contact kurrawongai";
 }
 
-const LIST_ITEM = /^\s*(?:[-*]|\d+\.)\s+/;
+const LIST_ITEM = /^\s*(?:[-*]|(?:\d+|[a-z])[).])\s+/;
+
+/** Phrasings that introduce a trailing list of suggested questions. */
+const FOLLOWUP_HINT = new RegExp(
+    [
+        "follow[- ]?ups?",
+        "you (could|might|may|can|want to)? ?(also |like to |want to )?(ask|know|explore|hear|learn)",
+        "would you like to (know|hear|learn|explore)",
+        "here ('s|are|is) (some|a few|other|more)? ?(more )?(questions|ideas|examples|things)",
+        "(other|related|more|some|common|typical) questions",
+        "try asking",
+        "feel free to ask",
+    ].join("|"),
+    "i",
+);
 
 /**
  * Split a trailing list of question suggestions out of an assistant answer.
- * The list is only treated as follow-ups when the preceding text mentions
- * "follow-up", so answer lists of questions are left intact.
+ * Any trailing list made entirely of questions is offered as follow-up
+ * pills; when the text before it invites further questions, that
+ * introductory line is removed from the body.
  */
 export function kchatExtractFollowUps(text: string): { body: string; followUps: string[] } {
     const lines = text.split("\n");
@@ -167,17 +182,21 @@ export function kchatExtractFollowUps(text: string): { body: string; followUps: 
     while (start > 0 && LIST_ITEM.test(lines[start - 1])) start--;
     if (start === end) return { body: text, followUps: [] };
 
-    // Look back past blanks and horizontal rules for a follow-up mention.
-    let marker = start;
-    while (marker > 0 && (!lines[marker - 1].trim() || lines[marker - 1].trim() === "---")) marker--;
-    const before = lines.slice(Math.max(0, marker - 2), start).join(" ");
-    if (!/follow[- ]?up/i.test(before)) return { body: text, followUps: [] };
-
-    const items = lines.slice(start, end).map(line => line.replace(LIST_ITEM, "").replace(/\*\*/g, "").trim());
+    const items = lines
+        .slice(start, end)
+        .map(line => line.replace(LIST_ITEM, "").replace(/\*\*/g, "").trim())
+        .map(item => item.replace(/^(["'])(.*)\1$/, "$2").trim());
     if (!items.length || !items.every(item => item.endsWith("?"))) return { body: text, followUps: [] };
 
+    // Look back past blanks and horizontal rules for the introducing line.
+    let marker = start;
+    while (marker > 0 && (!lines[marker - 1].trim() || lines[marker - 1].trim() === "---")) marker--;
+    const before = lines.slice(Math.max(0, marker - 3), start).join(" ");
+
     let bodyEnd = marker;
-    if (bodyEnd > 0 && /follow[- ]?up/i.test(lines[bodyEnd - 1]) && !LIST_ITEM.test(lines[bodyEnd - 1])) bodyEnd -= 1;
+    const introducing = bodyEnd > 0 && !LIST_ITEM.test(lines[bodyEnd - 1])
+        && (FOLLOWUP_HINT.test(before) || /:\s*$/.test(lines[bodyEnd - 1]));
+    if (introducing) bodyEnd -= 1;
     while (bodyEnd > 0 && (!lines[bodyEnd - 1].trim() || lines[bodyEnd - 1].trim() === "---")) bodyEnd -= 1;
     const body = lines.slice(0, bodyEnd).join("\n").replace(/\s+$/, "");
     return { body: body || text, followUps: items };

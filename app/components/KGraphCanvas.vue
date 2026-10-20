@@ -14,10 +14,17 @@ interface SimNode extends d3.SimulationNodeDatum {
     r: number;
 }
 
-interface SimLink extends d3.SimulationLinkDatum<SimNode> {}
+interface SimLink extends d3.SimulationLinkDatum<SimNode> {
+    /** Predicates of the RDF statements this visible edge represents. */
+    labels: string[];
+}
 
 const props = defineProps<{
     turtle: string;
+    /** Backdrop mode: keep nodes below the site header instead of behind it. */
+    constrained?: boolean;
+    /** A page is open in the split pane: the first background click only closes it. */
+    splitOpen?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -144,16 +151,23 @@ function render() {
     }
 
     // Visible links: endpoints collapse to their cluster unless expanded.
+    // Parallel statements between the same pair merge into one edge whose
+    // labels are all its predicates.
     const simLinks: SimLink[] = [];
-    const seenLinks = new Set<string>();
+    const linkByKey = new Map<string, SimLink>();
     for (const link of allLinks) {
         const source = idToVisible.get(link.source);
         const target = idToVisible.get(link.target);
         if (!source || !target || source === target) continue;
         const key = source.id < target.id ? `${source.id}|${target.id}` : `${target.id}|${source.id}`;
-        if (seenLinks.has(key)) continue;
-        seenLinks.add(key);
-        simLinks.push({ source: source.id, target: target.id });
+        const simLink = linkByKey.get(key);
+        if (simLink) {
+            if (!simLink.labels.includes(link.label)) simLink.labels.push(link.label);
+            continue;
+        }
+        const newLink: SimLink = { source: source.id, target: target.id, labels: [link.label] };
+        linkByKey.set(key, newLink);
+        simLinks.push(newLink);
     }
 
     const entering = new Set(simNodes.filter(node => !previousVisible.has(node.id)).map(node => node.id));
@@ -163,7 +177,15 @@ function render() {
     const width = host.clientWidth || 800;
     const height = host.clientHeight || 600;
 
-    const svg = d3.select(host).append("svg").attr("width", width).attr("height", height).classed("kgraph-svg", true);
+    // Outside explore mode the diagram is a blurred backdrop, so its node
+    // labels stay hidden; explore mode shows them as before.
+    const svg = d3
+        .select(host)
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .classed("kgraph-svg", true)
+        .classed("kgraph-unlabelled", !exploring.value);
     const g = svg.append("g");
 
     svg.call(
@@ -177,6 +199,20 @@ function render() {
         .data(simLinks)
         .join("line")
         .classed("kgraph-link", true);
+
+    // Edge labels sit above the links and below the nodes; they are hidden
+    // until a node hover reveals the labels of its connected edges.
+    const edgeLabel = g
+        .append("g")
+        .selectAll<SVGTextElement, SimLink>(".kgraph-edge-label")
+        .data(simLinks)
+        .join("text")
+        .classed("kgraph-edge-label", true)
+        .attr("dy", "-0.4em")
+        .text(d => {
+            const text = d.labels.join(" · ");
+            return text.length > 40 ? `${text.slice(0, 39)}…` : text;
+        });
 
     const node = g
         .selectAll<SVGGElement, SimNode>(".kgraph-node")
@@ -193,7 +229,7 @@ function render() {
     node.append("title").text(d => `${d.label}\n${d.id}${d.description ? `\n\n${d.description}` : ""}`);
     node.append("text")
         .text(d => d.label)
-        .attr("dy", d => d.r + 14)
+        .attr("dy", d => d.r + 16)
         .attr("text-anchor", "middle")
         .classed("kgraph-label", true);
 
@@ -216,9 +252,15 @@ function render() {
             const target = typeof l.target === "string" ? l.target : l.target.id;
             return source === d.id || target === d.id ? "true" : null;
         });
+        edgeLabel.attr("data-active", l => {
+            const source = typeof l.source === "string" ? l.source : l.source.id;
+            const target = typeof l.target === "string" ? l.target : l.target.id;
+            return source === d.id || target === d.id ? "true" : null;
+        });
     }).on("mouseout", () => {
         node.attr("data-active", null);
         link.attr("data-active", null);
+        edgeLabel.attr("data-active", null);
     });
 
     node.on("click", (event, d) => {
@@ -231,11 +273,14 @@ function render() {
         }
     });
     svg.on("click", () => {
+        emit("select", null);
+        // With the split pane open, this click just closes it; the next one
+        // clusters the nodes again.
+        if (props.splitOpen) return;
         if (userExpanded.size) {
             userExpanded.clear();
             render();
         }
-        emit("select", null);
     });
 
     const dragBehaviour = d3
@@ -256,19 +301,41 @@ function render() {
         });
     node.call(dragBehaviour);
 
+    // In backdrop mode keep nodes inside the area below the sticky header.
+    function topBound(): number {
+        if (!props.constrained) return 0;
+        return document.querySelector<HTMLElement>("header.top-nav")?.offsetHeight ?? 0;
+    }
+
+    // Spread but calm: long link springs and strong, wide-ranging repulsion
+    // push nodes apart, centre snap keeps the cloud anchored, and heavier
+    // velocity damping stops the larger layout from oscillating.
     simulation = d3
         .forceSimulation<SimNode>(simNodes)
-        .force("link", d3.forceLink<SimNode, SimLink>(simLinks).id(d => d.id).distance(120))
-        .force("charge", d3.forceManyBody().strength(-350))
-        .force("center", d3.forceCenter(width / 2, height / 2))
-        .force("collide", d3.forceCollide<SimNode>(d => d.r + 10))
+        .velocityDecay(0.45)
+        .force("link", d3.forceLink<SimNode, SimLink>(simLinks).id(d => d.id).distance(220))
+        .force("charge", d3.forceManyBody().strength(-550).distanceMax(600))
+        .force("center", d3.forceCenter(width / 2, (topBound() + height) / 2))
+        .force("collide", d3.forceCollide<SimNode>(d => d.r + 22).iterations(2))
         .on("tick", () => {
+            if (props.constrained) {
+                const top = topBound() + 8;
+                for (const d of simNodes) {
+                    d.x = Math.min(Math.max(d.x ?? 0, d.r + 8), width - d.r - 8);
+                    d.y = Math.min(Math.max(d.y ?? 0, top + d.r), height - d.r - 8);
+                }
+            }
             for (const d of simNodes) lastPositions.set(d.id, { x: d.x ?? 0, y: d.y ?? 0 });
             link
                 .attr("x1", d => (d.source as SimNode).x ?? 0)
                 .attr("y1", d => (d.source as SimNode).y ?? 0)
                 .attr("x2", d => (d.target as SimNode).x ?? 0)
                 .attr("y2", d => (d.target as SimNode).y ?? 0);
+            edgeLabel.attr("transform", d => {
+                const source = d.source as SimNode;
+                const target = d.target as SimNode;
+                return `translate(${((source.x ?? 0) + (target.x ?? 0)) / 2},${((source.y ?? 0) + (target.y ?? 0)) / 2})`;
+            });
             node.attr("transform", d => `translate(${d.x ?? 0},${d.y ?? 0})`);
         });
 
@@ -278,7 +345,7 @@ function render() {
         const newHeight = host.clientHeight;
         if (!newWidth || !newHeight) return;
         svg.attr("width", newWidth).attr("height", newHeight);
-        simulation?.force("center", d3.forceCenter(newWidth / 2, newHeight / 2)).alpha(0.3).restart();
+        simulation?.force("center", d3.forceCenter(newWidth / 2, (topBound() + newHeight) / 2)).alpha(0.3).restart();
     });
     observer.observe(host);
 }
@@ -388,14 +455,37 @@ onBeforeUnmount(() => {
     opacity: 0.15;
 }
 
+.kgraph-unlabelled .kgraph-label {
+    opacity: 0;
+}
+
 .kgraph-label {
-    font-size: 10px;
+    font-size: 12px;
+    font-weight: 500;
     fill: var(--foreground);
     paint-order: stroke;
     stroke: var(--background);
-    stroke-width: 3px;
+    stroke-width: 3.5px;
     stroke-linejoin: round;
     pointer-events: none;
     user-select: none;
+}
+
+.kgraph-edge-label {
+    font-size: 10.5px;
+    fill: var(--foreground);
+    paint-order: stroke;
+    stroke: var(--background);
+    stroke-width: 3.5px;
+    stroke-linejoin: round;
+    text-anchor: middle;
+    opacity: 0;
+    transition: opacity 0.15s;
+    pointer-events: none;
+    user-select: none;
+}
+
+.kgraph-edge-label[data-active="true"] {
+    opacity: 1;
 }
 </style>

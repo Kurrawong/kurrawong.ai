@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MessageCircle, Send, X } from "lucide-vue-next";
+import { Send, X } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { ChatMessage } from "@/utils/kchat";
@@ -12,14 +12,14 @@ const { exploring } = useGraphExplore();
 const { scrollFade } = useScrollFade();
 const route = useRoute();
 
-// The landing page shows the chat bar in the top-left corner; other pages get
-// the floating launcher in the bottom-right.
+// The chat bar only exists on the landing page.
 const isLanding = computed(() => route.path === "/");
 
-// On small screens the chat overlays the content, so it hides once the user
-// scrolls to the main page content and returns when they scroll back up.
+// The chat column overlays the page content, so it fades out with the hero as
+// soon as the user scrolls toward the main content, returns at the top, and is
+// always hidden while the graph is being explored.
 const isMobile = ref(false);
-const chatHiddenByScroll = computed(() => isLanding.value && isMobile.value && !exploring.value && scrollFade.value <= 0);
+const chatHiddenByScroll = computed(() => isLanding.value && (exploring.value || scrollFade.value <= 0));
 
 // The landing hero (KHero) fetches the RDF under this key; share it for the
 // company summary shown above the chat bar. Off the landing page the fetch is
@@ -41,7 +41,6 @@ const initialSuggestionsVisible = ref(true);
 
 let userId = "";
 let sessionId = "";
-const knownArtifacts = new Set<string>();
 const messagesEl = ref<HTMLElement | null>(null);
 
 const artifactOpen = ref(false);
@@ -84,7 +83,6 @@ watch([open, messages, isLanding], () => {
 /** Clear the conversation and start a fresh session with new suggestions. */
 function clearSession() {
     messages.value = [];
-    knownArtifacts.clear();
     sessionId = `chat-${crypto.randomUUID()}`;
     localStorage.setItem("kchat.session", sessionId);
     suggestions.value = kchatRandomSuggestions(kchatSuggestionCount());
@@ -137,16 +135,12 @@ async function listArtifacts(): Promise<{ name: string; version: number }[]> {
     return found.sort((a, b) => a.version - b.version || a.name.localeCompare(b.name));
 }
 
-async function attachArtifacts(message: ChatMessage) {
-    const found: ChatMessage["artifacts"] = [];
+async function attachArtifacts(message: ChatMessage, known: Set<string>) {
     for (const artifact of await listArtifacts()) {
         const key = `${artifact.name}:${artifact.version}`;
-        if (!knownArtifacts.has(key)) {
-            knownArtifacts.add(key);
-            found.push({ ...artifact, label: kchatArtifactLabel(artifact.name) });
-        }
+        if (known.has(key)) continue;
+        message.artifacts.push({ ...artifact, label: kchatArtifactLabel(artifact.name) });
     }
-    message.artifacts.push(...found);
 }
 
 async function openArtifact(name: string, version: number) {
@@ -205,7 +199,9 @@ async function submit(message: string) {
     let answer = "";
     try {
         await ensureSession();
-        await attachArtifacts(assistant);
+        // Snapshot the session's artifacts before asking so only the ones
+        // this answer generates are attached to it, never older ones.
+        const known = new Set((await listArtifacts()).map(artifact => `${artifact.name}:${artifact.version}`));
         const response = await fetch(`${kchatUrl}/run_sse`, {
             method: "POST",
             headers: { "content-type": "application/json" },
@@ -228,7 +224,7 @@ async function submit(message: string) {
         });
         if (!answer) answer = "No text response was returned.";
         assistant.text = answer;
-        await attachArtifacts(assistant);
+        await attachArtifacts(assistant, known);
     } catch (error) {
         assistant.error = true;
         assistant.text = `**Chat error:** ${error instanceof Error ? error.message : String(error)}`;
@@ -242,13 +238,6 @@ async function submit(message: string) {
 function onFormSubmit() {
     sendQuestion(input.value);
 }
-
-function onInputKeydown(event: KeyboardEvent) {
-    if (event.key === "Enter" && !event.shiftKey) {
-        event.preventDefault();
-        onFormSubmit();
-    }
-}
 </script>
 
 <template>
@@ -256,9 +245,10 @@ function onInputKeydown(event: KeyboardEvent) {
         <!-- Landing page: title, blurb and chat bar in the top-left corner.
              Hidden while the graph is being explored. -->
         <div
-            v-if="isLanding && !exploring"
+            v-if="isLanding"
             v-show="!chatHiddenByScroll"
-            class="fixed top-24 left-5 z-[80] max-h-[calc(100svh-7rem)] w-[min(calc(100vw-2.5rem),420px)] overflow-y-auto overscroll-contain"
+            :style="{ opacity: scrollFade }"
+            class="fixed top-24 left-5 z-[80] max-h-[calc(100svh-7rem)] w-[min(calc(100vw-2.5rem),420px)] overflow-y-auto overscroll-contain transition-opacity duration-150"
         >
             <div>
                 <h1 class="text-4xl font-bold text-foreground !m-0 sm:text-5xl">Graphs, Models, AI?</h1>
@@ -266,19 +256,25 @@ function onInputKeydown(event: KeyboardEvent) {
                 <p v-if="summary" class="mt-1 text-sm leading-relaxed text-foreground/80 !my-0">{{ summary.description }}</p>
             </div>
 
-            <!-- Initial layout: chat bar with suggested questions below it. -->
+            <!-- Initial layout: chat bar with suggested questions below it.
+                 The bar hides while an answer is being generated. -->
             <template v-if="initialSuggestionsVisible">
-                <form class="bg-card mt-4 flex items-center gap-1 rounded-md border p-1.5 pl-4 shadow-lg" @submit.prevent="onFormSubmit">
+                <form
+                    v-show="!busy"
+                    class="bg-card/70 dark:bg-white mt-4 flex items-center gap-2 rounded-md border border-border/70 py-1 pr-1.5 pl-4 shadow-sm backdrop-blur-md dark:border-black/10"
+                    @submit.prevent="onFormSubmit"
+                >
                     <input
                         id="kchat-input"
                         v-model="input"
                         type="text"
+                        autocomplete="off"
                         placeholder="Ask about KurrawongAI…"
                         aria-label="Ask a question about KurrawongAI"
-                        class="h-9 flex-1 bg-transparent text-sm outline-none"
+                        class="h-8 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/80 dark:text-neutral-900 dark:placeholder:text-neutral-500"
                     >
-                    <Button type="submit" size="icon" class="size-9 shrink-0 rounded-md" aria-label="Send question" :disabled="busy || !input.trim()">
-                        <Send />
+                    <Button type="submit" size="icon" class="size-8 shrink-0 rounded-md dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-900/90" aria-label="Send question" :disabled="busy || !input.trim()">
+                        <Send class="size-4" />
                     </Button>
                 </form>
 
@@ -287,7 +283,7 @@ function onInputKeydown(event: KeyboardEvent) {
                         v-for="suggestion in suggestions"
                         :key="suggestion"
                         type="button"
-                        class="bg-card/80 hover:bg-accent rounded-full border px-2.5 py-1 text-xs shadow-sm backdrop-blur-sm"
+                        class="bg-card/80 hover:bg-accent dark:bg-white/90 dark:border-black/10 dark:text-neutral-900 dark:hover:bg-neutral-100 rounded-full border px-2.5 py-1 text-xs shadow-sm backdrop-blur-sm"
                         :disabled="busy"
                         @click="sendQuestion(suggestion)"
                     >
@@ -303,70 +299,29 @@ function onInputKeydown(event: KeyboardEvent) {
             </Transition>
 
             <!-- Conversation layout: messages above, bar at the bottom with a
-                 button to clear the session and start anew. -->
-            <form v-if="!initialSuggestionsVisible" class="bg-card sticky bottom-0 mt-3 flex items-center gap-1 rounded-md border p-1.5 pl-4 shadow-lg" @submit.prevent="onFormSubmit">
+                 button to clear the session and start anew. The bar hides
+                 while an answer is being generated. -->
+            <form
+                v-if="!initialSuggestionsVisible"
+                v-show="!busy"
+                class="bg-card/70 dark:bg-white sticky bottom-0 mt-3 flex items-center gap-2 rounded-md border border-border/70 py-1 pr-1.5 pl-4 shadow-sm backdrop-blur-md dark:border-black/10"
+                @submit.prevent="onFormSubmit"
+            >
                 <input
                     id="kchat-input"
                     v-model="input"
                     type="text"
+                    autocomplete="off"
                     placeholder="Type a follow-up question…"
                     aria-label="Ask a follow-up question"
-                    class="h-9 flex-1 bg-transparent text-sm outline-none"
+                    class="h-8 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/80 dark:text-neutral-900 dark:placeholder:text-neutral-500"
                 >
-                <Button variant="ghost" size="icon" class="size-9 shrink-0 rounded-md" aria-label="Clear chat and start a new one" title="Clear chat and start a new one" @click="clearSession">
-                    <X />
+                <Button variant="ghost" type="button" size="icon" class="text-muted-foreground hover:text-foreground dark:text-neutral-500 dark:hover:text-neutral-900 size-8 shrink-0 rounded-md" aria-label="Clear chat and start a new one" title="Clear chat and start a new one" @click="clearSession">
+                    <X class="size-4" />
                 </Button>
-                <Button type="submit" size="icon" class="size-9 shrink-0 rounded-md" aria-label="Send question" :disabled="busy || !input.trim()">
-                    <Send />
+                <Button type="submit" size="icon" class="size-8 shrink-0 rounded-md dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-900/90" aria-label="Send question" :disabled="busy || !input.trim()">
+                    <Send class="size-4" />
                 </Button>
-            </form>
-        </div>
-
-        <!-- Other pages: floating launcher in the bottom-right corner. -->
-        <Button
-            v-if="!isLanding && !open"
-            size="lg"
-            class="fixed bottom-5 right-5 z-[80] rounded-full pr-5 shadow-lg"
-            aria-label="Open chat"
-            @click="open = true"
-        >
-            <MessageCircle />
-            Ask KurrawongAI
-        </Button>
-
-        <div
-            v-if="!isLanding && open"
-            class="bg-card text-card-foreground fixed bottom-5 right-5 z-[80] flex h-[min(70vh,600px)] w-[min(calc(100vw-2.5rem),400px)] flex-col overflow-hidden rounded-lg border shadow-xl"
-            role="dialog"
-            aria-label="KurrawongAI chat"
-        >
-            <div class="border-b px-4 py-3">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-sm font-semibold">Ask KurrawongAI</h2>
-                    <Button variant="ghost" size="icon" aria-label="Close chat" @click="open = false">
-                        <X />
-                    </Button>
-                </div>
-            </div>
-
-            <div ref="messagesEl" class="flex-1 overflow-y-auto overscroll-contain px-4 py-4">
-                <KChatMessages :messages="messages" show-suggestions @open-artifact="openArtifact" @send="sendQuestion" />
-            </div>
-
-            <form class="border-t p-3" @submit.prevent="onFormSubmit">
-                <div class="flex items-end gap-2">
-                    <textarea
-                        id="kchat-input"
-                        v-model="input"
-                        rows="1"
-                        placeholder="Type a message…"
-                        class="bg-background min-h-9 max-h-25 flex-1 resize-none rounded-md border px-3 py-2 text-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
-                        @keydown="onInputKeydown"
-                    />
-                    <Button type="submit" size="icon" :disabled="busy || !input.trim()" aria-label="Send message">
-                        <Send />
-                    </Button>
-                </div>
             </form>
         </div>
 

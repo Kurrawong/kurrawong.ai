@@ -95,7 +95,7 @@ router.beforeEach((from, to) => {
 <!--	    desktop nav-->
         <div class="ml-auto md:flex md:flex-row gap-2 hidden">
             <template v-for="link of props.navigation">
-                <DropdownMenu v-if="link.children && link.children.length > 1" v-slot="{open}">
+                <DropdownMenu v-if="link.children && link.children.length > 1" :modal="false" v-slot="{open}">
                     <DropdownMenuTrigger as-child>
                         <Button :variant="route.path.startsWith(link.path) ? 'default' : 'ghost'">
                             {{ link.children.find(c => c.path === link.path)?.title || link.title }}
