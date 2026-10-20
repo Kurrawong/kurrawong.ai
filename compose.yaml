@@ -1,15 +1,13 @@
 # Runs the kchat SPARQL chat agent against this website's RDF.
 #
-# Requires the kchat repo checked out next to this one (../kchat).
+# Uses the published (public) image from GHCR.
 # Copy .env.example to .env and set LLM_API_KEY, then:
-#   docker compose up --build
+#   docker compose up
 # The agent is then available at http://localhost:8000 (API at /docs).
 
 services:
   kchat:
-    build:
-      context: ../kchat
-    image: kchat:dev
+    image: ghcr.io/kurrawong/kchat:v0.0.4
     ports:
       - "${KCHAT_PORT:-8000}:8000"
     volumes:

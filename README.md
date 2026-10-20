@@ -43,12 +43,12 @@ The website includes an AI chat agent, [kchat](https://github.com/Kurrawong/kcha
 The agent's answers are grounded in [`server/assets/rdf.ttl`](server/assets/rdf.ttl), a schema.org model of the important website content (organisation, people, products, services, projects). This same file is served as Turtle at the site root via content negotiation (see [`server/middleware/rdf.ts`](server/middleware/rdf.ts)), so the RDF is both the agent's knowledge base and the site's own linked data. Update it when website content changes.
 
 ### Run locally
-Requires the [kchat](https://github.com/Kurrawong/kchat) repo checked out next to this one (e.g. `../kchat`) and Docker.
+Requires Docker; the kchat agent is pulled from GHCR (`ghcr.io/kurrawong/kchat`, public).
 
 ```bash
 cp .env.example .env  # set LLM_API_KEY and NUXT_PUBLIC_KCHAT_URL
-docker compose up --build  # kchat on http://localhost:8000
-pnpm dev                   # website on http://localhost:3000
+docker compose up     # kchat on http://localhost:8000
+pnpm dev              # website on http://localhost:3000
 ```
 
 Open http://localhost:3000 and use the "Ask KurrawongAI" button in the bottom-right corner. The kchat API docs are at http://localhost:8000/docs.
@@ -64,11 +64,13 @@ Two protections are configured through the kchat container (see `compose.yaml` a
 - `AGENT_EXTRA_INSTRUCTIONS` appends instructions to the agent telling it to only answer questions about KurrawongAI and to politely refuse off-topic questions.
 
 ### Deployment
-The intended deployment is Azure Container Apps:
-- one container app running the kchat image, with `server/assets/rdf.ttl` either baked into the image or mounted via an Azure Files volume at `/rdf`, `SPARQL_ENDPOINT=/rdf`, and `LLM_API_KEY`/`LLM_MODEL` as container app secrets;
-- the static site (`pnpm generate`) hosted as a static container app, with `NUXT_PUBLIC_KCHAT_URL` set to the kchat container app's public URL.
+The site deploys automatically to Azure from pushes to `main` (see `.github/workflows/push.yaml`, [`deploy/README.md`](deploy/README.md), and the architecture diagram [`deploy/architecture.html`](deploy/architecture.html)):
 
-kchat already allows cross-origin requests, so the browser widget talks to it directly; no proxy is required. For multi-instance deployments, set `SESSION_DATABASE_URL` to a PostgreSQL database (see the [kchat README](https://github.com/Kurrawong/kchat)).
+- one Container App with two containers: the site (main, serving all traffic) and kchat (sidecar); both images are built by CI, the kchat one being the published agent image plus this site's RDF baked in ([`deploy/Dockerfile.kchat`](deploy/Dockerfile.kchat));
+- the site proxies `/kchat/*` to the sidecar (see `nuxt.config.ts`), so the agent is only reachable via the site's own origin, with `NUXT_PUBLIC_KCHAT_URL=/kchat`;
+- `LLM_API_KEY` is an inline Container App secret (rotation runbook in `deploy/README.md`).
+
+One-time Azure setup commands (storage, secret, registry credentials) are in [`deploy/README.md`](deploy/README.md); the workflow never creates Azure resources. Chat sessions are ephemeral (single replica, SQLite on EmptyDir). For multi-instance deployments, set `SESSION_DATABASE_URL` to a PostgreSQL database (see the [kchat README](https://github.com/Kurrawong/kchat)).
 
 ## Markdown Content
 See [Nuxt Content docs](https://content.nuxt.com/usage/markdown) for more info.

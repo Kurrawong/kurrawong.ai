@@ -1,0 +1,8 @@
+# Thin layer over the published kchat image that adds this site's RDF as the
+# agent's knowledge base, baked into the image instead of an Azure Files share.
+#
+# Built from the repo root by .github/workflows/push.yaml; KCHAT_BASE_IMAGE
+# is bumped there when a new kchat version is published to GHCR.
+ARG KCHAT_BASE_IMAGE=ghcr.io/kurrawong/kchat:v0.0.4
+FROM ${KCHAT_BASE_IMAGE}
+COPY server/assets/rdf.ttl /rdf/rdf.ttl

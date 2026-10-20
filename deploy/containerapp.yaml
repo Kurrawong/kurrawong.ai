@@ -1,0 +1,62 @@
+# Azure Container App definition applied on every deploy by
+# .github/workflows/push.yaml.
+#
+# `az containerapp update --yaml` PATCHes only the properties present in this
+# file; ingress, secrets, and registry credentials are managed out-of-band
+# (see deploy/README.md) and are left untouched.
+#
+# __SITE_IMAGE__ and __KCHAT_IMAGE__ are placeholders replaced by the workflow
+# before the file is applied.
+properties:
+  template:
+    containers:
+      # Main container: the Nuxt website. Receives all ingress traffic.
+      - name: website
+        image: __SITE_IMAGE__
+        resources:
+          cpu: 0.5
+          memory: 1Gi
+        env:
+          # Same-origin path proxied to the kchat sidecar (see nuxt.config.ts).
+          - name: NUXT_PUBLIC_KCHAT_URL
+            value: /kchat
+      # Sidecar: the kchat SPARQL chat agent. Not directly reachable from the
+      # internet; the website proxies /kchat/* to it over localhost.
+      - name: kchat
+        image: __KCHAT_IMAGE__
+        resources:
+          cpu: 0.25
+          memory: 0.5Gi
+        env:
+          # RDF directory, baked into the kchat image by deploy/Dockerfile.kchat
+          # from server/assets/rdf.ttl on every deploy.
+          - name: SPARQL_ENDPOINT
+            value: /rdf
+          - name: LLM_MODEL
+            value: mistral/mistral-small-latest
+          - name: LLM_API_KEY
+            secretRef: llm-api-key
+          - name: LITELLM_LOCAL_MODEL_COST_MAP
+            value: "true"
+          # Ephemeral (EmptyDir): chat sessions do not survive redeploys.
+          - name: SESSION_DATABASE_URL
+            value: "sqlite:////data/kchat-sessions.db"
+          - name: RATE_LIMIT_QUESTIONS
+            value: "15"
+          - name: RATE_LIMIT_WINDOW_SECONDS
+            value: "3600"
+          # Keep in sync with .env.example (used by compose.yaml locally).
+          - name: AGENT_EXTRA_INSTRUCTIONS
+            value: "You are the chat assistant embedded on the KurrawongAI company website (https://kurrawong.ai). Only answer questions about KurrawongAI: its people, products, services, projects, and contact details, or about navigating this website. If a question is not about KurrawongAI, politely and briefly decline and suggest an on-topic question. Do not answer general knowledge, current events, or personal questions. Endeavour to provide as much useful key information as possible: include the relevant names, roles, descriptions and website page links from the data in your answers. Keep answers concise, and end each answer with two to four short suggested follow-up questions the user could ask next. The graph uses schema.org. Its classes and predicates are: Organization (KurrawongAI and partner organisations; schema:memberOf links the company to standards bodies it belongs to); Person (staff; schema:worksFor the company, schema:affiliation lists past organisations); SoftwareApplication (products and online tools, distinguished by schema:additionalType 'Product' or 'Tool'); Service (services the company offers); CreativeWork (projects; schema:contributor links a project to its participating organisation, schema:isRelatedTo links it to products used); WebSite. The company links to its services with schema:makesOffer, services and products connect with schema:isRelatedTo, and one product building on another uses schema:isBasedOn. Website page links for entities are in schema:url. Resolve names and relations with the schema tool before querying rather than guessing predicates. If you cannot find a satisfactory answer in the graph after your queries, say so plainly: do not speculate or invent facts. In that case, direct the user to the most relevant pages of this website (such as About, Products, Services or Projects, using their schema:url links where available), and provide the company contact email info@kurrawong.ai so a human can help them."
+        volumeMounts:
+          - volumeName: kchat-sessions
+            mountPath: /data
+    volumes:
+      # Ephemeral per-replica storage; chat sessions do not survive redeploys.
+      - name: kchat-sessions
+        storageType: EmptyDir
+    # One replica keeps the SQLite session store coherent and the site always
+    # warm. Scale beyond 1 only after switching sessions to PostgreSQL.
+    scale:
+      minReplicas: 1
+      maxReplicas: 1
