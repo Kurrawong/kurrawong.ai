@@ -30,10 +30,10 @@ However, we actively support a range of Knowledge Graph-related products: mostly
 
 Where KurrawongAI has developed tools through our work with RDF and Semantic Web technologies that we feel have value for the broader technology community, we do our best to share and maintain these. This includes several to which we provide access via an online user-interface for ease of use:
 - **[KGM](https://docs.kurrawong.ai/products/tools/kgm/)** - a Python command line and workflow application that helps manage parts of Knowledge Graphs
-- **[pyLODE](https://tools.kurrawong.ai/tools/pylode)** - used to generate human-readable HTML documentation from ontologies
-- **[RDF Converter](https://tools.kurrawong.ai/tools/convert)** - convert between different RDF formats
-- **[SHACL Validator](https://tools.kurrawong.ai/tools/validate)** - Validate RDF data against SHACL rules
-- **[VocExcel](https://tools.kurrawong.ai/tools/vocexcel)** - convert Excel data to SKOS vocabularies
+- **[pyLODE](https://tools.kurrawong.ai/pylode)** - used to generate human-readable HTML documentation from ontologies
+- **[RDF Converter](https://tools.kurrawong.ai/convert)** - convert between different RDF formats
+- **[SHACL Validator](https://tools.kurrawong.ai/validate)** - Validate RDF data against SHACL rules
+- **[VocExcel](https://tools.kurrawong.ai/vocexcel)** - convert Excel data to SKOS vocabularies
 
 In other instances, please see the relevant GitHub repositories:
 

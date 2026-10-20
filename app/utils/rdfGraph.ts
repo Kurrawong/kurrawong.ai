@@ -68,8 +68,15 @@ function nodeFor(quads: Quad[], store: { nodes: Map<string, RdfGraphNode> }, id:
             node.label = objectValue(quad.object);
         } else if (predicate === `${SCHEMA}description`) {
             node.description = objectValue(quad.object);
-        } else if (predicate === `${SCHEMA}url` || predicate === `${SCHEMA}sameAs`) {
-            node.url ??= objectValue(quad.object);
+        }
+    }
+    // schema:url is the node's own page: prefer it over any sameAs link so
+    // same-origin pages open in the split pane rather than an external site.
+    for (const predicate of [`${SCHEMA}url`, `${SCHEMA}sameAs`]) {
+        const match = quads.find(quad => quad.subject.id === id && quad.predicate.id === predicate);
+        if (match) {
+            node.url = objectValue(match.object);
+            break;
         }
     }
     store.nodes.set(id, node);

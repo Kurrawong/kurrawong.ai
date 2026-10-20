@@ -1,10 +1,16 @@
 <script setup lang="ts">
 const colorMode = useColorMode()
-const { $mermaid } = useNuxtApp()
 const mermaidContainer = ref<HTMLDivElement | null>(null)
 const hasRenderedOnce = ref(false) // Track the initial render
 let mermaidDefinition = ''
 let observer: IntersectionObserver | null = null
+
+// Mermaid is ~800 KB: only download it when a diagram actually renders.
+let mermaidModule: typeof import('mermaid')['default'] | null = null
+async function getMermaid() {
+	mermaidModule ??= (await import('mermaid')).default
+	return mermaidModule
+}
 
 const mermaidTheme = computed(() => {
 	return colorMode.value === 'dark' ? 'dark' : 'default'
@@ -19,8 +25,9 @@ async function renderMermaid() {
 		mermaidContainer.value.textContent = mermaidDefinition
 		await nextTick()
 
-		$mermaid().initialize({ startOnLoad: false, theme: mermaidTheme.value })
-		await $mermaid().run({
+		const mermaid = await getMermaid()
+		mermaid.initialize({ startOnLoad: false, theme: mermaidTheme.value })
+		await mermaid.run({
 			nodes: [mermaidContainer.value],
 		})
 		hasRenderedOnce.value = true // Mark as rendered

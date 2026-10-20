@@ -39,6 +39,11 @@ export default defineNuxtConfig({
             tailwindcss(),
         ],
     },
+    nitro: {
+        // Precompress static assets (.gz/.br) so the bare Node server serves
+        // them compressed; no dependence on a proxy for byte size.
+        compressPublicAssets: true,
+    },
     image: {
         provider: "none",
     },

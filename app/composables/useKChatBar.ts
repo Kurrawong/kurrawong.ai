@@ -36,14 +36,23 @@ export const KCHAT_SUGGESTIONS = [
 /** The contact question is always included in the suggestions and answered locally. */
 export const KCHAT_CONTACT_QUESTION = "How can I contact KurrawongAI?";
 
-/** Pick `count` distinct suggestions at random, always including the contact question. Call client-side only. */
+/** Suggestions always included alongside the random picks: the core offering
+ *  questions plus the contact question. */
+export const KCHAT_PINNED_SUGGESTIONS = [
+    "What products does KurrawongAI make?",
+    "What services does KurrawongAI offer?",
+    "What training does KurrawongAI offer?",
+    KCHAT_CONTACT_QUESTION,
+];
+
+/** Pick `count` distinct suggestions at random, always including the pinned ones. Call client-side only. */
 export function kchatRandomSuggestions(count = 13): string[] {
-    const rest = KCHAT_SUGGESTIONS.filter(suggestion => suggestion !== KCHAT_CONTACT_QUESTION);
+    const rest = KCHAT_SUGGESTIONS.filter(suggestion => !KCHAT_PINNED_SUGGESTIONS.includes(suggestion));
     for (let i = rest.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [rest[i], rest[j]] = [rest[j], rest[i]];
     }
-    const picked = [...rest.slice(0, Math.max(0, count - 1)), KCHAT_CONTACT_QUESTION];
+    const picked = [...rest.slice(0, Math.max(0, count - KCHAT_PINNED_SUGGESTIONS.length)), ...KCHAT_PINNED_SUGGESTIONS];
     for (let i = picked.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [picked[i], picked[j]] = [picked[j], picked[i]];

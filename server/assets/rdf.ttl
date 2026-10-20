@@ -8,7 +8,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:email "david@kurrawong.ai"^^xsd:anyURI ;
     schema:jobTitle "Data Scientist, Knowledge Graph Systems Senior Developer"@en ;
     schema:name "David Habgood"@en ;
-    schema:url "https://kurrawong.ai/about-us/our-people"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-people#david-habgood"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
@@ -17,7 +17,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:email "edmond@kurrawong.ai"^^xsd:anyURI ;
     schema:jobTitle "Knowledge Graph Senior Developer"@en ;
     schema:name "Edmond Chuc"@en ;
-    schema:url "https://kurrawong.ai/about-us/our-people"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-people#edmond-chuc"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
@@ -26,7 +26,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:email "howard@kurrawong.ai"^^xsd:anyURI ;
     schema:jobTitle "Solution Architect"@en ;
     schema:name "Howard Johns"@en ;
-    schema:url "https://kurrawong.ai/about-us/our-people"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-people#howard-johns"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
@@ -35,7 +35,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:email "jamie@kurrawong.ai"^^xsd:anyURI ;
     schema:jobTitle "Knowledge Graph Senior Developer"@en ;
     schema:name "Jamie Feiss"@en ;
-    schema:url "https://kurrawong.ai/about-us/our-people"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-people#jamie-feiss"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
@@ -44,7 +44,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:email "lawson@kurrawong.ai"^^xsd:anyURI ;
     schema:jobTitle "Infrastructure and Python Developer"@en ;
     schema:name "Lawson Lewis"@en ;
-    schema:url "https://kurrawong.ai/about-us/our-people"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-people#lawson-lewis"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
@@ -53,7 +53,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:email "les@kurrawong.ai"^^xsd:anyURI ;
     schema:jobTitle "Vocabulary Specialist"@en ;
     schema:name "Les Kneebone"@en ;
-    schema:url "https://kurrawong.ai/about-us/our-people"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-people#les-kneebone"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
@@ -62,7 +62,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:email "margie@kurrawong.ai"^^xsd:anyURI ;
     schema:jobTitle "Data Governance Coach"@en ;
     schema:name "Margie Smith"@en ;
-    schema:url "https://kurrawong.ai/about-us/our-people"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-people#margie-smith"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
@@ -71,7 +71,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:email "monique@kurrawong.ai"^^xsd:anyURI ;
     schema:jobTitle "Business Support Coordinator"@en ;
     schema:name "Monique Harris"@en ;
-    schema:url "https://kurrawong.ai/about-us/our-people"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-people#monique-harris"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
@@ -80,7 +80,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:email "sophie@kurrawong.ai"^^xsd:anyURI ;
     schema:jobTitle "Data Governance Advisor & Business Analyst"@en ;
     schema:name "Sophie Darnell"@en ;
-    schema:url "https://kurrawong.ai/about-us/our-people"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-people#sophie-darnell"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
@@ -91,7 +91,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:affiliation <https://kurrawong.ai/organisations/#csiro> ;
     schema:name "Nicholas Car"@en ;
     schema:telephone "+61 477 560 177" ;
-    schema:url "https://kurrawong.ai/about-us/our-people"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-people#nicholas-car"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
@@ -317,7 +317,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 <https://kurrawong.ai/projects/#ogc-reference-data-platform>
     a schema:CreativeWork ;
-    schema:url "https://kurrawong.ai/about-us/our-projects"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-projects#ogcs-reference-data-platform"^^xsd:anyURI ;
     schema:description "KurrawongAI upgraded the Open Geospatial Consortium's RAINBOW reference data platform to use Prez, allowing it to deliver human- and machine-readable forms of a wide array of definitional items, including OGC's 1,500 international spatial data standards, Building Blocks, and vocabularies of controlled terms."@en ;
     schema:contributor <https://kurrawong.ai/organisations/#ogc> ;
     schema:name "OGC Reference Data Platform (RAINBOW)"@en ;
@@ -327,7 +327,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 <https://kurrawong.ai/projects/#resources-domain-integrated-ai>
     a schema:CreativeWork ;
-    schema:url "https://kurrawong.ai/about-us/our-projects"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-projects#resources-domain-integrated-ai"^^xsd:anyURI ;
     schema:description "In 2024 and 2025 KurrawongAI developed and deployed an instance of Bower, its AI tool bundle product, for a large international mining company. Bower's workflows processed thousands of mixed datasets and close to half a million domain documents, feeding a Knowledge Graph and catalogue UI as well as a chat search and data loading UI embedded within ESRI's ArcGIS Online."@en ;
     schema:name "Resources domain integrated AI"@en ;
     schema:isRelatedTo <https://kurrawong.ai/products/#bower> ;
@@ -335,7 +335,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 <https://kurrawong.ai/projects/#indigenous-data-network-catalogue>
     a schema:CreativeWork ;
-    schema:url "https://kurrawong.ai/about-us/our-projects"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-projects#indigenous-data-network-catalogue-project"^^xsd:anyURI ;
     schema:description "Over several years KurrawongAI designed a profile of DCAT for the better representation of Indigenous data governance concerns and implemented a series of reference data catalogues for the Indigenous Studies Unit at the University of Melbourne to support a national Indigenous Data Network. The work includes automated FAIR and CARE scores, catalogues of reference data, the ATNS database of Indigenous spatial reference data, fuzzy geometry spatial data models, and a Keeping Place for at-risk Indigenous data."@en ;
     schema:contributor <https://kurrawong.ai/organisations/#unimelb-indigenous-studies-unit> ;
     schema:name "Indigenous Data Network Catalogue Project"@en ;
@@ -344,7 +344,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 <https://kurrawong.ai/projects/#sa-dem-vocabulary-system>
     a schema:CreativeWork ;
-    schema:url "https://kurrawong.ai/about-us/our-projects"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-projects#vocabulary-system-establishment-for-sas-department-for-energy-and-mining"^^xsd:anyURI ;
     schema:description "Vocabulary system establishment for South Australia's Department for Energy and Mining. KurrawongAI converted 6 Excel vocabularies of dataset classification terms into SKOS, created 5 more, extended the VocPub profile's metadata for governance information, and established a branded Prez instance publishing all 11 vocabularies in human- and machine-readable form."@en ;
     schema:contributor <https://kurrawong.ai/organisations/#sa-dem> ;
     schema:name "Vocabulary system establishment for SA Department for Energy and Mining"@en ;
@@ -354,7 +354,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 <https://kurrawong.ai/projects/#biodiversity-data-repository>
     a schema:CreativeWork ;
-    schema:url "https://kurrawong.ai/about-us/our-projects"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-projects#biodiversity-data-repository-bdr"^^xsd:anyURI ;
     schema:description "KurrawongAI developed the Biodiversity Data Repository (BDR) for the Australian Department of Climate Change, Energy, the Environment and Water: a robust, scalable and secure national data system for managing species observations, comprising millions of records. It is a graph-native database implementing the national graph data model ABIS, partially designed by KurrawongAI staff, running in an Azure Cloud environment."@en ;
     schema:contributor <https://kurrawong.ai/organisations/#dcceew> ;
     schema:name "Biodiversity Data Repository (BDR)"@en ;
@@ -363,7 +363,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 <https://kurrawong.ai/projects/#national-address-model>
     a schema:CreativeWork ;
-    schema:url "https://kurrawong.ai/about-us/our-projects"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-projects#national-address-model"^^xsd:anyURI ;
     schema:description "This project developed the ICSM national address model for Australia and New Zealand, in response to the ICSM Address Strategy 2035. It is a Semantic Web graph model which has been test implemented in both graph and non-graph (relational) systems, and is related to a candidate ICSM Geographical Names model and the ICSM 3D Cadastral Survey Data Model national standard."@en ;
     schema:contributor <https://kurrawong.ai/organisations/#icsm> ;
     schema:name "National Address Model"@en ;
@@ -372,7 +372,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 <https://kurrawong.ai/projects/#qld-spatial-information-datasets-rebuild>
     a schema:CreativeWork ;
-    schema:url "https://kurrawong.ai/about-us/our-projects"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/about-us/our-projects#queensland-spatial-information-datasets-rebuild"^^xsd:anyURI ;
     schema:description "KurrawongAI completed modelling, testing and production implementation of Queensland's Address, Road names and Geographical (Place) Names datasets over 3 phases of work. This implemented the first spatial graph-native jurisdictional core datasets in Australia and established a Spatial Data Exchange Platform forming the basis of the Queensland Department of Natural Resources and Mines' spatial data future state architecture, including the Queensland Spatial Information Supermodel."@en ;
     schema:contributor <https://kurrawong.ai/organisations/#qld-resources> ;
     schema:name "Queensland Spatial Information Datasets Rebuild"@en ;
@@ -471,7 +471,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:isPartOf <https://kurrawong.ai/#tools-website> ;
     schema:name "pyLODE"@en ;
     schema:provider <https://kurrawong.ai> ;
-    schema:url "https://tools.kurrawong.ai/tools/pylode"^^xsd:anyURI ;
+    schema:url "https://tools.kurrawong.ai/pylode"^^xsd:anyURI ;
 .
 
 <https://kurrawong.ai/products/#rdf-converter>
@@ -482,7 +482,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:isPartOf <https://kurrawong.ai/#tools-website> ;
     schema:name "RDF Converter"@en ;
     schema:provider <https://kurrawong.ai> ;
-    schema:url "https://tools.kurrawong.ai/tools/convert"^^xsd:anyURI ;
+    schema:url "https://tools.kurrawong.ai/convert"^^xsd:anyURI ;
 .
 
 <https://kurrawong.ai/products/#vocexcel>
@@ -493,7 +493,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:isPartOf <https://kurrawong.ai/#tools-website> ;
     schema:name "VocExcel"@en ;
     schema:provider <https://kurrawong.ai> ;
-    schema:url "https://tools.kurrawong.ai/tools/vocexcel"^^xsd:anyURI ;
+    schema:url "https://tools.kurrawong.ai/vocexcel"^^xsd:anyURI ;
 .
 
 <https://kurrawong.ai/products/#sparql-parser>
@@ -543,6 +543,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     schema:isPartOf <https://kurrawong.ai/#docs-website> ;
     schema:name "Prefix Lookup"@en ;
     schema:provider <https://kurrawong.ai> ;
+    schema:sameAs "https://tools.kurrawong.ai/prefixes"^^xsd:anyURI ;
     schema:url "https://docs.kurrawong.ai/products/tools/prefix-lookup/"^^xsd:anyURI ;
 .
 

@@ -248,9 +248,11 @@ function onFormSubmit() {
             v-if="isLanding"
             v-show="!chatHiddenByScroll"
             :style="{ opacity: scrollFade }"
-            class="fixed top-24 left-5 z-[80] max-h-[calc(100svh-7rem)] w-[min(calc(100vw-2.5rem),420px)] overflow-y-auto overscroll-contain transition-opacity duration-150"
+            class="fixed top-24 left-5 right-5 z-40 max-h-[calc(100svh-7rem)] max-w-[420px] overflow-x-hidden overflow-y-auto overscroll-contain transition-opacity duration-150"
         >
-            <div>
+            <!-- On small screens the graph backdrop is busy, so the intro
+                 gets a faint background to keep it legible. -->
+            <div class="max-sm:rounded-lg max-sm:bg-background/60 max-sm:p-3 max-sm:backdrop-blur-md">
                 <h1 class="text-4xl font-bold text-foreground !m-0 sm:text-5xl">Graphs, Models, AI?</h1>
                 <p class="text-lg text-muted-foreground !m-0">Hello KurrawongAI!</p>
                 <p v-if="summary" class="mt-1 text-sm leading-relaxed text-foreground/80 !my-0">{{ summary.description }}</p>

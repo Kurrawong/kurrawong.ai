@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+// OpenLayers is a large dependency: only load it when the map is shown.
+const KContactMap = defineAsyncComponent(() => import("./KContactMap.vue"));
+
 const details = [
     { label: "Address", value: "72 Yundah St, Shorncliffe QLD 4017, Australia" },
     { label: "Email", value: "info@kurrawong.ai", href: "mailto:info@kurrawong.ai" },

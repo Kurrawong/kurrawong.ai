@@ -23,8 +23,6 @@ const props = defineProps<{
     turtle: string;
     /** Backdrop mode: keep nodes below the site header instead of behind it. */
     constrained?: boolean;
-    /** A page is open in the split pane: the first background click only closes it. */
-    splitOpen?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -52,13 +50,25 @@ function clusterOf(node: RdfGraphNode): string {
 
 const container = ref<HTMLElement | null>(null);
 const { exploring } = useGraphExplore();
+// On small screens the blurred backdrop shows clusters only: every single
+// node is too much clutter behind the intro text.
+const isSmallScreen = ref(false);
 // Clusters the user has expanded while exploring. Outside explore mode the
-// diagram always shows every node unclustered.
+// diagram shows every node unclustered on desktop and the clustered
+// overview on small screens.
 const userExpanded = new Set<string>();
 const lastPositions = new Map<string, { x: number; y: number }>();
 const previousVisible = new Set<string>();
 let simulation: d3.Simulation<SimNode, SimLink> | null = null;
 let observer: ResizeObserver | null = null;
+
+/** Collapse every expanded cluster back into aggregate nodes. */
+function recluster() {
+    userExpanded.clear();
+    render();
+}
+
+defineExpose({ recluster });
 
 /** Entering explore mode clusters the diagram; leaving it shows all nodes. */
 watch(exploring, () => {
@@ -82,8 +92,12 @@ function render() {
     }
 
     // Visible nodes: an expanded cluster shows its members, otherwise one
-    // aggregate node per cluster. All clusters are expanded unless exploring.
-    const expandedClusters = new Set(exploring.value ? userExpanded : membersByCluster.keys());
+    // aggregate node per cluster. All clusters are expanded unless exploring,
+    // or unless the small-screen backdrop shows the clustered overview.
+    let expandedClusters: Set<string>;
+    if (exploring.value) expandedClusters = new Set(userExpanded);
+    else if (isSmallScreen.value) expandedClusters = new Set();
+    else expandedClusters = new Set(membersByCluster.keys());
 
     // Clusters expanded since the previous render: their members burst out
     // of the cluster's last position.
@@ -273,14 +287,10 @@ function render() {
         }
     });
     svg.on("click", () => {
+        // A background click only dismisses the info popup. Re-clustering is
+        // the re-cluster button's job, and the split pane closes via its own
+        // close button.
         emit("select", null);
-        // With the split pane open, this click just closes it; the next one
-        // clusters the nodes again.
-        if (props.splitOpen) return;
-        if (userExpanded.size) {
-            userExpanded.clear();
-            render();
-        }
     });
 
     const dragBehaviour = d3
@@ -350,7 +360,15 @@ function render() {
     observer.observe(host);
 }
 
-onMounted(render);
+onMounted(() => {
+    const media = window.matchMedia("(max-width: 639px)");
+    isSmallScreen.value = media.matches;
+    media.addEventListener("change", event => {
+        isSmallScreen.value = event.matches;
+        render();
+    });
+    render();
+});
 watch(() => props.turtle, render);
 
 onBeforeUnmount(() => {

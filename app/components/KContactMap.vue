@@ -14,6 +14,21 @@ const target = ref<HTMLElement | null>(null);
 let map: Map | null = null;
 let resizeObserver: ResizeObserver | null = null;
 
+/**
+ * Resolve a CSS color variable to a concrete color. OpenLayers parses colors
+ * itself and rejects `var(...)` and `oklch(...)` values, which aborts the
+ * map's render; the canvas 2D context normalises any CSS color to rgb.
+ */
+function themeColor(name: string, fallback: string): string {
+    const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    if (!value) return fallback;
+    const ctx = document.createElement("canvas").getContext("2d");
+    if (!ctx) return fallback;
+    ctx.fillStyle = "#000";
+    ctx.fillStyle = value;
+    return ctx.fillStyle === "#000000" ? fallback : ctx.fillStyle;
+}
+
 onMounted(() => {
     if (!target.value) return;
     const position = fromLonLat(LON_LAT);
@@ -27,7 +42,7 @@ onMounted(() => {
                 style: new Style({
                     image: new CircleStyle({
                         radius: 8,
-                        fill: new Fill({ color: "var(--chart-1, #d97706)" }),
+                        fill: new Fill({ color: themeColor("--chart-1", "#d97706") }),
                         stroke: new Stroke({ color: "#ffffff", width: 2.5 }),
                     }),
                 }),

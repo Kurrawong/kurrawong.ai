@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ChevronDown, ExternalLink, Waypoints, X } from "lucide-vue-next";
+import { ChevronDown, ExternalLink, RotateCcw, Tags, Waypoints, X } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 
 const { data: turtleData } = await useAsyncData("rdf", () => $fetch<string>("/?_mediatype=text/turtle"), {
@@ -10,11 +10,18 @@ const { exploring } = useGraphExplore();
 const { conversationActive } = useKChatBar();
 const { scrollFade } = useScrollFade();
 const selectedNode = ref<{ label: string; type: string; description?: string; url?: string; id: string } | null>(null);
+// The node whose page is open in the right-hand split pane; kept separately
+// from selectedNode so dismissing the info popup leaves the pane alone.
+const splitNode = ref<{ label: string; type: string; description?: string; url?: string; id: string } | null>(null);
 // In explore mode, a node's page opens in a right-hand split pane.
 const splitUrl = ref<string | null>(null);
 // Half-and-half is too narrow on small screens, so pages open from the
 // info box there instead.
 const isSmallScreen = ref(false);
+// The graph canvas: called directly by the re-cluster button.
+const graphCanvas = ref<{ recluster: () => void } | null>(null);
+// On small screens the explore-mode legend starts collapsed behind a pill.
+const legendOpen = ref(false);
 
 /** True when a URL points somewhere other than the KurrawongAI site. */
 function isThirdPartyUrl(url: string): boolean {
@@ -26,11 +33,15 @@ function isThirdPartyUrl(url: string): boolean {
     }
 }
 
-/** KurrawongAI pages open in the split pane as same-origin paths; third-party URLs return null. */
+/**
+ * KurrawongAI pages open in the split pane as same-origin paths; everything
+ * else returns null. Subdomains like tools.kurrawong.ai are separate sites:
+ * their paths don't exist here, so they open in the info popup instead.
+ */
 function pageFor(url: string): string | null {
     try {
         const parsed = new URL(url);
-        if (parsed.hostname === "kurrawong.ai" || parsed.hostname.endsWith(".kurrawong.ai")) {
+        if (parsed.hostname === "kurrawong.ai") {
             return `${parsed.pathname}${parsed.search}${parsed.hash}` || "/";
         }
         return null;
@@ -40,9 +51,27 @@ function pageFor(url: string): string | null {
     }
 }
 
-function onNodeSelect(node: { label: string; type: string; description?: string; url?: string; id: string } | null) {
+/** Node click: always open the info popup; open the split pane when the
+ *  node's URL is a page on this site (and the screen is wide enough). */
+function onNodeSelect(node: { label: string; type: string; description?: string; url?: string; id: string }) {
     selectedNode.value = node;
-    splitUrl.value = node?.url && !isSmallScreen.value ? pageFor(node.url) : null;
+    splitNode.value = node;
+    splitUrl.value = node.url && !isSmallScreen.value ? pageFor(node.url) : null;
+}
+
+/** Background click: dismiss the info popup only. The split pane closes via
+ *  its own close button and clustering via the re-cluster button. */
+function onBackgroundSelect() {
+    selectedNode.value = null;
+}
+
+function closePopup() {
+    selectedNode.value = null;
+}
+
+function closeSplit() {
+    splitNode.value = null;
+    splitUrl.value = null;
 }
 
 const frame = ref<HTMLIFrameElement | null>(null);
@@ -71,25 +100,71 @@ function relevantSection(doc: Document, label: string): HTMLElement | null {
     return best && best.score >= 2 ? best.element : null;
 }
 
-/** After the framed page loads, scroll to the section about the clicked node. */
+/** After the framed page loads, scroll to the node's section: the URL's
+ *  section anchor when it has one, otherwise the heading that best matches
+ *  the node's label. */
 function onFrameLoad() {
     const frameEl = frame.value;
-    const node = selectedNode.value;
+    const node = splitNode.value;
     if (!frameEl || !node || !splitUrl.value) return;
     try {
         const win = frameEl.contentWindow;
         const doc = frameEl.contentDocument;
         // Only scroll the page this pane was opened for, not in-frame navigation.
         if (!win || !doc || !win.location.pathname.startsWith(splitUrl.value.split("#")[0])) return;
-        const section = relevantSection(doc, node.label);
+        const hash = splitUrl.value.split("#")[1] ?? "";
+        const section = (hash ? doc.getElementById(hash) : null) ?? relevantSection(doc, node.label);
         if (!section) return;
-        section.scrollIntoView({ block: "start" });
         // Keep the section clear of the page's sticky header inside the frame.
-        win.scrollBy({ top: -80 });
+        const top = section.getBoundingClientRect().top + win.scrollY - 80;
+        win.scrollTo({ top: Math.max(0, top) });
     } catch {
         // Cross-origin frame: nothing to scroll.
     }
 }
+
+// The frame's load event waits for every image before firing, which makes
+// the section scroll feel like it is never coming. The framed page is
+// same-origin, so poll for the target element and scroll as soon as the
+// parser has reached it; onFrameLoad then re-adjusts once the layout is
+// final.
+let frameTargetTimer: ReturnType<typeof setInterval> | null = null;
+
+function stopFrameTargetWatch() {
+    if (frameTargetTimer !== null) {
+        clearInterval(frameTargetTimer);
+        frameTargetTimer = null;
+    }
+}
+
+function watchFrameTarget() {
+    stopFrameTargetWatch();
+    const url = splitUrl.value;
+    const hash = url?.split("#")[1] ?? "";
+    if (!url || !hash) return;
+    let tries = 0;
+    frameTargetTimer = setInterval(() => {
+        const frameEl = frame.value;
+        tries += 1;
+        if (!frameEl || tries > 300) {
+            stopFrameTargetWatch();
+            return;
+        }
+        try {
+            const doc = frameEl.contentDocument;
+            const win = frameEl.contentWindow;
+            const section = doc?.getElementById(hash);
+            if (!doc || !win || !section) return;
+            const top = section.getBoundingClientRect().top + win.scrollY - 80;
+            win.scrollTo({ top: Math.max(0, top) });
+            stopFrameTargetWatch();
+        } catch {
+            stopFrameTargetWatch();
+        }
+    }, 50);
+}
+
+watch(splitUrl, watchFrameTarget);
 
 const LEGEND = [
     { label: "People", type: "person" },
@@ -112,7 +187,9 @@ function onScroll() {
 const backdropStyle = computed(() => {
     if (exploring.value) return undefined;
     const base = colorMode.value === "dark" ? 0.3 : 0.45;
-    return { opacity: base * scrollFade.value };
+    // The small-screen backdrop is blurred harder, so dim it a little too.
+    const dim = isSmallScreen.value ? 0.7 : 1;
+    return { opacity: base * dim * scrollFade.value };
 });
 
 function scrollDown() {
@@ -132,12 +209,18 @@ onMounted(() => {
 
 watch(exploring, value => {
     document.body.style.overflow = value ? "hidden" : "";
-    if (!value) onNodeSelect(null);
+    if (!value) {
+        selectedNode.value = null;
+        splitNode.value = null;
+        splitUrl.value = null;
+        legendOpen.value = false;
+    }
 });
 
 onBeforeUnmount(() => {
     window.removeEventListener("scroll", onScroll);
     document.body.style.overflow = "";
+    stopFrameTargetWatch();
 });
 </script>
 
@@ -151,11 +234,11 @@ onBeforeUnmount(() => {
                 ? (splitUrl
                     ? 'fixed inset-y-0 left-0 z-[60] w-full bg-background blur-0 sm:w-1/2'
                     : 'fixed inset-0 z-[60] bg-background blur-0')
-                : 'fixed inset-0 -z-10 blur-[2px] pointer-events-none'"
+                : 'fixed inset-0 -z-10 blur-[8px] sm:blur-[2px] pointer-events-none'"
             :style="backdropStyle"
         >
             <ClientOnly>
-                <KGraphCanvas :turtle="turtleData" :constrained="!exploring" :split-open="!!splitUrl" @select="onNodeSelect" />
+                <KGraphCanvas ref="graphCanvas" :turtle="turtleData" :constrained="!exploring" @select="node => (node ? onNodeSelect(node) : onBackgroundSelect())" />
             </ClientOnly>
         </div>
 
@@ -174,16 +257,43 @@ onBeforeUnmount(() => {
         <Button
             v-show="!exploring && scrollFade > 0"
             size="lg"
-            class="fixed bottom-5 right-5 z-[90] pr-5 shadow-lg"
+            class="fixed bottom-5 right-5 z-[90] max-sm:h-10 max-sm:px-3 max-sm:text-sm pr-5 shadow-lg"
             @click="exploring = true"
         >
             <Waypoints />
-            Explore the graph
+            Explore<span class="max-sm:hidden"> the graph</span>
         </Button>
 
         <template v-if="exploring">
+            <!-- Re-cluster control. Background clicks never re-cluster (they
+                 happen too easily by accident); this is the only way back to
+                 the clustered overview. -->
+            <Button
+                size="sm"
+                variant="outline"
+                class="fixed top-5 z-[70] h-9 shadow-lg"
+                :class="splitUrl ? 'right-[calc(50%+1.25rem)]' : 'right-5'"
+                @click="graphCanvas?.recluster()"
+            >
+                <RotateCcw />
+                Re-cluster
+            </Button>
+
+            <!-- Small screens: the legend starts as a collapsed pill at the
+                 bottom left so it stays clear of the other buttons. -->
+            <Button
+                v-if="isSmallScreen && !legendOpen"
+                size="sm"
+                variant="outline"
+                class="fixed bottom-5 left-5 z-[70] h-9 shadow-lg"
+                @click="legendOpen = true"
+            >
+                <Tags />
+                Legend
+            </Button>
             <div
-                class="bg-card/90 fixed bottom-5 left-5 z-[70] rounded-lg border p-3 text-xs shadow-lg backdrop-blur-sm"
+                v-show="!isSmallScreen || legendOpen"
+                class="bg-card/90 fixed bottom-5 left-5 z-[70] max-w-[calc(100vw-2.5rem)] rounded-lg border p-3 text-xs shadow-lg backdrop-blur-sm"
                 aria-label="Diagram legend"
             >
                 <div class="grid grid-cols-2 gap-x-4 gap-y-1.5">
@@ -192,9 +302,15 @@ onBeforeUnmount(() => {
                         {{ item.label }}
                     </span>
                 </div>
-                <p class="text-muted-foreground mt-2 max-w-56">
-                    Click a cluster to expand its nodes; click the background to cluster them again. Larger outlined nodes open their website page beside the diagram. Drag to arrange, scroll to zoom.
+                <p class="text-muted-foreground mt-2 max-w-56 max-sm:hidden">
+                    Click a cluster to expand its nodes; use the re-cluster button to group them again. Drag to arrange, scroll to zoom.
                 </p>
+                <p class="text-muted-foreground mt-2 max-w-56 sm:hidden">
+                    Tap a cluster to expand its nodes; use the re-cluster button to group them again. Drag to arrange, pinch to zoom.
+                </p>
+                <Button v-if="isSmallScreen" variant="ghost" size="icon" class="-mr-1 -mb-1 size-7 shrink-0" aria-label="Collapse legend" @click="legendOpen = false">
+                    <ChevronDown class="size-4" />
+                </Button>
             </div>
 
             <!-- Split view: the clicked node's page on the right, graph on the left. -->
@@ -204,10 +320,10 @@ onBeforeUnmount(() => {
             >
                 <div class="flex items-center justify-between gap-2 border-b px-4 py-3">
                     <div class="min-w-0">
-                        <h2 class="truncate text-sm font-semibold !m-0">{{ selectedNode?.label ?? "Page" }}</h2>
+                        <h2 class="truncate text-sm font-semibold !m-0">{{ splitNode?.label ?? "Page" }}</h2>
                         <p class="text-muted-foreground truncate text-xs !my-0">{{ splitUrl }}</p>
                     </div>
-                    <Button variant="ghost" size="icon" class="size-8 shrink-0" aria-label="Close page view" @click="onNodeSelect(null)">
+                    <Button variant="ghost" size="icon" class="size-8 shrink-0" aria-label="Close page view" @click="closeSplit()">
                         <X class="size-4" />
                     </Button>
                 </div>
@@ -215,18 +331,20 @@ onBeforeUnmount(() => {
                     ref="frame"
                     :src="splitUrl"
                     class="bg-background w-full flex-1"
-                    :title="`KurrawongAI page: ${selectedNode?.label ?? splitUrl}`"
+                    :title="`KurrawongAI page: ${splitNode?.label ?? splitUrl}`"
                     @load="onFrameLoad"
                 />
             </div>
 
+            <!-- Info popup: always opened by a node click; anchored top-left
+                 on desktop so it stays clear of the split pane. -->
             <div
-                v-if="selectedNode && !splitUrl"
-                class="bg-card text-card-foreground fixed top-20 right-5 z-[70] max-w-sm rounded-lg border p-4 text-sm shadow-lg"
+                v-if="selectedNode"
+                class="bg-card text-card-foreground fixed top-5 left-5 z-[70] max-w-sm max-sm:inset-x-5 max-sm:top-16 max-sm:max-w-none max-sm:max-h-[55vh] max-sm:overflow-y-auto rounded-lg border p-4 text-sm shadow-lg"
             >
                 <div class="flex items-start justify-between gap-2">
                     <h2 class="text-base font-semibold !m-0">{{ selectedNode.label }}</h2>
-                    <Button variant="ghost" size="icon" class="-mt-1 -mr-1 size-7" aria-label="Close details" @click="onNodeSelect(null)">
+                    <Button variant="ghost" size="icon" class="-mt-1 -mr-1 size-7" aria-label="Close details" @click="closePopup()">
                         <X class="size-4" />
                     </Button>
                 </div>
@@ -237,7 +355,7 @@ onBeforeUnmount(() => {
                     :href="selectedNode.url"
                     target="_blank"
                     rel="noopener"
-                    class="mt-2 inline-flex items-center gap-1 text-xs underline"
+                    class="mt-2 inline-flex items-center gap-1 break-all text-xs underline"
                 >
                     {{ selectedNode.url }}
                     <ExternalLink v-if="isThirdPartyUrl(selectedNode.url)" class="size-3" aria-label="External site" />
@@ -247,12 +365,13 @@ onBeforeUnmount(() => {
             <Button
                 size="lg"
                 variant="outline"
-                class="fixed bottom-5 z-[70] pr-5 shadow-lg"
+                class="fixed bottom-5 z-[70] pr-5 shadow-lg max-sm:size-10 max-sm:p-0"
                 :class="splitUrl ? 'right-[calc(50%+1.25rem)] max-sm:right-5' : 'right-5'"
+                aria-label="Back to the site"
                 @click="exploring = false"
             >
                 <X />
-                Back to the site
+                <span class="max-sm:hidden">Back to the site</span>
             </Button>
         </template>
     </div>
