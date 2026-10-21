@@ -63,12 +63,12 @@ const parsed = computed(() => props.messages.map(message => {
                     :class="{ 'text-destructive': message.error }"
                     v-html="kchatMarkdown(parsed[index].body)"
                 />
-                <div v-if="parsed[index].followUps.length" class="mt-2 flex flex-wrap gap-1.5">
+                <div v-if="parsed[index].followUps.length" class="mt-1.5 flex flex-wrap justify-start gap-1">
                     <button
                         v-for="followUp in parsed[index].followUps"
                         :key="followUp"
                         type="button"
-                        class="bg-background hover:bg-accent dark:bg-white/90 dark:border-black/10 dark:text-neutral-900 dark:hover:bg-neutral-100 rounded-full border px-2.5 py-1 text-xs"
+                        class="rounded-full border border-border/60 bg-muted/50 px-2 py-0.5 text-[11px] leading-4 text-muted-foreground transition-colors hover:border-border hover:bg-accent hover:text-foreground"
                         @click="emit('send', followUp)"
                     >
                         {{ followUp }}

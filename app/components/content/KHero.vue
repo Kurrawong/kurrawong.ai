@@ -401,23 +401,23 @@ onBeforeUnmount(() => {
 }
 
 .kgraph-legend-person {
-    background: var(--chart-2);
+    background: var(--kgraph-person);
 }
 
 .kgraph-legend-organization {
-    background: var(--chart-1);
+    background: var(--kgraph-organization);
 }
 
 .kgraph-legend-product {
-    background: var(--chart-4);
+    background: var(--kgraph-product);
 }
 
 .kgraph-legend-service {
-    background: var(--chart-3);
+    background: var(--kgraph-service);
 }
 
 .kgraph-legend-project {
-    background: var(--chart-5);
+    background: var(--kgraph-project);
 }
 
 .kgraph-legend-other {

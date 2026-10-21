@@ -402,24 +402,24 @@ onBeforeUnmount(() => {
 }
 
 .kgraph-node.kgraph-type-person circle {
-    fill: var(--chart-2);
+    fill: var(--kgraph-person);
 }
 
 .kgraph-node.kgraph-type-organization circle,
 .kgraph-node.kgraph-type-website circle {
-    fill: var(--chart-1);
+    fill: var(--kgraph-organization);
 }
 
 .kgraph-node.kgraph-type-product circle {
-    fill: var(--chart-4);
+    fill: var(--kgraph-product);
 }
 
 .kgraph-node.kgraph-type-service circle {
-    fill: var(--chart-3);
+    fill: var(--kgraph-service);
 }
 
 .kgraph-node.kgraph-type-project circle {
-    fill: var(--chart-5);
+    fill: var(--kgraph-project);
 }
 
 .kgraph-node.kgraph-type-other circle {

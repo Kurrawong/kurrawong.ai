@@ -158,7 +158,7 @@ const LIST_ITEM = /^\s*(?:[-*]|(?:\d+|[a-z])[).])\s+/;
 const FOLLOWUP_HINT = new RegExp(
     [
         "follow[- ]?ups?",
-        "you (could|might|may|can|want to)? ?(also |like to |want to )?(ask|know|explore|hear|learn)",
+        "you (could|might|may|can|want to)? ?(also |like to |want to ){0,2}(ask|know|explore|hear|learn)",
         "would you like to (know|hear|learn|explore)",
         "here ('s|are|is) (some|a few|other|more)? ?(more )?(questions|ideas|examples|things)",
         "(other|related|more|some|common|typical) questions",
@@ -194,8 +194,9 @@ export function kchatExtractFollowUps(text: string): { body: string; followUps: 
     const before = lines.slice(Math.max(0, marker - 3), start).join(" ");
 
     let bodyEnd = marker;
+    // A trailing colon may be wrapped in bold/italic markers, e.g. "**Questions:**".
     const introducing = bodyEnd > 0 && !LIST_ITEM.test(lines[bodyEnd - 1])
-        && (FOLLOWUP_HINT.test(before) || /:\s*$/.test(lines[bodyEnd - 1]));
+        && (FOLLOWUP_HINT.test(before) || /:\s*[\*_]+\s*$/.test(lines[bodyEnd - 1]));
     if (introducing) bodyEnd -= 1;
     while (bodyEnd > 0 && (!lines[bodyEnd - 1].trim() || lines[bodyEnd - 1].trim() === "---")) bodyEnd -= 1;
     const body = lines.slice(0, bodyEnd).join("\n").replace(/\s+$/, "");

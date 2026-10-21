@@ -6,6 +6,16 @@ const router = useRouter();
 const route = useRoute();
 const colorMode = useColorMode();
 
+const cycleTheme = () => {
+    if (colorMode.preference === 'system') {
+        colorMode.preference = 'light';
+    } else if (colorMode.preference === 'light') {
+        colorMode.preference = 'dark';
+    } else {
+        colorMode.preference = 'system';
+    }
+};
+
 const externalLinks = [
     {
         title: "Tools",
@@ -128,10 +138,10 @@ router.beforeEach((from, to) => {
         </div>
         <div class="flex flex-row justify-end items-center gap-2">
             <SearchCommand />
-            <Button variant="ghost" size="icon" @click="!colorMode.unknown ? colorMode.value === 'dark' ? colorMode.preference = 'light' : colorMode.preference = 'dark' : undefined">
-                <SunMoon v-show="colorMode.unknown" />
-                <Sun v-show="colorMode.value === 'dark'" class="w-4 h-4" />
-                <Moon v-show="colorMode.value === 'light'" class="w-4 h-4" />
+            <Button variant="ghost" size="icon" :title="`Theme: ${colorMode.preference}`" @click="cycleTheme">
+                <SunMoon v-show="colorMode.preference === 'system'" class="w-4 h-4" />
+                <Sun v-show="colorMode.preference === 'light'" class="w-4 h-4" />
+                <Moon v-show="colorMode.preference === 'dark'" class="w-4 h-4" />
             </Button>
         </div>
     </header>
