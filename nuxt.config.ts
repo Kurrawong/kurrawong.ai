@@ -18,6 +18,13 @@ export default defineNuxtConfig({
         fallback: 'light'
     },
     css: ["@/assets/css/tailwind.css", "@/assets/css/style.css"],
+    runtimeConfig: {
+        public: {
+            // Set with NUXT_PUBLIC_KCHAT_URL, e.g. http://localhost:8000 (see compose.yaml).
+            // When empty, the chat widget is not rendered.
+            kchatUrl: "",
+        },
+    },
     app: {
         head: {
             link: [
@@ -31,6 +38,17 @@ export default defineNuxtConfig({
         plugins: [
             tailwindcss(),
         ],
+    },
+    nitro: {
+        // Precompress static assets (.gz/.br) so the bare Node server serves
+        // them compressed; no dependence on a proxy for byte size.
+        compressPublicAssets: true,
+        routeRules: {
+            // Same-origin proxy to the kchat sidecar, which shares localhost
+            // with this site inside the container app (see deploy/containerapp.yaml).
+            // Locally, compose.yaml instead exposes kchat on its own port.
+            "/kchat/**": { proxy: "http://127.0.0.1:8000/**" },
+        },
     },
     image: {
         provider: "none",

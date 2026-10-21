@@ -1,4 +1,4 @@
-name: Publish Docker image and deploy
+name: Publish Docker images and deploy
 
 on:
   push:
@@ -11,32 +11,64 @@ permissions:
   id-token: write
   packages: write
 
+env:
+  SITE_IMAGE: ghcr.io/kurrawong/kurrawongai
+  # kchat plus this site's RDF; built from deploy/Dockerfile.kchat.
+  KCHAT_IMAGE: ghcr.io/kurrawong/kurrawongai-kchat
+  # Bump when a new kchat release is published to GHCR.
+  KCHAT_BASE_IMAGE: ghcr.io/kurrawong/kchat:v0.0.4
+  AZ_RESOURCE_GROUP: DEV
+  AZ_APP_NAME: website
+
 jobs:
-  publish:
+  deploy:
+    # Deployments only ever run against main, including manual dispatches.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push Docker image
+
+      - name: Build and push site image
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ghcr.io/kurrawong/kurrawongai:latest
-  deploy:
-    needs: publish
-    runs-on: ubuntu-latest
-    steps:
+          # Container App revisions pin image digests, so each deploy must
+          # reference a unique tag for the new build to be pulled.
+          tags: |
+            ${{ env.SITE_IMAGE }}:latest
+            ${{ env.SITE_IMAGE }}:sha-${{ github.sha }}
+
+      - name: Build and push kchat image (kchat + site RDF)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: deploy/Dockerfile.kchat
+          push: true
+          build-args: |
+            KCHAT_BASE_IMAGE=${{ env.KCHAT_BASE_IMAGE }}
+          tags: |
+            ${{ env.KCHAT_IMAGE }}:latest
+            ${{ env.KCHAT_IMAGE }}:sha-${{ github.sha }}
+
       - name: Azure Login
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Restart container app revision
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript: az containerapp revision restart --revision website--y1d43sa --resource-group DEV
+
+      - name: Deploy container app revision
+        run: |
+          sed -i \
+            -e "s|__SITE_IMAGE__|$SITE_IMAGE:sha-${{ github.sha }}|" \
+            -e "s|__KCHAT_IMAGE__|$KCHAT_IMAGE:sha-${{ github.sha }}|" \
+            deploy/containerapp.yaml
+          az containerapp update \
+            --name "$AZ_APP_NAME" \
+            --resource-group "$AZ_RESOURCE_GROUP" \
+            --yaml deploy/containerapp.yaml

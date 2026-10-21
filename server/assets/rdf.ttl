@@ -1,95 +1,581 @@
 PREFIX schema: <https://schema.org/>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
+# --- People ---
+
 <https://kurrawong.ai/people/#david-habgood>
     a schema:Person ;
     schema:email "david@kurrawong.ai"^^xsd:anyURI ;
-    schema:jobTitle "Data Scientist, Knowledge Graph Systems Senior Developer" ;
+    schema:jobTitle "Data Scientist, Knowledge Graph Systems Senior Developer"@en ;
     schema:name "David Habgood"@en ;
+    schema:url "https://kurrawong.ai/about-us/our-people#david-habgood"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
 <https://kurrawong.ai/people/#edmond-chuc>
     a schema:Person ;
     schema:email "edmond@kurrawong.ai"^^xsd:anyURI ;
-    schema:jobTitle "Knowledge Graph Senior Developer" ;
+    schema:jobTitle "Knowledge Graph Senior Developer"@en ;
     schema:name "Edmond Chuc"@en ;
+    schema:url "https://kurrawong.ai/about-us/our-people#edmond-chuc"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
 <https://kurrawong.ai/people/#howard-johns>
     a schema:Person ;
     schema:email "howard@kurrawong.ai"^^xsd:anyURI ;
-    schema:jobTitle "Solution Architect" ;
+    schema:jobTitle "Solution Architect"@en ;
     schema:name "Howard Johns"@en ;
+    schema:url "https://kurrawong.ai/about-us/our-people#howard-johns"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
 <https://kurrawong.ai/people/#jamie-feiss>
     a schema:Person ;
     schema:email "jamie@kurrawong.ai"^^xsd:anyURI ;
-    schema:jobTitle "Knowledge Graph Senior Developer" ;
+    schema:jobTitle "Knowledge Graph Senior Developer"@en ;
     schema:name "Jamie Feiss"@en ;
+    schema:url "https://kurrawong.ai/about-us/our-people#jamie-feiss"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
 <https://kurrawong.ai/people/#lawson-lewis>
     a schema:Person ;
     schema:email "lawson@kurrawong.ai"^^xsd:anyURI ;
-    schema:jobTitle "Infrastructure and Python Developer" ;
+    schema:jobTitle "Infrastructure and Python Developer"@en ;
     schema:name "Lawson Lewis"@en ;
+    schema:url "https://kurrawong.ai/about-us/our-people#lawson-lewis"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
 <https://kurrawong.ai/people/#les-kneebone>
     a schema:Person ;
     schema:email "les@kurrawong.ai"^^xsd:anyURI ;
-    schema:jobTitle "Vocabulary Specialist" ;
+    schema:jobTitle "Vocabulary Specialist"@en ;
     schema:name "Les Kneebone"@en ;
+    schema:url "https://kurrawong.ai/about-us/our-people#les-kneebone"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
 <https://kurrawong.ai/people/#margie-smith>
     a schema:Person ;
     schema:email "margie@kurrawong.ai"^^xsd:anyURI ;
-    schema:jobTitle "Data Governance Coach" ;
+    schema:jobTitle "Data Governance Coach"@en ;
     schema:name "Margie Smith"@en ;
+    schema:url "https://kurrawong.ai/about-us/our-people#margie-smith"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
 <https://kurrawong.ai/people/#monique-harris>
     a schema:Person ;
     schema:email "monique@kurrawong.ai"^^xsd:anyURI ;
-    schema:jobTitle "Business Support Coordinator" ;
+    schema:jobTitle "Business Support Coordinator"@en ;
     schema:name "Monique Harris"@en ;
+    schema:url "https://kurrawong.ai/about-us/our-people#monique-harris"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
 <https://kurrawong.ai/people/#sophie-darnell>
     a schema:Person ;
     schema:email "sophie@kurrawong.ai"^^xsd:anyURI ;
-    schema:jobTitle "Data Governance Advisor & Business Analyst" ;
+    schema:jobTitle "Data Governance Advisor & Business Analyst"@en ;
     schema:name "Sophie Darnell"@en ;
+    schema:url "https://kurrawong.ai/about-us/our-people#sophie-darnell"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
 
 <https://orcid.org/0000-0002-8742-7730>
     a schema:Person ;
     schema:email "nick@kurrawong.ai"^^xsd:anyURI ;
-    schema:jobTitle "Director / data Architect" ;
+    schema:jobTitle "Director / data Architect"@en ;
+    schema:affiliation <https://kurrawong.ai/organisations/#csiro> ;
     schema:name "Nicholas Car"@en ;
     schema:telephone "+61 477 560 177" ;
+    schema:url "https://kurrawong.ai/about-us/our-people#nicholas-car"^^xsd:anyURI ;
     schema:worksFor <https://kurrawong.ai> ;
 .
+
+# --- Organization ---
 
 <https://kurrawong.ai>
     a schema:Organization ;
     schema:address "72 Yundah St, Shorncliffe QLD 4017 Australia" ;
     schema:contactPoint <https://orcid.org/0000-0002-8742-7730> ;
-    schema:description "KurrawongAI is a small, Australian-based IT company, specialising in Knowledge Graphs, Data Modelling & AI." ;
+    schema:description "KurrawongAI is a small, Australian-based IT company, specialising in Knowledge Graphs, Data Modelling & AI."@en ;
     schema:email "info@kurrawong.ai" ;
+    schema:founder <https://orcid.org/0000-0002-8742-7730> ;
     schema:identifier "31 353 542 036"^^<http://linked.data.gov.au/def/party-identifier-type/abn> ;
-    schema:name "KurrawongAI" ;
+    schema:memberOf
+        <https://kurrawong.ai/organisations/#w3c> ,
+        <https://kurrawong.ai/organisations/#ogc> ;
+    schema:makesOffer
+        <https://kurrawong.ai/services/#ai-appropriateness> ,
+        <https://kurrawong.ai/services/#ai-powered-data-management> ,
+        <https://kurrawong.ai/services/#data-governance> ,
+        <https://kurrawong.ai/services/#data-modelling> ,
+        <https://kurrawong.ai/services/#reference-data-use> ,
+        <https://kurrawong.ai/services/#support> ,
+        <https://kurrawong.ai/services/#system-design> ,
+        <https://kurrawong.ai/services/#training> ,
+        <https://kurrawong.ai/services/#vocabularies> ;
+    schema:name "KurrawongAI"@en ;
     schema:url "https://kurrawong.ai"^^xsd:anyURI ;
 .
 
+<https://kurrawong.ai/#website>
+    a schema:WebSite ;
+    schema:description "The KurrawongAI company website. Pages describe KurrawongAI's products, services, projects and people."@en ;
+    schema:name "KurrawongAI website"@en ;
+    schema:publisher <https://kurrawong.ai> ;
+    schema:url "https://kurrawong.ai"^^xsd:anyURI ;
+.
+
+# --- Products ---
+
+<https://kurrawong.ai/products/#address-manager>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Product" ;
+    schema:applicationCategory "Address management application" ;
+    schema:description "Address Manager is one of KurrawongAI's Address Services tools. It is designed to manage address data conforming to the ANZ ICSM Address Model, the standard address data model for Australia and New Zealand."@en ;
+    schema:name "Address Manager"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://kurrawong.ai/products/address-manager"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#k-maker>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Product" ;
+    schema:applicationCategory "Knowledge Graph editing application" ;
+    schema:description "K-Maker is KurrawongAI's Knowledge Graph creation and maintenance application. It provides specialised functions to create and govern data as standards-compliant Knowledge Graphs, and is often used for reference data management. Graphs created with it are readily available to other applications."@en ;
+    schema:name "K-Maker"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://kurrawong.ai/products/k-maker"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#bower>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Product" ;
+    schema:applicationCategory "AI platform" ;
+    schema:description "Bower is KurrawongAI's multi-AI platform that aggregates, classifies and searches an organisation's own data, grounded by Knowledge Graphs."@en ;
+    schema:name "Bower"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://kurrawong.ai/products/bower"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#prez>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Product" ;
+    schema:applicationCategory "Linked Data API framework" ;
+    schema:description "Prez is an open source, data-configurable, Linked Data API framework that delivers profiles of Knowledge Graph data according to the Content Negotiation by Profile standard. KurrawongAI uses it to deliver thematic views of data stored in Knowledge Graphs, such as vocabularies, and has deployed it for many organisations including the Geological Survey of Queensland and the Open Geospatial Consortium."@en ;
+    schema:name "Prez"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:sameAs "https://github.com/rdflib/prez/"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/products/prez"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#validator>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Product" ;
+    schema:applicationCategory "Validation tool" ;
+    schema:description "KurrawongAI's online SHACL validator, at tools.kurrawong.ai/validate, is a user interface and API used to validate RDF data according to provided SHACL constraints. It contains many pre-loaded SHACL shapes graphs developed for different models and systems, arranged in dependency hierarchies."@en ;
+    schema:isPartOf <https://kurrawong.ai/#tools-website> ;
+    schema:name "KG Validator"@en ;
+    schema:sameAs "https://docs.kurrawong.ai/products/tools/shacl-validator/"^^xsd:anyURI ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:sameAs "https://tools.kurrawong.ai/validate"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/products/validator"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#fuseki>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Supported third-party product" ;
+    schema:applicationCategory "RDF graph database" ;
+    schema:description "Fuseki is a free and open source product of the Apache Software Foundation's Jena RDF framework. It is an RDF database which implements the SPARQL Protocol so it can be used to expose Knowledge Graph information to applications. KurrawongAI supports it commercially."@en ;
+    schema:name "Fuseki"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:sameAs "https://jena.apache.org/documentation/fuseki2/"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/products/fuseki"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#olis>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Product" ;
+    schema:applicationCategory "Graph management application" ;
+    schema:description "Olis is KurrawongAI's graph management application. It helps administrators of Knowledge Graphs manage them as a series of sub-graphs and provides role-based access control to Knowledge Graphs."@en ;
+    schema:name "Olis"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://kurrawong.ai/products/olis"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#kurra>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Product" ;
+    schema:applicationCategory "RDF toolkit" ;
+    schema:description "kurra is an open source toolkit, supported commercially by KurrawongAI, for the management of Knowledge Graph data. It provides functions to validate, query, convert, export and load RDF data and is built on RDFLib."@en ;
+    schema:isBasedOn <https://kurrawong.ai/products/#rdflib> ;
+    schema:name "kurra"@en ;
+    schema:sameAs "https://docs.kurrawong.ai/products/tools/kurra/"^^xsd:anyURI ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://kurrawong.ai/products/kurra"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#rdflib>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Supported open source product" ;
+    schema:applicationCategory "RDF library" ;
+    schema:description "RDFLib is an open source, permissively-licensed Python package used to create and manipulate RDF data, often used as the basis of Knowledge Graphs. It is used widely in Knowledge Graph applications, cloud infrastructure and AI data processing. KurrawongAI contributes to it and supports it commercially."@en ;
+    schema:contributor <https://kurrawong.ai> ;
+    schema:name "RDFLib"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:sameAs "https://rdflib.dev"^^xsd:anyURI ;
+    schema:url "https://kurrawong.ai/products/rdflib"^^xsd:anyURI ;
+.
+
+# --- Services ---
+
+<https://kurrawong.ai/services/#ai-appropriateness>
+    a schema:Service ;
+    schema:description "AI appropriateness consulting. KurrawongAI has implemented many AI systems and provides business analytics-style consulting to help organisations consider if and how AI is sensible for them, covering data scope, information models, competency questions, UIs, budgets and tolerance for external data processing."@en ;
+    schema:name "AI Appropriateness"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://kurrawong.ai/services/ai-appropriateness"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/services/#ai-powered-data-management>
+    a schema:Service ;
+    schema:description "KurrawongAI has implemented data management solutions for many years and uses AI tools within data management projects, with or without building an AI system for a client."@en ;
+    schema:isRelatedTo <https://kurrawong.ai/products/#bower> ;
+    schema:name "AI-Powered Data Management"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://kurrawong.ai/services/ai-powered-data-management"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/services/#system-design>
+    a schema:Service ;
+    schema:description "System design and implementation for Knowledge Graph systems. KurrawongAI implements all aspects: RDF generation, databases, adaptors for external systems, and APIs to deliver Knowledge Graph data online as Linked Data."@en ;
+    schema:isRelatedTo <https://kurrawong.ai/products/#prez> ;
+    schema:name "System Design & Implementation"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://kurrawong.ai/services/system-design"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/services/#data-governance>
+    a schema:Service ;
+    schema:description "Data governance consulting: policies, reviews and training. KurrawongAI has several staff who have worked on data governance for large Commonwealth government data holders for decades and can demystify challenges and provide clear, direct actions suited to a business' needs."@en ;
+    schema:name "Data Governance"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://kurrawong.ai/services/data-governance"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/services/#vocabularies>
+    a schema:Service ;
+    schema:description "Complete vocabulary support: establishment, understanding and management. KurrawongAI has extensive experience creating controlled vocabularies for organisations to use as master data, usually with the SKOS vocabulary data model, and can publish them and train clients to maintain them."@en ;
+    schema:isRelatedTo <https://kurrawong.ai/products/#prez> ;
+    schema:name "Vocabularies"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://kurrawong.ai/services/vocabularies"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/services/#data-modelling>
+    a schema:Service ;
+    schema:description "Domain-specific and enterprise data modelling, predicated on Linked Data, Semantic Web and Knowledge Graph principles, with decades of collective experience in relational systems and UML too."@en ;
+    schema:name "Data Modelling"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://kurrawong.ai/services/data-modelling"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/services/#reference-data-use>
+    a schema:Service ;
+    schema:description "Help establishing reference data systems and practices. KurrawongAI uses a lot of reference data within Knowledge Graphs and for AI context and can help organisations establish reference data systems of their own."@en ;
+    schema:name "Reference Data Use"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://kurrawong.ai/services/reference-data-use"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/services/#support>
+    a schema:Service ;
+    schema:description "Maintenance and support: one-off solutions or ongoing Service Level Agreements. KurrawongAI can support anything it builds and even some things it didn't build, if they are in its general area."@en ;
+    schema:isRelatedTo
+        <https://kurrawong.ai/products/#fuseki> ,
+        <https://kurrawong.ai/products/#olis> ,
+        <https://kurrawong.ai/products/#prez> ,
+        <https://kurrawong.ai/products/#rdflib> ;
+    schema:name "Support"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://kurrawong.ai/services/support"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/services/#training>
+    a schema:Service ;
+    schema:description "Training across multiple aspects of Knowledge Graph data, formats and skill levels, including vocabulary training and SPARQL training."@en ;
+    schema:name "Training"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://kurrawong.ai/services/training"^^xsd:anyURI ;
+.
+
+# --- Projects ---
+
+<https://kurrawong.ai/projects/#ogc-reference-data-platform>
+    a schema:CreativeWork ;
+    schema:url "https://kurrawong.ai/about-us/our-projects#ogcs-reference-data-platform"^^xsd:anyURI ;
+    schema:description "KurrawongAI upgraded the Open Geospatial Consortium's RAINBOW reference data platform to use Prez, allowing it to deliver human- and machine-readable forms of a wide array of definitional items, including OGC's 1,500 international spatial data standards, Building Blocks, and vocabularies of controlled terms."@en ;
+    schema:contributor <https://kurrawong.ai/organisations/#ogc> ;
+    schema:name "OGC Reference Data Platform (RAINBOW)"@en ;
+    schema:isRelatedTo <https://kurrawong.ai/products/#prez> ;
+    schema:sameAs "https://defs.opengis.net/prez/"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/projects/#resources-domain-integrated-ai>
+    a schema:CreativeWork ;
+    schema:url "https://kurrawong.ai/about-us/our-projects#resources-domain-integrated-ai"^^xsd:anyURI ;
+    schema:description "In 2024 and 2025 KurrawongAI developed and deployed an instance of Bower, its AI tool bundle product, for a large international mining company. Bower's workflows processed thousands of mixed datasets and close to half a million domain documents, feeding a Knowledge Graph and catalogue UI as well as a chat search and data loading UI embedded within ESRI's ArcGIS Online."@en ;
+    schema:name "Resources domain integrated AI"@en ;
+    schema:isRelatedTo <https://kurrawong.ai/products/#bower> ;
+.
+
+<https://kurrawong.ai/projects/#indigenous-data-network-catalogue>
+    a schema:CreativeWork ;
+    schema:url "https://kurrawong.ai/about-us/our-projects#indigenous-data-network-catalogue-project"^^xsd:anyURI ;
+    schema:description "Over several years KurrawongAI designed a profile of DCAT for the better representation of Indigenous data governance concerns and implemented a series of reference data catalogues for the Indigenous Studies Unit at the University of Melbourne to support a national Indigenous Data Network. The work includes automated FAIR and CARE scores, catalogues of reference data, the ATNS database of Indigenous spatial reference data, fuzzy geometry spatial data models, and a Keeping Place for at-risk Indigenous data."@en ;
+    schema:contributor <https://kurrawong.ai/organisations/#unimelb-indigenous-studies-unit> ;
+    schema:name "Indigenous Data Network Catalogue Project"@en ;
+    schema:sameAs "https://data.idnau.org/"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/projects/#sa-dem-vocabulary-system>
+    a schema:CreativeWork ;
+    schema:url "https://kurrawong.ai/about-us/our-projects#vocabulary-system-establishment-for-sas-department-for-energy-and-mining"^^xsd:anyURI ;
+    schema:description "Vocabulary system establishment for South Australia's Department for Energy and Mining. KurrawongAI converted 6 Excel vocabularies of dataset classification terms into SKOS, created 5 more, extended the VocPub profile's metadata for governance information, and established a branded Prez instance publishing all 11 vocabularies in human- and machine-readable form."@en ;
+    schema:contributor <https://kurrawong.ai/organisations/#sa-dem> ;
+    schema:name "Vocabulary system establishment for SA Department for Energy and Mining"@en ;
+    schema:isRelatedTo <https://kurrawong.ai/products/#prez> ;
+    schema:sameAs "https://vocabularies.sarig.sa.gov.au/vocab"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/projects/#biodiversity-data-repository>
+    a schema:CreativeWork ;
+    schema:url "https://kurrawong.ai/about-us/our-projects#biodiversity-data-repository-bdr"^^xsd:anyURI ;
+    schema:description "KurrawongAI developed the Biodiversity Data Repository (BDR) for the Australian Department of Climate Change, Energy, the Environment and Water: a robust, scalable and secure national data system for managing species observations, comprising millions of records. It is a graph-native database implementing the national graph data model ABIS, partially designed by KurrawongAI staff, running in an Azure Cloud environment."@en ;
+    schema:contributor <https://kurrawong.ai/organisations/#dcceew> ;
+    schema:name "Biodiversity Data Repository (BDR)"@en ;
+    schema:sameAs "https://bdr.gov.au/"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/projects/#national-address-model>
+    a schema:CreativeWork ;
+    schema:url "https://kurrawong.ai/about-us/our-projects#national-address-model"^^xsd:anyURI ;
+    schema:description "This project developed the ICSM national address model for Australia and New Zealand, in response to the ICSM Address Strategy 2035. It is a Semantic Web graph model which has been test implemented in both graph and non-graph (relational) systems, and is related to a candidate ICSM Geographical Names model and the ICSM 3D Cadastral Survey Data Model national standard."@en ;
+    schema:contributor <https://kurrawong.ai/organisations/#icsm> ;
+    schema:name "National Address Model"@en ;
+    schema:sameAs "https://linked.data.gov.au/def/addr"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/projects/#qld-spatial-information-datasets-rebuild>
+    a schema:CreativeWork ;
+    schema:url "https://kurrawong.ai/about-us/our-projects#queensland-spatial-information-datasets-rebuild"^^xsd:anyURI ;
+    schema:description "KurrawongAI completed modelling, testing and production implementation of Queensland's Address, Road names and Geographical (Place) Names datasets over 3 phases of work. This implemented the first spatial graph-native jurisdictional core datasets in Australia and established a Spatial Data Exchange Platform forming the basis of the Queensland Department of Natural Resources and Mines' spatial data future state architecture, including the Queensland Spatial Information Supermodel."@en ;
+    schema:contributor <https://kurrawong.ai/organisations/#qld-resources> ;
+    schema:name "Queensland Spatial Information Datasets Rebuild"@en ;
+.
+
+# --- Other Organisations ---
+
+<https://kurrawong.ai/organisations/#w3c>
+    a schema:Organization ;
+    schema:name "World Wide Web Consortium (W3C)"@en ;
+    schema:sameAs "https://www.w3.org"^^xsd:anyURI ;
+    schema:url "https://www.w3.org"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/organisations/#ogc>
+    a schema:Organization ;
+    schema:name "Open Geospatial Consortium (OGC)"@en ;
+    schema:sameAs "https://www.ogc.org"^^xsd:anyURI ;
+    schema:url "https://www.ogc.org"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/organisations/#csiro>
+    a schema:Organization ;
+    schema:name "CSIRO"@en ;
+    schema:sameAs "https://www.csiro.au"^^xsd:anyURI ;
+    schema:url "https://www.csiro.au"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/organisations/#tern>
+    a schema:Organization ;
+    schema:name "TERN"@en ;
+    schema:sameAs "https://www.tern.org.au"^^xsd:anyURI ;
+    schema:url "https://www.tern.org.au"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/organisations/#gsq>
+    a schema:Organization ;
+    schema:description "The Geological Survey of Queensland, for whom KurrawongAI supports a Prez instance delivering scientific and administrative vocabularies."@en ;
+    schema:name "Geological Survey of Queensland"@en ;
+    schema:url "https://www.business.qld.gov.au/industries/mining-energy-water/resources/geoscience-information/gsq"^^xsd:anyURI ;
+    schema:uses <https://kurrawong.ai/products/#prez> ;
+.
+
+<https://kurrawong.ai/organisations/#unimelb-indigenous-studies-unit>
+    a schema:Organization ;
+    schema:description "The Indigenous Studies Unit at the University of Melbourne, for whom KurrawongAI implemented reference data catalogues supporting a national Indigenous Data Network."@en ;
+    schema:name "Indigenous Studies Unit, University of Melbourne"@en ;
+    schema:url "https://mspgh.unimelb.edu.au/centres-institutes/onemda/research-group/indigenous-studies-unit"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/organisations/#dcceew>
+    a schema:Organization ;
+    schema:description "The Australian Department of Climate Change, Energy, the Environment and Water, for whom KurrawongAI developed the Biodiversity Data Repository."@en ;
+    schema:name "Department of Climate Change, Energy, the Environment and Water (DCCEEW)"@en ;
+    schema:url "https://www.dcceew.gov.au"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/organisations/#sa-dem>
+    a schema:Organization ;
+    schema:description "South Australia's Department for Energy and Mining, for whom KurrawongAI established a vocabulary system publishing 11 SKOS vocabularies via a branded Prez instance."@en ;
+    schema:name "SA Department for Energy and Mining"@en ;
+    schema:url "https://www.energymining.sa.gov.au"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/organisations/#icsm>
+    a schema:Organization ;
+    schema:description "The Intergovernmental Committee on Surveying and Mapping, whose national address model for Australia and New Zealand KurrawongAI developed in response to the ICSM Addressing 2035 strategy."@en ;
+    schema:name "Intergovernmental Committee on Surveying and Mapping (ICSM)"@en ;
+    schema:url "https://www.icsm.gov.au"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/organisations/#qld-resources>
+    a schema:Organization ;
+    schema:description "Queensland's Department of Natural Resources and Mines, Manufacturing and Regional and Rural Development, for whom KurrawongAI rebuilt the Address, Road names and Geographical (Place) Names datasets."@en ;
+    schema:name "Queensland Department of Natural Resources and Mines"@en ;
+.
+
+# --- Tools ---
+
+<https://kurrawong.ai/products/#kgm>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Tool" ;
+    schema:applicationCategory "Knowledge Graph management tool" ;
+    schema:description "KGM is a Python command line and workflow application, developed by KurrawongAI, that helps manage parts of Knowledge Graphs."@en ;
+    schema:isPartOf <https://kurrawong.ai/#docs-website> ;
+    schema:name "KGM"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://docs.kurrawong.ai/products/tools/kgm/"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#pylode>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Tool" ;
+    schema:applicationCategory "Ontology documentation tool" ;
+    schema:description "pyLODE is an online tool used to generate human-readable HTML documentation from ontologies."@en ;
+    schema:isPartOf <https://kurrawong.ai/#tools-website> ;
+    schema:name "pyLODE"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://tools.kurrawong.ai/pylode"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#rdf-converter>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Tool" ;
+    schema:applicationCategory "RDF conversion tool" ;
+    schema:description "The RDF Converter is an online tool used to convert between different RDF formats."@en ;
+    schema:isPartOf <https://kurrawong.ai/#tools-website> ;
+    schema:name "RDF Converter"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://tools.kurrawong.ai/convert"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#vocexcel>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Tool" ;
+    schema:applicationCategory "Vocabulary conversion tool" ;
+    schema:description "VocExcel is an online tool used to convert Excel data to SKOS vocabularies."@en ;
+    schema:isPartOf <https://kurrawong.ai/#tools-website> ;
+    schema:name "VocExcel"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://tools.kurrawong.ai/vocexcel"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#sparql-parser>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Tool" ;
+    schema:applicationCategory "SPARQL tool" ;
+    schema:description "KurrawongAI's SPARQL parser is a command line and web page tool that can parse and validate SPARQL queries."@en ;
+    schema:name "SPARQL parser"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://github.com/Kurrawong/sparql"^^xsd:anyURI ;
+.
+
+# --- Tool Websites ---
+
+<https://kurrawong.ai/#tools-website>
+    a schema:WebSite ;
+    schema:description "KurrawongAI's website of free online RDF and Semantic Web tools, including pyLODE ontology documentation, RDF format conversion, SHACL validation and SKOS vocabulary conversion."@en ;
+    schema:name "KurrawongAI Tools"@en ;
+    schema:publisher <https://kurrawong.ai> ;
+    schema:url "https://tools.kurrawong.ai"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/#docs-website>
+    a schema:WebSite ;
+    schema:description "KurrawongAI's knowledge base with information about the RDF and Semantic Web-related tools that KurrawongAI maintains, plus its products and modelling concepts."@en ;
+    schema:name "KurrawongAI Knowledge Base"@en ;
+    schema:publisher <https://kurrawong.ai> ;
+    schema:url "https://docs.kurrawong.ai"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#ogc-tests>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Tool" ;
+    schema:applicationCategory "OGC test suite" ;
+    schema:description "An unofficial, open source, Python implementation of the Open Geospatial Consortium's Java-based test suite."@en ;
+    schema:isPartOf <https://kurrawong.ai/#docs-website> ;
+    schema:name "OGC Tests"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://docs.kurrawong.ai/products/tools/ogc-tests/"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#prefix-lookup>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Tool" ;
+    schema:applicationCategory "RDF namespace tool" ;
+    schema:description "Prefix Lookup gets RDF namespaces from prefixes."@en ;
+    schema:isPartOf <https://kurrawong.ai/#docs-website> ;
+    schema:name "Prefix Lookup"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:sameAs "https://tools.kurrawong.ai/prefixes"^^xsd:anyURI ;
+    schema:url "https://docs.kurrawong.ai/products/tools/prefix-lookup/"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#provworkflow>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Tool" ;
+    schema:applicationCategory "Provenance tool" ;
+    schema:description "ProvWorkflow records the provenance of Python workflows in RDF."@en ;
+    schema:isPartOf <https://kurrawong.ai/#docs-website> ;
+    schema:name "ProvWorkflow"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://docs.kurrawong.ai/products/tools/provworkflow/"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#rdf-merger>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Tool" ;
+    schema:applicationCategory "RDF tool" ;
+    schema:description "The RDF Merger merges RDF graphs together."@en ;
+    schema:isPartOf <https://kurrawong.ai/#docs-website> ;
+    schema:name "RDF Merger"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://docs.kurrawong.ai/products/tools/rdf-merger/"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/products/#vocedit>
+    a schema:SoftwareApplication ;
+    schema:additionalType "Tool" ;
+    schema:applicationCategory "SKOS vocabulary tool" ;
+    schema:description "VocEdit is an online tool for SKOS vocabulary creation and editing."@en ;
+    schema:isPartOf <https://kurrawong.ai/#docs-website> ;
+    schema:name "VocEdit"@en ;
+    schema:provider <https://kurrawong.ai> ;
+    schema:url "https://docs.kurrawong.ai/products/tools/vocedit/"^^xsd:anyURI ;
+.

@@ -44,6 +44,12 @@
     --tertiary-foreground: hsl(26 83.3% 14.1%);
     --link: hsl(221.2 83.2% 53.3%);
     --link-foreground: hsl(210 40% 98%);
+    /* Yellow/amber palette for the landing-page d3 diagram. */
+    --kgraph-organization: oklch(0.60 0.16 48);
+    --kgraph-person: oklch(0.70 0.16 63);
+    --kgraph-service: oklch(0.79 0.16 78);
+    --kgraph-product: oklch(0.87 0.13 90);
+    --kgraph-project: oklch(0.94 0.08 100);
 }
 
 .dark {
@@ -79,6 +85,12 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(0.274 0.006 286.033);
     --sidebar-ring: oklch(0.442 0.017 285.786);
+    /* Brighter yellow/amber variants for the d3 diagram on dark backgrounds. */
+    --kgraph-organization: oklch(0.70 0.15 52);
+    --kgraph-person: oklch(0.79 0.15 68);
+    --kgraph-service: oklch(0.87 0.13 83);
+    --kgraph-product: oklch(0.93 0.10 93);
+    --kgraph-project: oklch(0.97 0.05 102);
 }
 
 @theme inline {

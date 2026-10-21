@@ -10,5 +10,6 @@ const useIdFunction = () => useId();
         <NuxtLayout>
             <NuxtPage />
         </NuxtLayout>
+        <KChat />
     </ConfigProvider>
 </template>

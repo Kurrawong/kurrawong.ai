@@ -36,6 +36,42 @@ This should help improve the speed of installing packages. See https://pnpm.io/i
 
 The Nuxt dev server may also take a long time to start and load in browsers. Instead of going to http://localhost:3000, try [http://[::1]:3000](http://[::1]:3000). If your computer doesn't support that, try http://127.0.0.1:3000 instead.
 
+## Chat Agent (kchat)
+The website includes an AI chat agent, [kchat](https://github.com/Kurrawong/kchat), which answers questions about KurrawongAI's people, products, services and projects. The agent is a separate container: this repo provides its data and interface.
+
+### RDF data
+The agent's answers are grounded in [`server/assets/rdf.ttl`](server/assets/rdf.ttl), a schema.org model of the important website content (organisation, people, products, services, projects). This same file is served as Turtle at the site root via content negotiation (see [`server/middleware/rdf.ts`](server/middleware/rdf.ts)), so the RDF is both the agent's knowledge base and the site's own linked data. Update it when website content changes.
+
+### Run locally
+Requires Docker; the kchat agent is pulled from GHCR (`ghcr.io/kurrawong/kchat`, public).
+
+```bash
+cp .env.example .env  # set LLM_API_KEY and NUXT_PUBLIC_KCHAT_URL
+docker compose up     # kchat on http://localhost:8000
+pnpm dev              # website on http://localhost:3000
+```
+
+Open http://localhost:3000 and use the "Ask KurrawongAI" button in the bottom-right corner. The kchat API docs are at http://localhost:8000/docs.
+
+The chat widget (`app/components/KChat.vue`) is enabled by setting `NUXT_PUBLIC_KCHAT_URL` to the kchat service's base URL; when unset, the widget is not rendered.
+
+### Landing page
+The landing page hero (see `app/components/content/KHero.vue`) keeps the site minimal: a headline and a concise company summary derived from the RDF (no chat request needed) sit over a fullscreen d3.js network diagram of the RDF, lightly blurred as a backdrop. Key nodes (entities with website page links, such as products and services) are drawn larger and outlined. The chat bar sits in the top-left corner (see `app/components/KChat.vue`) with suggested-question pills; after you ask a question, the chat window expands out of the bar. The "Explore the graph" button in the bottom-right un-blurs the diagram and hides the rest of the site so the graph can be explored (drag nodes, zoom, hover to highlight connections, click a node for its details and page link). A chevron at the bottom of the hero indicates more content below.
+
+### Guardrails
+Two protections are configured through the kchat container (see `compose.yaml` and `.env.example`):
+- `RATE_LIMIT_QUESTIONS` / `RATE_LIMIT_WINDOW_SECONDS` limit the number of questions each user may ask per time window (enforced server-side by kchat; exceeded requests get a friendly 429 message in the widget).
+- `AGENT_EXTRA_INSTRUCTIONS` appends instructions to the agent telling it to answer concisely, help users find website content, only answer questions about KurrawongAI, and politely refuse off-topic questions.
+
+### Deployment
+The site deploys automatically to Azure from pushes to `main` (see `.github/workflows/push.yaml`, [`deploy/README.md`](deploy/README.md), and the architecture diagram [`deploy/architecture.html`](deploy/architecture.html)):
+
+- one Container App with two containers: the site (main, serving all traffic) and kchat (sidecar); both images are built by CI, the kchat one being the published agent image plus this site's RDF baked in ([`deploy/Dockerfile.kchat`](deploy/Dockerfile.kchat));
+- the site proxies `/kchat/*` to the sidecar (see `nuxt.config.ts`), so the agent is only reachable via the site's own origin, with `NUXT_PUBLIC_KCHAT_URL=/kchat`;
+- `LLM_API_KEY` is an inline Container App secret (rotation runbook in `deploy/README.md`).
+
+One-time Azure setup commands (storage, secret, registry credentials) are in [`deploy/README.md`](deploy/README.md); the workflow never creates Azure resources. Chat sessions are ephemeral (single replica, SQLite on EmptyDir). For multi-instance deployments, set `SESSION_DATABASE_URL` to a PostgreSQL database (see the [kchat README](https://github.com/Kurrawong/kchat)).
+
 ## Markdown Content
 See [Nuxt Content docs](https://content.nuxt.com/usage/markdown) for more info.
 

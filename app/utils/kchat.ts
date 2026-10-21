@@ -1,0 +1,204 @@
+// Helpers for the kchat chat widget (see KChat.vue).
+
+export function escapeHtml(value: string): string {
+    return value.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
+}
+
+function inlineMarkdown(value: string): string {
+    return value
+        .replace(/`([^`]+)`/g, "<code>$1</code>")
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/__([^_]+)__/g, "<strong>$1</strong>")
+        .replace(/\*([^*]+)\*/g, "<em>$1</em>")
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label: string, url: string) => {
+            const safe = /^(https?:\/\/|\/)/i.test(url) ? url : "#";
+            return `<a href="${escapeHtml(safe)}" target="_blank" rel="noopener">${label}</a>`;
+        });
+}
+
+/** Render a small subset of Markdown (code blocks, headings, lists, links) to safe HTML. */
+export function kchatMarkdown(source: string): string {
+    const code: string[] = [];
+    let text = escapeHtml(source || "").replace(/```([^\n]*)\n?([\s\S]*?)```/g, (_, language: string, body: string) => {
+        const key = `@@KCHATCODE${code.length}@@`;
+        code.push(`<pre><code class="language-${escapeHtml(language.trim())}">${body.replace(/^\n|\n$/g, "")}</code></pre>`);
+        return key;
+    });
+
+    const lines = text.split("\n");
+    let html = "";
+    let list = "";
+    const closeList = () => {
+        if (list) {
+            html += `</${list}>`;
+            list = "";
+        }
+    };
+    for (const line of lines) {
+        if (/^@@KCHATCODE\d+@@$/.test(line)) {
+            closeList();
+            html += line;
+            continue;
+        }
+        const heading = line.match(/^(#{1,3})\s+(.+)/);
+        const unordered = line.match(/^\s*[-*]\s+(.+)/);
+        const ordered = line.match(/^\s*\d+\.\s+(.+)/);
+        if (heading) {
+            closeList();
+            const n = heading[1].length;
+            html += `<h${n}>${inlineMarkdown(heading[2])}</h${n}>`;
+        } else if (unordered) {
+            if (list !== "ul") {
+                closeList();
+                list = "ul";
+                html += "<ul>";
+            }
+            html += `<li>${inlineMarkdown(unordered[1])}</li>`;
+        } else if (ordered) {
+            if (list !== "ol") {
+                closeList();
+                list = "ol";
+                html += "<ol>";
+            }
+            html += `<li>${inlineMarkdown(ordered[1])}</li>`;
+        } else if (!line.trim()) {
+            closeList();
+        } else {
+            closeList();
+            html += `<p>${inlineMarkdown(line)}</p>`;
+        }
+    }
+    closeList();
+    return html.replace(/@@KCHATCODE(\d+)@@/g, (_, index: string) => code[Number(index)] ?? "");
+}
+
+export interface KchatEvent {
+    content?: { parts?: { text?: string; thought?: boolean }[] };
+    partial?: boolean;
+    usageMetadata?: {
+        promptTokenCount?: number;
+        candidatesTokenCount?: number;
+        prompt_token_count?: number;
+        candidates_token_count?: number;
+        inputTokenCount?: number;
+        outputTokenCount?: number;
+        input_token_count?: number;
+        output_token_count?: number;
+    };
+}
+
+/** Extract the visible text chunks from an ADK streaming event. */
+export function kchatEventText(event: KchatEvent): string {
+    return (event.content?.parts ?? []).filter(part => part.text && !part.thought).map(part => part.text).join("");
+}
+
+/** Consume an SSE response body, invoking the callback once per JSON event. */
+export async function kchatConsumeSse(response: Response, onEvent: (event: KchatEvent) => void): Promise<void> {
+    if (!response.ok) {
+        let message = (await response.text()) || `Chat request failed (${response.status})`;
+        try {
+            message = JSON.parse(message).detail ?? message;
+        } catch {
+            // Not a JSON error body: show the raw text.
+        }
+        throw new Error(message);
+    }
+    const reader = response.body!.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    const emit = (block: string) => {
+        const data = block.split(/\r?\n/).filter(line => line.startsWith("data:")).map(line => line.slice(5).trimStart()).join("\n");
+        if (data && data !== "[DONE]") onEvent(JSON.parse(data));
+    };
+    while (true) {
+        const { value, done } = await reader.read();
+        buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
+        const blocks = buffer.split(/\r?\n\r?\n/);
+        buffer = blocks.pop() || "";
+        for (const block of blocks) emit(block);
+        if (done) break;
+    }
+    if (buffer.trim()) emit(buffer);
+}
+
+/** Decode ADK artifact bytes: URL-safe base64, padding omitted. */
+export function kchatDecodeArtifact(data: string): string {
+    const normalized = data.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
+    const binary = atob(padded);
+    return new TextDecoder().decode(Uint8Array.from(binary, c => c.charCodeAt(0)));
+}
+
+export function kchatArtifactLabel(name: string): string {
+    if (name.endsWith(".rq")) return "SPARQL query";
+    if (name.endsWith(".json")) return "JSON result";
+    if (name.endsWith(".ttl")) return "Turtle result";
+    return name;
+}
+
+export interface ChatMessage {
+    role: "user" | "assistant";
+    text: string;
+    artifacts: { name: string; version: number; label: string }[];
+    error?: boolean;
+    typing?: boolean;
+    /** "contact" renders the pre-canned contact card instead of markdown. */
+    kind?: "contact";
+}
+
+/** True when a question matches the pre-canned contact question. */
+export function kchatIsContactQuestion(question: string): boolean {
+    const normalise = (value: string) => value.toLowerCase().replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+    return normalise(question) === "how can i contact kurrawongai";
+}
+
+const LIST_ITEM = /^\s*(?:[-*]|(?:\d+|[a-z])[).])\s+/;
+
+/** Phrasings that introduce a trailing list of suggested questions. */
+const FOLLOWUP_HINT = new RegExp(
+    [
+        "follow[- ]?ups?",
+        "you (could|might|may|can|want to)? ?(also |like to |want to ){0,2}(ask|know|explore|hear|learn)",
+        "would you like to (know|hear|learn|explore)",
+        "here ('s|are|is) (some|a few|other|more)? ?(more )?(questions|ideas|examples|things)",
+        "(other|related|more|some|common|typical) questions",
+        "try asking",
+        "feel free to ask",
+    ].join("|"),
+    "i",
+);
+
+/**
+ * Split a trailing list of question suggestions out of an assistant answer.
+ * Any trailing list made entirely of questions is offered as follow-up
+ * pills; when the text before it invites further questions, that
+ * introductory line is removed from the body.
+ */
+export function kchatExtractFollowUps(text: string): { body: string; followUps: string[] } {
+    const lines = text.split("\n");
+    let end = lines.length;
+    while (end > 0 && !lines[end - 1].trim()) end--;
+    let start = end;
+    while (start > 0 && LIST_ITEM.test(lines[start - 1])) start--;
+    if (start === end) return { body: text, followUps: [] };
+
+    const items = lines
+        .slice(start, end)
+        .map(line => line.replace(LIST_ITEM, "").replace(/\*\*/g, "").trim())
+        .map(item => item.replace(/^(["'])(.*)\1$/, "$2").trim());
+    if (!items.length || !items.every(item => item.endsWith("?"))) return { body: text, followUps: [] };
+
+    // Look back past blanks and horizontal rules for the introducing line.
+    let marker = start;
+    while (marker > 0 && (!lines[marker - 1].trim() || lines[marker - 1].trim() === "---")) marker--;
+    const before = lines.slice(Math.max(0, marker - 3), start).join(" ");
+
+    let bodyEnd = marker;
+    // A trailing colon may be wrapped in bold/italic markers, e.g. "**Questions:**".
+    const introducing = bodyEnd > 0 && !LIST_ITEM.test(lines[bodyEnd - 1])
+        && (FOLLOWUP_HINT.test(before) || /:\s*[\*_]+\s*$/.test(lines[bodyEnd - 1]));
+    if (introducing) bodyEnd -= 1;
+    while (bodyEnd > 0 && (!lines[bodyEnd - 1].trim() || lines[bodyEnd - 1].trim() === "---")) bodyEnd -= 1;
+    const body = lines.slice(0, bodyEnd).join("\n").replace(/\s+$/, "");
+    return { body: body || text, followUps: items };
+}
