@@ -304,7 +304,7 @@ function onFormSubmit() {
                         v-for="suggestion in suggestions"
                         :key="suggestion"
                         type="button"
-                        class="bg-card/80 hover:bg-accent dark:bg-white/90 dark:border-black/10 dark:text-neutral-900 dark:hover:bg-neutral-100 rounded-full border px-2.5 py-1 text-xs shadow-sm backdrop-blur-sm"
+                        class="rounded-full border border-border/60 bg-muted/50 px-2 py-0.5 text-[11px] leading-4 text-muted-foreground transition-colors hover:border-border hover:bg-accent hover:text-foreground"
                         :disabled="busy"
                         @click="sendQuestion(suggestion)"
                     >
