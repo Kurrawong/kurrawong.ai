@@ -85,6 +85,18 @@ export function useGraphExplore() {
 }
 
 /**
+ * Landing-page chat layout variant. "fullscreen" fills the viewport under the
+ * header with the chat and hides the graph diagram; "corner" is the original
+ * top-left chat column over the graph. This branch shows off the fullscreen
+ * variant; flip the default to compare the two.
+ */
+export function useKChatVariant() {
+    const variant = useState<"corner" | "fullscreen">("kchat-variant", () => "fullscreen");
+    const chatFullscreen = computed(() => variant.value === "fullscreen");
+    return { variant, chatFullscreen };
+}
+
+/**
  * Shared scroll fade for the landing hero: 1 at the top of the page, fading to
  * 0 as the main content scrolls into view. KHero updates it; other landing
  * widgets (e.g. the chat column) react to it.

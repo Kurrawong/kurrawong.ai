@@ -9,6 +9,9 @@ const { data: turtleData } = await useAsyncData("rdf", () => $fetch<string>("/?_
 const { exploring } = useGraphExplore();
 const { conversationActive } = useKChatBar();
 const { scrollFade } = useScrollFade();
+// Fullscreen chat variant: the graph diagram is hidden and the chat fills the
+// hero, so only the spacer and the scroll-down chip remain.
+const { chatFullscreen } = useKChatVariant();
 const selectedNode = ref<{ label: string; type: string; description?: string; url?: string; id: string } | null>(null);
 // The node whose page is open in the right-hand split pane; kept separately
 // from selectedNode so dismissing the info popup leaves the pane alone.
@@ -227,8 +230,10 @@ onBeforeUnmount(() => {
 <template>
     <div class="relative -mx-5 not-prose rounded-lg min-h-[calc(100svh-4.5rem)]">
         <!-- Fullscreen backdrop behind all page content (negative z-index),
-             fading out as the page scrolls past the hero. -->
+             fading out as the page scrolls past the hero. Hidden in the
+             fullscreen chat variant, where the chat takes the hero instead. -->
         <div
+            v-if="!chatFullscreen"
             class="transition-all duration-150"
             :class="exploring
                 ? (splitUrl
@@ -255,6 +260,7 @@ onBeforeUnmount(() => {
         </Button>
 
         <Button
+            v-if="!chatFullscreen"
             v-show="!exploring && scrollFade > 0"
             size="lg"
             class="fixed bottom-5 right-5 z-[90] max-sm:h-10 max-sm:px-3 max-sm:text-sm pr-5 shadow-lg"

@@ -10,6 +10,7 @@ const { public: { kchatUrl } } = useRuntimeConfig();
 const { pendingQuestion, conversationActive } = useKChatBar();
 const { exploring } = useGraphExplore();
 const { scrollFade } = useScrollFade();
+const { chatFullscreen } = useKChatVariant();
 const route = useRoute();
 
 // The chat bar only exists on the landing page.
@@ -20,6 +21,22 @@ const isLanding = computed(() => route.path === "/");
 // always hidden while the graph is being explored.
 const isMobile = ref(false);
 const chatHiddenByScroll = computed(() => isLanding.value && (exploring.value || scrollFade.value <= 0));
+
+// Fullscreen variant: the chat fills the viewport under the header, centred in
+// a reading-width column, with KHero's scroll-down chip in the gap below it.
+// Corner variant: the original top-left column over the graph.
+const containerClass = computed(() => chatFullscreen.value
+    ? "fixed inset-x-0 top-[4.5rem] bottom-16 z-40 mx-auto flex max-w-2xl flex-col overflow-y-auto px-5 transition-opacity duration-150"
+    : "fixed top-24 left-5 right-5 z-40 max-h-[calc(100svh-7rem)] max-w-[420px] overflow-x-hidden overflow-y-auto overscroll-contain transition-opacity duration-150");
+const introClass = computed(() => chatFullscreen.value
+    ? "pt-8 text-center sm:pt-12"
+    : "max-sm:rounded-lg max-sm:bg-background/60 max-sm:p-3 max-sm:backdrop-blur-md");
+const messagesClass = computed(() => chatFullscreen.value
+    ? "mt-4 min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1"
+    : "mt-3 max-h-[55vh] overflow-y-auto overscroll-contain pr-1");
+const suggestionsClass = computed(() => chatFullscreen.value
+    ? "mt-2 flex flex-wrap justify-center gap-1.5"
+    : "mt-2 flex flex-wrap gap-1.5");
 
 // The landing hero (KHero) fetches the RDF under this key; share it for the
 // company summary shown above the chat bar. Off the landing page the fetch is
@@ -242,20 +259,22 @@ function onFormSubmit() {
 
 <template>
     <div v-if="kchatUrl" class="font-sans">
-        <!-- Landing page: title, blurb and chat bar in the top-left corner.
-             Hidden while the graph is being explored. -->
+        <!-- Landing page: title, blurb and chat. Fullscreen variant: the chat
+             fills the viewport under the header. Corner variant: a top-left
+             column over the graph. Hidden while the graph is being explored. -->
         <div
             v-if="isLanding"
             v-show="!chatHiddenByScroll"
             :style="{ opacity: scrollFade }"
-            class="fixed top-24 left-5 right-5 z-40 max-h-[calc(100svh-7rem)] max-w-[420px] overflow-x-hidden overflow-y-auto overscroll-contain transition-opacity duration-150"
+            :class="containerClass"
         >
-            <!-- On small screens the graph backdrop is busy, so the intro
-                 gets a faint background to keep it legible. -->
-            <div class="max-sm:rounded-lg max-sm:bg-background/60 max-sm:p-3 max-sm:backdrop-blur-md">
+            <!-- Fullscreen: centred intro with breathing room under the header.
+                 Corner: on small screens the graph backdrop is busy, so the
+                 intro gets a faint background to keep it legible. -->
+            <div :class="introClass">
                 <h1 class="text-4xl font-bold text-foreground !m-0 sm:text-5xl">Graphs, Models, AI?</h1>
                 <p class="text-lg text-muted-foreground !m-0">Hello KurrawongAI!</p>
-                <p v-if="summary" class="mt-1 text-sm leading-relaxed text-foreground/80 !my-0">{{ summary.description }}</p>
+                <p v-if="summary" class="mt-1 text-sm leading-relaxed text-foreground/80 !my-0" :class="chatFullscreen ? 'mx-auto max-w-xl' : ''">{{ summary.description }}</p>
             </div>
 
             <!-- Initial layout: chat bar with suggested questions below it.
@@ -280,7 +299,7 @@ function onFormSubmit() {
                     </Button>
                 </form>
 
-                <div class="mt-2 flex flex-wrap gap-1.5">
+                <div :class="suggestionsClass">
                     <button
                         v-for="suggestion in suggestions"
                         :key="suggestion"
@@ -295,7 +314,7 @@ function onFormSubmit() {
             </template>
 
             <Transition name="kchat-conversation">
-                <div v-if="open" ref="messagesEl" class="mt-3 max-h-[55vh] overflow-y-auto overscroll-contain pr-1">
+                <div v-if="open" ref="messagesEl" :class="messagesClass">
                     <KChatMessages :messages="messages" @open-artifact="openArtifact" @send="sendQuestion" />
                 </div>
             </Transition>
