@@ -61,7 +61,7 @@ The landing page hero (see `app/components/content/KHero.vue`) keeps the site mi
 ### Guardrails
 Two protections are configured through the kchat container (see `compose.yaml` and `.env.example`):
 - `RATE_LIMIT_QUESTIONS` / `RATE_LIMIT_WINDOW_SECONDS` limit the number of questions each user may ask per time window (enforced server-side by kchat; exceeded requests get a friendly 429 message in the widget).
-- `AGENT_EXTRA_INSTRUCTIONS` appends instructions to the agent telling it to answer concisely, help users find website content, only answer questions about KurrawongAI, and politely refuse off-topic questions.
+- `AGENT_EXTRA_INSTRUCTIONS` appends instructions to the agent telling it to answer concisely in plain English without jargon (explaining any technical term it must use), help users find website content, only answer questions about KurrawongAI, and politely refuse off-topic questions.
 
 ### Deployment
 The site deploys automatically to Azure from pushes to `main` (see `.github/workflows/push.yaml`, [`deploy/README.md`](deploy/README.md), and the architecture diagram [`deploy/architecture.html`](deploy/architecture.html)):
