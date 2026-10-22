@@ -5,21 +5,12 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 
 const props = defineProps<{
     messages: ChatMessage[];
-    // Show suggested-question pills when the conversation is empty.
-    showSuggestions?: boolean;
 }>();
 
 const emit = defineEmits<{
     "open-artifact": [name: string, version: number];
     send: [question: string];
 }>();
-
-const suggestions = ref<string[]>([]);
-
-onMounted(() => {
-    // Random picks are made client-side so server and client markup match.
-    suggestions.value = kchatRandomSuggestions(kchatSuggestionCount());
-});
 
 const parsed = computed(() => props.messages.map(message => {
     if (message.kind === "contact" || message.role !== "assistant" || message.error) return { body: message.text, followUps: [] as string[] };
@@ -29,23 +20,6 @@ const parsed = computed(() => props.messages.map(message => {
 
 <template>
     <TransitionGroup name="kchat-bubble" tag="div" class="flex flex-col gap-3">
-        <div v-if="showSuggestions && !messages.length" key="empty" class="flex flex-col items-center gap-3">
-            <p class="text-muted-foreground mt-4 text-center text-sm">
-                Ask a question about KurrawongAI, our people, products, services or projects.
-            </p>
-            <div v-if="suggestions.length" class="flex flex-wrap justify-center gap-2">
-                <button
-                    v-for="suggestion in suggestions"
-                    :key="suggestion"
-                    type="button"
-                    class="bg-background hover:bg-accent rounded-full border px-3 py-1.5 text-xs"
-                    @click="emit('send', suggestion)"
-                >
-                    {{ suggestion }}
-                </button>
-            </div>
-        </div>
-
         <div
             v-for="(message, index) in messages"
             :key="index"
