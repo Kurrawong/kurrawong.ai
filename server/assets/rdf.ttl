@@ -99,7 +99,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 <https://kurrawong.ai>
     a schema:Organization ;
-    schema:address "72 Yundah St, Shorncliffe QLD 4017 Australia" ;
+    schema:address <https://kurrawong.ai/#postal-address> ;
     schema:contactPoint <https://orcid.org/0000-0002-8742-7730> ;
     schema:description "KurrawongAI is a small, Australian-based IT company, specialising in Knowledge Graphs, Data Modelling & AI."@en ;
     schema:email "info@kurrawong.ai" ;
@@ -120,6 +120,16 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
         <https://kurrawong.ai/services/#vocabularies> ;
     schema:name "KurrawongAI"@en ;
     schema:url "https://kurrawong.ai"^^xsd:anyURI ;
+.
+
+<https://kurrawong.ai/#postal-address>
+    a schema:PostalAddress ;
+    schema:addressCountry "Australia" ;
+    schema:addressLocality "Shorncliffe" ;
+    schema:addressRegion "QLD" ;
+    schema:name "KurrawongAI postal address"@en ;
+    schema:postalCode "4017" ;
+    schema:streetAddress "72 Yundah St" ;
 .
 
 <https://kurrawong.ai/#website>
