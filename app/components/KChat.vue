@@ -18,9 +18,11 @@ const isLanding = computed(() => route.path === "/");
 
 // The chat column overlays the page content, so it fades out with the hero as
 // soon as the user scrolls toward the main content, returns at the top, and is
-// always hidden while the graph is being explored.
+// always hidden while the graph is being explored — except in the fullscreen
+// variant, where the chat stays rendered under the sliding graph so the graph
+// can slide back off it.
 const isMobile = ref(false);
-const chatHiddenByScroll = computed(() => isLanding.value && (exploring.value || scrollFade.value <= 0));
+const chatHiddenByScroll = computed(() => isLanding.value && (scrollFade.value <= 0 || (!chatFullscreen.value && exploring.value)));
 
 // Fullscreen variant: the chat fills the viewport under the header, centred in
 // a reading-width column, with KHero's scroll-down chip in the gap below it.

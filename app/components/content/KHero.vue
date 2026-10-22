@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ChevronDown, ExternalLink, RotateCcw, Tags, Waypoints, X } from "lucide-vue-next";
+import { ChevronDown, ExternalLink, MessageSquare, RotateCcw, Tags, Waypoints, X } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 
 const { data: turtleData } = await useAsyncData("rdf", () => $fetch<string>("/?_mediatype=text/turtle"), {
@@ -9,8 +9,8 @@ const { data: turtleData } = await useAsyncData("rdf", () => $fetch<string>("/?_
 const { exploring } = useGraphExplore();
 const { conversationActive } = useKChatBar();
 const { scrollFade } = useScrollFade();
-// Fullscreen chat variant: the graph diagram is hidden and the chat fills the
-// hero, so only the spacer and the scroll-down chip remain.
+// Fullscreen chat variant: the chat fills the hero and the graph diagram
+// slides over it in explore mode, toggled by the scroll-more chip.
 const { chatFullscreen } = useKChatVariant();
 const selectedNode = ref<{ label: string; type: string; description?: string; url?: string; id: string } | null>(null);
 // The node whose page is open in the right-hand split pane; kept separately
@@ -187,8 +187,26 @@ function onScroll() {
     scrollFade.value = Math.min(1, Math.max(0, 1 - progress));
 }
 
+const backdropClass = computed(() => {
+    if (chatFullscreen.value) {
+        // The diagram slides over the chat in explore mode; otherwise it sits
+        // fully off-screen to the right, ready to slide in.
+        if (!exploring.value) return "fixed inset-0 z-[60] bg-background translate-x-full pointer-events-none duration-300";
+        return splitUrl.value
+            ? "fixed inset-y-0 left-0 z-[60] w-full bg-background blur-0 translate-x-0 duration-300"
+            : "fixed inset-0 z-[60] bg-background blur-0 translate-x-0 duration-300";
+    }
+    if (!exploring.value) return "fixed inset-0 -z-10 blur-[8px] sm:blur-[2px] pointer-events-none duration-150";
+    return splitUrl.value
+        ? "fixed inset-y-0 left-0 z-[60] w-full bg-background blur-0 sm:w-1/2 duration-150"
+        : "fixed inset-0 z-[60] bg-background blur-0 duration-150";
+});
+
 const backdropStyle = computed(() => {
     if (exploring.value) return undefined;
+    // Fullscreen variant: the diagram panel stays opaque while it slides
+    // off-screen so the chat is revealed cleanly underneath it.
+    if (chatFullscreen.value) return { opacity: 1 };
     const base = colorMode.value === "dark" ? 0.3 : 0.45;
     // The small-screen backdrop is blurred harder, so dim it a little too.
     const dim = isSmallScreen.value ? 0.7 : 1;
@@ -230,16 +248,12 @@ onBeforeUnmount(() => {
 <template>
     <div class="relative -mx-5 not-prose rounded-lg min-h-[calc(100svh-4.5rem)]">
         <!-- Fullscreen backdrop behind all page content (negative z-index),
-             fading out as the page scrolls past the hero. Hidden in the
-             fullscreen chat variant, where the chat takes the hero instead. -->
+             fading out as the page scrolls past the hero. Fullscreen chat
+             variant: the diagram slides in from the right over the chat in
+             explore mode and slides back out to reveal the chat again. -->
         <div
-            v-if="!chatFullscreen"
-            class="transition-all duration-150"
-            :class="exploring
-                ? (splitUrl
-                    ? 'fixed inset-y-0 left-0 z-[60] w-full bg-background blur-0 sm:w-1/2'
-                    : 'fixed inset-0 z-[60] bg-background blur-0')
-                : 'fixed inset-0 -z-10 blur-[8px] sm:blur-[2px] pointer-events-none'"
+            class="transition-all"
+            :class="backdropClass"
             :style="backdropStyle"
         >
             <ClientOnly>
@@ -257,6 +271,26 @@ onBeforeUnmount(() => {
             @click="scrollDown"
         >
             <ChevronDown class="size-6" :class="conversationActive ? '' : 'khero-bounce'" />
+        </Button>
+
+        <!-- Fullscreen chat variant: the scroll-more chip. While the chat is
+             showing it sits on the right edge and slides the graph over it in
+             explore mode; once the graph is showing it moves to the left edge
+             to slide the chat back. Hidden once the page is scrolled down to
+             the main content. -->
+        <Button
+            v-if="chatFullscreen"
+            v-show="scrollFade > 0"
+            variant="ghost"
+            size="icon"
+            class="bg-card/80 fixed top-1/2 z-[90] size-10 -translate-y-1/2 rounded-md border shadow-lg backdrop-blur-sm transition-all duration-300"
+            :class="exploring ? 'left-5' : 'left-[calc(100vw-3.75rem)]'"
+            :aria-label="exploring ? 'Slide the chat back' : 'Slide the graph over'"
+            :title="exploring ? 'Slide the chat back' : 'Slide the graph over'"
+            @click="exploring = !exploring"
+        >
+            <MessageSquare v-if="exploring" class="size-5" />
+            <Waypoints v-else class="size-5" />
         </Button>
 
         <Button
@@ -369,6 +403,7 @@ onBeforeUnmount(() => {
             </div>
 
             <Button
+                v-if="!chatFullscreen"
                 size="lg"
                 variant="outline"
                 class="fixed bottom-5 z-[70] pr-5 shadow-lg max-sm:size-10 max-sm:p-0"
