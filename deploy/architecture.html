@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>kurrawong.ai — Deployment Architecture</title>
+<style>
+  :root {
+    --bg: #f6f8fa;
+    --panel: #ffffff;
+    --panel2: #f0f4f9;
+    --border: #d0d7e2;
+    --text: #1f2328;
+    --muted: #59636e;
+    --github: #8250df;
+    --ghcr: #bc4c00;
+    --azure: #0969da;
+    --site: #1a7f37;
+    --kchat: #9a6700;
+    --mistral: #bc4c00;
+    --manual: #bf3989;
+    --shadow: 0 1px 2px rgba(31,35,40,.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    padding: 40px 48px 64px;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; overflow-wrap: break-word; }
+  h1 span { color: var(--muted); font-weight: 400; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); margin: 40px 0 16px; }
+  .subtitle { color: var(--muted); margin-top: 6px; font-size: 14px; overflow-wrap: break-word; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 16px 24px; margin-top: 18px; font-size: 12.5px; color: var(--muted); }
+  .legend > span { display: inline-flex; align-items: center; gap: 7px; }
+  .swatch { width: 26px; height: 0; border-top: 2.5px solid; display: inline-block; border-radius: 2px; }
+
+  .row { display: flex; align-items: stretch; gap: 0; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    flex: 1;
+    min-width: 0;
+    box-shadow: var(--shadow);
+  }
+  .card .tag {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+  .card h3 { font-size: 14.5px; margin-bottom: 4px; overflow-wrap: break-word; }
+  .card p, .card li { font-size: 12.5px; color: var(--muted); line-height: 1.5; overflow-wrap: break-word; }
+  .card ul { list-style: none; margin-top: 6px; }
+  .card li { padding: 3px 0 3px 18px; position: relative; }
+  .card li::before { content: ""; position: absolute; left: 2px; top: 10px; width: 7px; height: 7px; border-radius: 2px; }
+  .c-github li::before { background: var(--github); }
+  .c-ghcr  li::before { background: var(--ghcr); }
+  .c-azure li::before { background: var(--azure); }
+  code {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11.5px;
+    background: #eef1f5;
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    border-radius: 5px;
+    color: var(--azure);
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
+  .arrow {
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    width: 64px; flex: none; padding: 0 4px;
+  }
+  .arrow .label { font-size: 10.5px; color: var(--muted); text-align: center; margin-bottom: 5px; line-height: 1.35; }
+  .arrow svg { width: 100%; height: 12px; overflow: visible; }
+  .arrow line { stroke-width: 2.5; }
+  .arrow polygon { stroke: none; }
+
+  /* Runtime section */
+  .runtime { display: flex; align-items: stretch; gap: 0; }
+  .app-box {
+    flex: 1.6;
+    min-width: 0;
+    background: linear-gradient(180deg, #eaf3fe, #f7fbff);
+    border: 1.5px solid #8db4e8;
+    border-radius: 12px;
+    padding: 16px 18px 18px;
+    box-shadow: var(--shadow);
+  }
+  .app-box > .box-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin-bottom: 14px; }
+  .app-box .box-title h3 { font-size: 15px; overflow-wrap: break-word; }
+  .app-box .box-title p { font-size: 11.5px; color: var(--muted); }
+  .containers { display: flex; gap: 12px; align-items: stretch; }
+  .container-card {
+    flex: 1; min-width: 0; border-radius: 10px; padding: 14px 16px; background: var(--panel);
+  }
+  .container-card.site { border: 1.5px solid #57ab5a; }
+  .container-card.kchat { border: 1.5px solid #d4a72c; }
+  .container-card h4 { font-size: 13.5px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; overflow-wrap: break-word; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none; }
+  .container-card .role { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin: 3px 0 10px; }
+  .container-card li { font-size: 12px; color: var(--muted); line-height: 1.5; overflow-wrap: break-word; }
+  .chips { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .chip {
+    font-size: 11px; color: var(--muted); background: var(--panel2);
+    border: 1px solid var(--border); border-radius: 999px; padding: 4px 11px;
+  }
+  .proxy-strip {
+    margin: 12px 6px 0;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
+    font-size: 11.5px; color: var(--azure);
+    background: #eaf1fb; border: 1px dashed #8db4e8; border-radius: 8px; padding: 8px 12px;
+    overflow-wrap: break-word;
+  }
+  .proxy-strip svg { flex: none; }
+
+  /* Manual ops */
+  .ops { display: flex; gap: 14px; }
+  .ops .card { flex: 1; min-width: 0; }
+  .ops .tag { background: rgba(191,57,137,.12); color: var(--manual); }
+  .steps { counter-reset: step; }
+  .steps li { counter-increment: step; padding-left: 26px !important; }
+  .steps li::before {
+    content: counter(step); background: none !important; width: 16px; height: 16px;
+    border: 1.5px solid var(--manual); border-radius: 50%; color: var(--manual);
+    font-size: 9.5px; display: flex; align-items: center; justify-content: center;
+    top: 5px !important; left: 0 !important; font-weight: 700; flex: none;
+  }
+  footer { margin-top: 44px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 14px; line-height: 1.7; overflow-wrap: break-word; }
+  footer code { font-size: 11px; }
+
+  /* Below ~1020px the five-across pipeline is too tight: stack everything
+     vertically and rotate the connector arrows to point down. */
+  @media (max-width: 1020px) {
+    body { padding: 32px 24px 48px; }
+    .row, .runtime { flex-direction: column; gap: 0; }
+    .arrow { width: 100%; height: 54px; padding: 8px 0; }
+    .arrow svg { width: 36px; height: 12px; transform: rotate(90deg); }
+    .ops { display: grid; grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .ops { grid-template-columns: 1fr; }
+    .containers { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<h1>kurrawong.ai <span>— deployment architecture &amp; process</span></h1>
+<p class="subtitle">One Azure Container App, two containers, deployed automatically from <code>main</code>. No databases, no file shares, no always-on builder.</p>
+
+<div class="legend">
+  <span><span class="swatch" style="border-color:#0969da"></span>deploy / build flow</span>
+  <span><span class="swatch" style="border-color:#1a7f37; border-top-style:dashed"></span>runtime traffic</span>
+  <span><span class="swatch" style="border-color:#bf3989; border-top-style:dotted"></span>manual / one-time</span>
+</div>
+
+<!-- ============ SECTION 1: PIPELINE ============ -->
+<h2>Continuous deployment — triggered by push to main</h2>
+<div class="row">
+
+  <div class="card c-github">
+    <span class="tag" style="background:rgba(130,80,223,.12);color:var(--github)">GitHub</span>
+    <h3>Push to <code>main</code></h3>
+    <p>Merge a feature branch (e.g. <code>feature/kchat-agent</code>). Manual dispatch is allowed, but only on <code>main</code>.</p>
+  </div>
+
+  <div class="arrow">
+    <div class="label">workflow<br>trigger</div>
+    <svg viewBox="0 0 100 12" preserveAspectRatio="none"><line x1="0" y1="6" x2="88" y2="6" stroke="#0969da"/><polygon points="88,0 100,6 88,12" fill="#0969da"/></svg>
+  </div>
+
+  <div class="card c-github">
+    <span class="tag" style="background:rgba(130,80,223,.12);color:var(--github)">GitHub Actions</span>
+    <h3><code>push.yaml</code> — single job</h3>
+    <ul>
+      <li>Build <strong>site image</strong> (Nuxt SSR)</li>
+      <li>Build <strong>kchat wrapper</strong>: public base + <code>server/assets/rdf.ttl</code> baked at <code>/rdf</code></li>
+      <li>Push both, tagged <code>sha-&lt;commit&gt;</code></li>
+      <li>PATCH <code>deploy/containerapp.yaml</code> via <code>az containerapp update</code></li>
+    </ul>
+  </div>
+
+  <div class="arrow">
+    <div class="label">docker push</div>
+    <svg viewBox="0 0 100 12" preserveAspectRatio="none"><line x1="0" y1="6" x2="88" y2="6" stroke="#0969da"/><polygon points="88,0 100,6 88,12" fill="#0969da"/></svg>
+  </div>
+
+  <div class="card c-ghcr">
+    <span class="tag" style="background:rgba(188,76,0,.12);color:var(--ghcr)">GHCR</span>
+    <h3>Immutable image tags</h3>
+    <ul>
+      <li><code>kurrawong/kurrawongai:sha-…</code></li>
+      <li><code>kurrawong/kurrawongai-kchat:sha-…</code><br><span style="color:#8c959f">(FROM public <code style="color:#8c959f">kchat:v0.0.4</code> + 1 COPY layer)</span></li>
+    </ul>
+    <p style="margin-top:8px">SHA tags guarantee each revision pulls the build it was created for.</p>
+  </div>
+
+  <div class="arrow">
+    <div class="label">az login<br>(OIDC)</div>
+    <svg viewBox="0 0 100 12" preserveAspectRatio="none"><line x1="0" y1="6" x2="88" y2="6" stroke="#0969da"/><polygon points="88,0 100,6 88,12" fill="#0969da"/></svg>
+  </div>
+
+  <div class="card c-azure">
+    <span class="tag" style="background:rgba(9,105,218,.12);color:var(--azure)">Azure</span>
+    <h3>New revision, atomically</h3>
+    <ul>
+      <li>Container App <code>website</code> (RG <code>DEV</code>)</li>
+      <li>New revision created per deploy</li>
+      <li>Ingress, secrets &amp; registry creds untouched (PATCH)</li>
+      <li>Old revision kept → instant rollback</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ============ SECTION 2: RUNTIME ============ -->
+<h2>Runtime — one Container App, one replica, two containers</h2>
+<div class="runtime">
+
+  <div class="card" style="flex:0.55">
+    <span class="tag" style="background:rgba(26,127,55,.12);color:var(--site)">Client</span>
+    <h3>Visitor's browser</h3>
+    <p>Loads <code>https://kurrawong.ai</code>. The chat widget is same-origin — no CORS, no second public endpoint, nothing of kchat exposed directly.</p>
+    <div class="chips">
+      <span class="chip">site pages</span>
+      <span class="chip">/kchat/run_sse</span>
+    </div>
+  </div>
+
+  <div class="arrow">
+    <div class="label">HTTPS<br>kurrawong.ai</div>
+    <svg viewBox="0 0 100 12" preserveAspectRatio="none"><line x1="0" y1="6" x2="88" y2="6" stroke="#1a7f37" stroke-dasharray="6 5"/><polygon points="88,0 100,6 88,12" fill="#1a7f37"/></svg>
+  </div>
+
+  <div class="app-box">
+    <div class="box-title">
+      <h3>Container App <code>website</code></h3>
+      <p>Consumption plan · 1 replica · ~0.75 vCPU / 1.5 Gi total · USD 40–60/mo</p>
+    </div>
+
+    <div class="containers">
+      <div class="container-card site">
+        <h4><span class="dot" style="background:var(--site)"></span>website <span style="font-weight:400;color:var(--muted);font-size:11px">— main container</span></h4>
+        <p class="role">Nuxt SSR · all ingress traffic · port 3000</p>
+        <ul style="list-style:none">
+          <li><code>NUXT_PUBLIC_KCHAT_URL=/kchat</code></li>
+          <li>serves <code>rdf.ttl</code> at <code>/</code> (content negotiation)</li>
+          <li>0.5 vCPU · 1 Gi</li>
+        </ul>
+      </div>
+      <div class="container-card kchat">
+        <h4><span class="dot" style="background:var(--kchat)"></span>kchat <span style="font-weight:400;color:var(--muted);font-size:11px">— sidecar</span></h4>
+        <p class="role">SPARQL agent · localhost:8000 · not internet-facing</p>
+        <ul style="list-style:none">
+          <li><code>SPARQL_ENDPOINT=/rdf</code> (RDF baked into image)</li>
+          <li><code>LLM_API_KEY</code> ← ACA secret <code>llm-api-key</code></li>
+          <li>sessions: SQLite on EmptyDir (ephemeral)</li>
+          <li>0.25 vCPU · 0.5 Gi</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="proxy-strip">
+      <svg width="46" height="14" viewBox="0 0 46 14"><line x1="0" y1="7" x2="36" y2="7" stroke="#0969da" stroke-width="2" stroke-dasharray="5 4"/><polygon points="36,1 46,7 36,13" fill="#0969da"/></svg>
+      Nitro route rule <code>/kchat/**</code> → <code>http://127.0.0.1:8000/**</code> &nbsp;·&nbsp; SSE streaming &nbsp;·&nbsp; rate limiting enforced in kchat (15 q/h)
+    </div>
+  </div>
+
+  <div class="arrow">
+    <div class="label">LLM calls<br>per question</div>
+    <svg viewBox="0 0 100 12" preserveAspectRatio="none"><line x1="0" y1="6" x2="88" y2="6" stroke="#1a7f37" stroke-dasharray="6 5"/><polygon points="88,0 100,6 88,12" fill="#1a7f37"/></svg>
+  </div>
+
+  <div class="card" style="flex:0.5">
+    <span class="tag" style="background:rgba(188,76,0,.12);color:var(--mistral)">External</span>
+    <h3>Mistral API</h3>
+    <p><code>mistral-small-latest</code> answers grounded in the RDF graph via SPARQL tool calls.</p>
+    <p style="margin-top:8px">Only outbound dependency of the app.</p>
+  </div>
+
+</div>
+
+<!-- ============ SECTION 3: MANUAL OPS ============ -->
+<h2>Manual operations — outside CI, kept deliberately human</h2>
+<div class="ops">
+
+  <div class="card">
+    <span class="tag">One-time setup</span>
+    <h3>Provision the moving parts</h3>
+    <ul class="steps">
+      <li><code>az containerapp secret set … llm-api-key=…</code></li>
+      <li><code>az containerapp registry set … ghcr.io</code> (only if site packages stay private)</li>
+      <li>GitHub secret <code>AZURE_CREDENTIALS</code> — SP with Contributor on the app only</li>
+    </ul>
+    <p style="margin-top:8px">The workflow itself creates zero Azure resources.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">Key rotation</span>
+    <h3>Mistral API key runbook</h3>
+    <ul class="steps">
+      <li>Create new key (don't revoke old yet)</li>
+      <li><code>az containerapp secret set … llm-api-key=&lt;new&gt;</code></li>
+      <li><code>az containerapp revision restart …</code></li>
+      <li>Verify in widget → revoke old key</li>
+    </ul>
+    <p style="margin-top:8px">No CI involvement; the key never touches GitHub.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">Rollback</span>
+    <h3>Reactivate a revision</h3>
+    <ul class="steps">
+      <li><code>az containerapp revision list …</code></li>
+      <li><code>az containerapp revision activate …</code></li>
+    </ul>
+    <p style="margin-top:8px">Every deploy is an immutable revision pinned to a <code>sha-&lt;commit&gt;</code> image that stays in GHCR — rollback needs no rebuild.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">kchat upgrade</span>
+    <h3>Bump the base image</h3>
+    <ul class="steps">
+      <li>Bump <code>KCHAT_BASE_IMAGE</code> in <code>push.yaml</code></li>
+      <li>Merge to <code>main</code></li>
+      <li>Next deploy rebuilds the wrapper against the new tag</li>
+    </ul>
+    <p style="margin-top:8px">RDF changes need nothing at all — <code>rdf.ttl</code> is re-baked on every deploy.</p>
+  </div>
+
+</div>
+
+<footer>
+  Files: <code>deploy/containerapp.yaml</code> (app template) · <code>deploy/Dockerfile.kchat</code> (kchat + RDF layer) · <code>deploy/README.md</code> (setup &amp; runbooks) · <code>.github/workflows/push.yaml</code> (pipeline) · <code>nuxt.config.ts</code> (same-origin /kchat proxy) · <code>compose.yaml</code> (local parity)
+</footer>
+
+</body>
+</html>

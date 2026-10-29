@@ -14,7 +14,7 @@ Our services offered are:
 - **Knowledge Graphs**
     - [System Design & Implementation](/services/system-design) - architecture design, system design, ETL & data migration, implementation and customised branding views and APIs
     - [Maintenance & Support](/services/support) - one-off solutions or ongoing Service Level Agreements
-    - [Related software tool services](/services/tools) - development, customisation or provisioning of tools for your organisation
+    - [Related software tool services](https://tools.kurrawong.ai/) - development, customisation or provisioning of tools for your organisation
     - [Complete Vocabulary Support](/services/vocabularies) - establishment, understanding and management
 - **Data**
     - [Governance](/services/data-governance) - policies, reviews and training
