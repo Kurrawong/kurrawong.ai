@@ -50,6 +50,16 @@
     --kgraph-service: oklch(0.79 0.16 78);
     --kgraph-product: oklch(0.87 0.13 90);
     --kgraph-project: oklch(0.94 0.08 100);
+    /* Chat accents drawn from the diagram palette. Accent is decorative
+       (borders, tints); ink is for text (6.3:1 on white and on accent
+       tints); focus is a 3:1+ indicator on the chat bar; send is the bar's
+       button with a 7.7:1 icon. The bar stays white in dark mode, so focus
+       and send are the same in both themes. */
+    --kchat-accent: var(--kgraph-service);
+    --kchat-ink: oklch(0.48 0.12 60);
+    --kchat-focus: oklch(0.60 0.16 48);
+    --kchat-send: oklch(0.79 0.16 78);
+    --kchat-send-foreground: oklch(0.27 0.06 70);
 }
 
 .dark {
@@ -91,6 +101,9 @@
     --kgraph-service: oklch(0.87 0.13 83);
     --kgraph-product: oklch(0.93 0.10 93);
     --kgraph-project: oklch(0.97 0.05 102);
+    /* Chat ink on dark backgrounds: 8:1 or more, also on accent tints. */
+    --kchat-accent: var(--kgraph-service);
+    --kchat-ink: var(--kgraph-person);
 }
 
 @theme inline {

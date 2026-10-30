@@ -1,37 +1,43 @@
 // Shared state between the landing page hero and the KChat widget.
 
-export const KCHAT_SUGGESTIONS = [
-    "What products does KurrawongAI make?",
-    "Who works at KurrawongAI?",
-    "What services does KurrawongAI offer?",
-    "Tell me about the Biodiversity Data Repository project",
-    "How can I contact KurrawongAI?",
-    "Which organisations has KurrawongAI worked with on its projects?",
-    "What is KurrawongAI a member of?",
-    "What online tools does KurrawongAI provide?",
-    "What is Prez and who uses it?",
-    "What training does KurrawongAI offer?",
-    "Tell me about the Indigenous Data Network Catalogue project",
-    "Where is KurrawongAI based?",
-    "What is Bower?",
-    "What is K-Maker used for?",
-    "What is Olis?",
-    "What does kurra do?",
-    "Who founded KurrawongAI?",
-    "What is the KG Validator?",
-    "What is VocExcel used for?",
-    "Tell me about the OGC RAINBOW platform project",
-    "What data governance services does KurrawongAI offer?",
-    "What is pyLODE?",
-    "Does KurrawongAI support RDFLib?",
-    "What is KurrawongAI's ABN?",
-    "Who is the director of KurrawongAI?",
-    "What reference data services does KurrawongAI offer?",
-    "Tell me about the Queensland spatial datasets rebuild",
-    "What was the National Address Model project?",
-    "What does KurrawongAI's support service cover?",
-    "What vocabularies has KurrawongAI created for clients?",
-];
+/** Node types from the landing-page diagram; each suggestion is coloured by
+ *  the type of thing it asks about, using the diagram's palette. */
+export type KChatSuggestionType = "person" | "organization" | "product" | "service" | "project";
+
+export const KCHAT_SUGGESTION_TYPES: Record<string, KChatSuggestionType> = {
+    "What products does KurrawongAI make?": "product",
+    "Who works at KurrawongAI?": "person",
+    "What services does KurrawongAI offer?": "service",
+    "Tell me about the Biodiversity Data Repository project": "project",
+    "How can I contact KurrawongAI?": "organization",
+    "Which organisations has KurrawongAI worked with on its projects?": "organization",
+    "What is KurrawongAI a member of?": "organization",
+    "What online tools does KurrawongAI provide?": "product",
+    "What is Prez and who uses it?": "product",
+    "What training does KurrawongAI offer?": "service",
+    "Tell me about the Indigenous Data Network Catalogue project": "project",
+    "Where is KurrawongAI based?": "organization",
+    "What is Bower?": "product",
+    "What is K-Maker used for?": "product",
+    "What is Olis?": "product",
+    "What does kurra do?": "product",
+    "Who founded KurrawongAI?": "person",
+    "What is the KG Validator?": "product",
+    "What is VocExcel used for?": "product",
+    "Tell me about the OGC RAINBOW platform project": "project",
+    "What data governance services does KurrawongAI offer?": "service",
+    "What is pyLODE?": "product",
+    "Does KurrawongAI support RDFLib?": "product",
+    "What is KurrawongAI's ABN?": "organization",
+    "Who is the director of KurrawongAI?": "person",
+    "What reference data services does KurrawongAI offer?": "service",
+    "Tell me about the Queensland spatial datasets rebuild": "project",
+    "What was the National Address Model project?": "project",
+    "What does KurrawongAI's support service cover?": "service",
+    "What vocabularies has KurrawongAI created for clients?": "service",
+};
+
+export const KCHAT_SUGGESTIONS = Object.keys(KCHAT_SUGGESTION_TYPES);
 
 /** The contact question is always included in the suggestions and answered locally. */
 export const KCHAT_CONTACT_QUESTION = "How can I contact KurrawongAI?";

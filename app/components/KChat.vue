@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Send, X } from "lucide-vue-next";
+import { X } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { ChatMessage } from "@/utils/kchat";
@@ -284,7 +284,7 @@ function onFormSubmit() {
             <template v-if="initialSuggestionsVisible">
                 <form
                     v-show="!busy"
-                    class="bg-card/70 dark:bg-white mt-4 flex items-center gap-2 rounded-md border border-border/70 py-1 pr-1.5 pl-4 shadow-sm backdrop-blur-md dark:border-black/10"
+                    class="kchat-bar bg-card/70 dark:bg-white mt-4 flex items-center gap-2 rounded-md border py-1 pr-1.5 pl-4 shadow-sm backdrop-blur-md"
                     @submit.prevent="onFormSubmit"
                 >
                     <input
@@ -296,8 +296,8 @@ function onFormSubmit() {
                         aria-label="Ask a question about KurrawongAI"
                         class="h-8 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/80 dark:text-neutral-900 dark:placeholder:text-neutral-500"
                     >
-                    <Button type="submit" size="icon" class="size-8 shrink-0 rounded-md dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-900/90" aria-label="Send question" :disabled="busy || !input.trim()">
-                        <Send class="size-4" />
+                    <Button type="submit" size="icon" class="kchat-send size-8 shrink-0 rounded-md" aria-label="Send question" :disabled="busy || !input.trim()">
+                        <KBeakIcon class="size-4" />
                     </Button>
                 </form>
 
@@ -306,7 +306,8 @@ function onFormSubmit() {
                         v-for="suggestion in suggestions"
                         :key="suggestion"
                         type="button"
-                        class="rounded-full border border-border/60 bg-muted/50 px-2 py-0.5 text-[11px] leading-4 text-muted-foreground transition-colors hover:border-border hover:bg-accent hover:text-foreground"
+                        class="kchat-pill rounded-full border bg-muted/50 px-2 py-0.5 text-[11px] leading-4 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                        :class="`kchat-pill-${KCHAT_SUGGESTION_TYPES[suggestion] ?? 'organization'}`"
                         :disabled="busy"
                         @click="sendQuestion(suggestion)"
                     >
@@ -327,7 +328,7 @@ function onFormSubmit() {
             <form
                 v-if="!initialSuggestionsVisible"
                 v-show="!busy"
-                class="bg-card/70 dark:bg-white sticky bottom-0 mt-3 flex items-center gap-2 rounded-md border border-border/70 py-1 pr-1.5 pl-4 shadow-sm backdrop-blur-md dark:border-black/10"
+                class="kchat-bar bg-card/70 dark:bg-white sticky bottom-0 mt-3 flex items-center gap-2 rounded-md border py-1 pr-1.5 pl-4 shadow-sm backdrop-blur-md"
                 @submit.prevent="onFormSubmit"
             >
                 <input
@@ -342,8 +343,8 @@ function onFormSubmit() {
                 <Button variant="ghost" type="button" size="icon" class="text-muted-foreground hover:text-foreground dark:text-neutral-500 dark:hover:text-neutral-900 size-8 shrink-0 rounded-md" aria-label="Clear chat and start a new one" title="Clear chat and start a new one" @click="clearSession">
                     <X class="size-4" />
                 </Button>
-                <Button type="submit" size="icon" class="size-8 shrink-0 rounded-md dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-900/90" aria-label="Send question" :disabled="busy || !input.trim()">
-                    <Send class="size-4" />
+                <Button type="submit" size="icon" class="kchat-send size-8 shrink-0 rounded-md" aria-label="Send question" :disabled="busy || !input.trim()">
+                    <KBeakIcon class="size-4" />
                 </Button>
             </form>
         </div>
@@ -364,6 +365,61 @@ function onFormSubmit() {
 </template>
 
 <style scoped>
+/* Chat bar: a faint palette border that deepens to a 3:1+ focus ring. */
+.kchat-bar {
+    border-color: color-mix(in oklch, var(--kchat-accent) 60%, transparent);
+}
+
+.kchat-bar:focus-within {
+    border-color: var(--kchat-focus);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--kchat-focus) 25%, transparent);
+}
+
+.kchat-send {
+    background: var(--kchat-send);
+    color: var(--kchat-send-foreground);
+}
+
+.kchat-send:hover:not(:disabled) {
+    filter: brightness(0.95);
+}
+
+.kchat-send:focus-visible,
+.kchat-pill:focus-visible {
+    outline: 2px solid var(--kchat-focus);
+    outline-offset: 2px;
+}
+
+/* Suggested-question pills get a faint border in the colour of the diagram
+   node type they ask about; full strength on hover. */
+.kchat-pill {
+    border-color: color-mix(in oklch, var(--pill-color) 45%, transparent);
+}
+
+.kchat-pill:hover {
+    border-color: var(--pill-color);
+}
+
+.kchat-pill-organization {
+    --pill-color: var(--kgraph-organization);
+}
+
+.kchat-pill-person {
+    --pill-color: var(--kgraph-person);
+}
+
+.kchat-pill-service {
+    --pill-color: var(--kgraph-service);
+}
+
+.kchat-pill-product {
+    --pill-color: var(--kgraph-product);
+}
+
+.kchat-pill-project {
+    --pill-color: var(--kgraph-project);
+}
+
 .kchat-conversation-enter-active {
     transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }

@@ -28,7 +28,7 @@ const parsed = computed(() => props.messages.map(message => {
         >
             <div
                 class="max-w-[85%] rounded-lg px-3 py-2 text-sm shadow-sm"
-                :class="message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-card text-foreground border'"
+                :class="message.role === 'user' ? 'kchat-bubble-user text-foreground border' : 'bg-card text-foreground border'"
             >
                 <KContactCard v-if="message.kind === 'contact'" />
                 <div
@@ -42,17 +42,17 @@ const parsed = computed(() => props.messages.map(message => {
                         v-for="followUp in parsed[index].followUps"
                         :key="followUp"
                         type="button"
-                        class="rounded-full border border-border/60 bg-muted/50 px-2 py-0.5 text-[11px] leading-4 text-muted-foreground transition-colors hover:border-border hover:bg-accent hover:text-foreground"
+                        class="kchat-follow-up rounded-full border bg-muted/50 px-2 py-0.5 text-[11px] leading-4 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                         @click="emit('send', followUp)"
                     >
                         {{ followUp }}
                     </button>
                 </div>
                 <Collapsible v-if="message.artifacts.length && !message.typing" v-slot="{ open }" class="mt-2.5">
-                    <CollapsibleTrigger class="text-muted-foreground hover:text-foreground hover:bg-accent/60 inline-flex items-center gap-1.5 rounded-md border border-border/70 px-2 py-1 text-xs transition-colors">
+                    <CollapsibleTrigger class="kchat-accent-hover text-muted-foreground hover:text-foreground hover:bg-accent/60 inline-flex items-center gap-1.5 rounded-md border border-border/70 px-2 py-1 text-xs transition-colors">
                         <ChevronDown class="size-3.5 transition-transform" :class="open ? 'rotate-180' : ''" />
                         SPARQL queries &amp; results
-                        <span class="bg-muted rounded px-1 text-[10px] font-medium">{{ message.artifacts.length }}</span>
+                        <span class="kchat-badge rounded px-1 text-[10px] font-medium">{{ message.artifacts.length }}</span>
                     </CollapsibleTrigger>
                     <CollapsibleContent>
                         <div class="mt-1.5 flex flex-wrap gap-1.5">
@@ -60,7 +60,7 @@ const parsed = computed(() => props.messages.map(message => {
                                 v-for="artifact in message.artifacts"
                                 :key="`${artifact.name}:${artifact.version}`"
                                 type="button"
-                                class="bg-background/60 hover:bg-accent inline-flex items-center gap-1 rounded-md border border-border/70 px-2 py-0.5 text-xs transition-colors"
+                                class="kchat-accent-hover bg-background/60 hover:bg-accent inline-flex items-center gap-1 rounded-md border border-border/70 px-2 py-0.5 text-xs transition-colors"
                                 :title="`Open ${artifact.name}`"
                                 @click="emit('open-artifact', artifact.name, artifact.version)"
                             >
@@ -71,9 +71,9 @@ const parsed = computed(() => props.messages.map(message => {
                     </CollapsibleContent>
                 </Collapsible>
                 <span v-if="message.typing" class="mt-1 inline-flex gap-1">
-                    <span class="bg-muted-foreground size-1.5 animate-bounce rounded-full [animation-delay:-0.3s]" />
-                    <span class="bg-muted-foreground size-1.5 animate-bounce rounded-full [animation-delay:-0.15s]" />
-                    <span class="bg-muted-foreground size-1.5 animate-bounce rounded-full" />
+                    <span class="size-1.5 animate-bounce rounded-full bg-(--kgraph-organization) [animation-delay:-0.3s]" />
+                    <span class="size-1.5 animate-bounce rounded-full bg-(--kgraph-person) [animation-delay:-0.15s]" />
+                    <span class="size-1.5 animate-bounce rounded-full bg-(--kgraph-service)" />
                 </span>
             </div>
         </div>
@@ -130,7 +130,39 @@ const parsed = computed(() => props.messages.map(message => {
 }
 
 .kchat-markdown :deep(a) {
+    color: var(--kchat-ink);
     text-decoration: underline;
-    text-underline-offset: 2;
+    text-decoration-color: color-mix(in oklch, var(--kchat-accent) 70%, transparent);
+    text-underline-offset: 2px;
+}
+
+.kchat-markdown :deep(a:hover) {
+    text-decoration-color: currentColor;
+}
+
+/* Palette highlights rather than blocks of colour: the user's bubble gets a
+   faint accent tint and border; text keeps the foreground colour. */
+.kchat-bubble-user {
+    background: color-mix(in srgb, var(--kchat-accent) 12%, var(--background));
+    border-color: color-mix(in oklch, var(--kchat-accent) 55%, transparent);
+}
+
+.kchat-follow-up {
+    border-color: color-mix(in oklch, var(--kchat-accent) 45%, transparent);
+}
+
+.kchat-follow-up:hover,
+.kchat-accent-hover:hover {
+    border-color: var(--kchat-accent);
+}
+
+.kchat-follow-up:focus-visible {
+    outline: 2px solid var(--kchat-focus);
+    outline-offset: 2px;
+}
+
+.kchat-badge {
+    background: color-mix(in oklch, var(--kchat-accent) 20%, transparent);
+    color: var(--kchat-ink);
 }
 </style>
