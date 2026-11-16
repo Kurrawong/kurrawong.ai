@@ -1,6 +1,9 @@
 ---
 title: Products
 ---
+::product-logos
+::
+
 # Products
 
 ## Our Approach
